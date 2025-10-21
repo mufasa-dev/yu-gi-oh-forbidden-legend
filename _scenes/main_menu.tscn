@@ -1,0 +1,809 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://_resources/menu_screen/big_menu_button.png" type="Texture" id=1]
+[ext_resource path="res://_resources/card_shop/full_bg.png" type="Texture" id=2]
+[ext_resource path="res://_resources/fonts/BankGothic Md BT.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://_resources/menu_screen/PermittedMemories-logo.png" type="Texture" id=4]
+[ext_resource path="res://_scripts/main_menu.gd" type="Script" id=5]
+[ext_resource path="res://_scenes/scene_transitioner.tscn" type="PackedScene" id=7]
+[ext_resource path="res://_scripts/save_load_logic.gd" type="Script" id=8]
+[ext_resource path="res://_resources/game_over/background.png" type="Texture" id=9]
+[ext_resource path="res://_resources/scene_deck_building/big_button.png" type="Texture" id=10]
+[ext_resource path="res://_resources/tournament/dark_aura.png" type="Texture" id=11]
+
+[sub_resource type="StyleBoxTexture" id=10]
+texture = ExtResource( 9 )
+region_rect = Rect2( 6, 0, 564, 667 )
+axis_stretch_horizontal = 1
+
+[sub_resource type="DynamicFont" id=11]
+size = 42
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 68
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+use_filter = true
+extra_spacing_char = -4
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 28
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 22
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 28
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.0313726, 0.0862745, 0.117647, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.356863, 0.407843, 0.435294, 1 )
+shadow_color = Color( 0, 0, 0, 0 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color( 0, 0, 0, 0 )
+shadow_size = 10
+
+[sub_resource type="DynamicFont" id=7]
+size = 22
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 15
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 24
+outline_size = 2
+font_data = ExtResource( 3 )
+
+[node name="main_menu" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="save_load_logic" type="Node" parent="."]
+script = ExtResource( 8 )
+
+[node name="background2" type="Panel" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+custom_styles/panel = SubResource( 10 )
+
+[node name="DarkAura2" type="Sprite" parent="background2"]
+position = Vector2( -720, 0 )
+scale = Vector2( 2.16953, 1 )
+texture = ExtResource( 11 )
+centered = false
+
+[node name="DarkAura2" type="Sprite" parent="background2/DarkAura2"]
+position = Vector2( -720, 0 )
+scale = Vector2( 2.16953, 1 )
+texture = ExtResource( 11 )
+centered = false
+
+[node name="small_logo" type="Sprite" parent="."]
+position = Vector2( 640, 180 )
+scale = Vector2( 0.444, 0.444 )
+texture = ExtResource( 4 )
+
+[node name="shadow" type="Sprite" parent="small_logo"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 24.024, 0 )
+texture = ExtResource( 4 )
+
+[node name="big_logo" type="Sprite" parent="."]
+visible = false
+modulate = Color( 0.392157, 0.392157, 0.392157, 0.494118 )
+position = Vector2( 640, 360 )
+scale = Vector2( 0.6, 0.6 )
+texture = ExtResource( 4 )
+
+[node name="website_button" type="Button" parent="."]
+margin_left = 1047.0
+margin_top = 640.0
+margin_right = 1274.0
+margin_bottom = 716.0
+rect_pivot_offset = Vector2( 113, 38 )
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
+[node name="compound_little_button" type="Node2D" parent="website_button"]
+position = Vector2( 19, 19 )
+
+[node name="compound_shadow" type="Node2D" parent="website_button/compound_little_button"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 5, 5 )
+
+[node name="top_left" type="Sprite" parent="website_button/compound_little_button/compound_shadow"]
+position = Vector2( 61, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 155, 32 )
+
+[node name="top_right" type="Sprite" parent="website_button/compound_little_button/compound_shadow"]
+position = Vector2( 144, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 411, 0, 115, 32 )
+
+[node name="bottom_right" type="Sprite" parent="website_button/compound_little_button/compound_shadow"]
+position = Vector2( 125, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 373, 76, 153, 32 )
+
+[node name="bottom_left" type="Sprite" parent="website_button/compound_little_button/compound_shadow"]
+position = Vector2( 37, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 76, 107, 32 )
+
+[node name="top_left" type="Sprite" parent="website_button/compound_little_button"]
+position = Vector2( 35, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 103, 32 )
+
+[node name="top_right" type="Sprite" parent="website_button/compound_little_button"]
+position = Vector2( 144, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 411, 0, 115, 32 )
+
+[node name="bottom_right" type="Sprite" parent="website_button/compound_little_button"]
+position = Vector2( 146, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 415, 76, 111, 32 )
+
+[node name="bottom_left" type="Sprite" parent="website_button/compound_little_button"]
+position = Vector2( 37, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 76, 107, 32 )
+
+[node name="white_over" type="Node2D" parent="website_button"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 19, 19 )
+
+[node name="top_left" type="Sprite" parent="website_button/white_over"]
+position = Vector2( 35, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 103, 32 )
+
+[node name="top_right" type="Sprite" parent="website_button/white_over"]
+position = Vector2( 144, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 411, 0, 115, 32 )
+
+[node name="bottom_right" type="Sprite" parent="website_button/white_over"]
+position = Vector2( 146, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 415, 76, 111, 32 )
+
+[node name="bottom_left" type="Sprite" parent="website_button/white_over"]
+position = Vector2( 37, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 76, 107, 32 )
+
+[node name="label" type="Label" parent="website_button"]
+margin_left = 19.0
+margin_top = 2.0
+margin_right = 201.0
+margin_bottom = 67.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 11 )
+text = "Website"
+align = 1
+valign = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+margin_left = 371.0
+margin_top = 8.0
+margin_right = 909.0
+margin_bottom = 712.0
+alignment = 1
+
+[node name="btn_campaign" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_right = 538.0
+margin_bottom = 114.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer/VBoxContainer/btn_campaign"]
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "Campaign"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer/VBoxContainer/btn_campaign"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer/VBoxContainer/btn_campaign"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="btn_tournament" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 118.0
+margin_right = 538.0
+margin_bottom = 232.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer/VBoxContainer/btn_tournament"]
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "Tournament"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer/VBoxContainer/btn_tournament"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer/VBoxContainer/btn_tournament"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="btn_free_duel" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 236.0
+margin_right = 538.0
+margin_bottom = 350.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer/VBoxContainer/btn_free_duel"]
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "Free Duel"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer/VBoxContainer/btn_free_duel"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer/VBoxContainer/btn_free_duel"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="btn_build_deck" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 354.0
+margin_right = 538.0
+margin_bottom = 468.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer/VBoxContainer/btn_build_deck"]
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "Build Deck"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer/VBoxContainer/btn_build_deck"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer/VBoxContainer/btn_build_deck"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="btn_library" type="Button" parent="CenterContainer/VBoxContainer"]
+visible = false
+margin_top = 354.0
+margin_right = 538.0
+margin_bottom = 468.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer/VBoxContainer/btn_library"]
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "library"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer/VBoxContainer/btn_library"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer/VBoxContainer/btn_library"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="btn_password" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 472.0
+margin_right = 538.0
+margin_bottom = 586.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer/VBoxContainer/btn_password"]
+margin_left = 2.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "Card Shop"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer/VBoxContainer/btn_password"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer/VBoxContainer/btn_password"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="btn_save" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 590.0
+margin_right = 538.0
+margin_bottom = 704.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer/VBoxContainer/btn_save"]
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "Save Game"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer/VBoxContainer/btn_save"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer/VBoxContainer/btn_save"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="CenterContainer2" type="CenterContainer" parent="."]
+visible = false
+margin_top = 329.0
+margin_right = 1280.0
+margin_bottom = 695.0
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer2"]
+margin_left = 371.0
+margin_right = 909.0
+margin_bottom = 366.0
+custom_constants/separation = 12
+alignment = 1
+
+[node name="btn_new_game" type="Button" parent="CenterContainer2/VBoxContainer"]
+margin_right = 538.0
+margin_bottom = 114.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer2/VBoxContainer/btn_new_game"]
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "New Game"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer2/VBoxContainer/btn_new_game"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer2/VBoxContainer/btn_new_game"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="btn_load_game" type="Button" parent="CenterContainer2/VBoxContainer"]
+modulate = Color( 0.392157, 0.392157, 0.392157, 1 )
+margin_top = 126.0
+margin_right = 538.0
+margin_bottom = 240.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer2/VBoxContainer/btn_load_game"]
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "Load Game"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer2/VBoxContainer/btn_load_game"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer2/VBoxContainer/btn_load_game"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="btn_options" type="Button" parent="CenterContainer2/VBoxContainer"]
+margin_top = 252.0
+margin_right = 538.0
+margin_bottom = 366.0
+rect_pivot_offset = Vector2( 269, 57 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 1 )
+flat = true
+
+[node name="button_text" type="Label" parent="CenterContainer2/VBoxContainer/btn_options"]
+margin_left = 6.0
+margin_top = 3.0
+margin_right = 532.0
+margin_bottom = 111.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 1 )
+text = "Options"
+align = 1
+valign = 1
+
+[node name="white_over" type="Sprite" parent="CenterContainer2/VBoxContainer/btn_options"]
+visible = false
+modulate = Color( 100, 100, 100, 0.00784314 )
+position = Vector2( 6, 3 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="shadow" type="Sprite" parent="CenterContainer2/VBoxContainer/btn_options"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 13, 10 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="game_version" type="Label" parent="."]
+margin_left = 10.0
+margin_top = 685.0
+margin_right = 646.0
+margin_bottom = 721.0
+custom_fonts/font = SubResource( 2 )
+text = "version 1.1.111"
+autowrap = true
+
+[node name="version_update_warning" type="Label" parent="game_version"]
+margin_left = -3.0
+margin_top = -93.0
+margin_right = 274.0
+margin_bottom = 1.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = SubResource( 9 )
+text = "[!]"
+align = 1
+valign = 2
+autowrap = true
+
+[node name="HTTPRequest" type="HTTPRequest" parent="game_version"]
+
+[node name="scene_transitioner" parent="." instance=ExtResource( 7 )]
+visible = false
+
+[node name="button_tweener" type="Tween" parent="."]
+
+[node name="animation_tweener" type="Tween" parent="."]
+
+[node name="timer" type="Timer" parent="."]
+
+[node name="save_load_overlay" type="Node2D" parent="."]
+visible = false
+
+[node name="Button" type="Button" parent="save_load_overlay"]
+margin_right = 1280.0
+margin_bottom = 722.0
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
+[node name="tween" type="Tween" parent="save_load_overlay"]
+
+[node name="darker_screen" type="Sprite" parent="save_load_overlay"]
+modulate = Color( 0, 0, 0, 0.686275 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="loading_indicator" type="Label" parent="save_load_overlay"]
+margin_left = 10.0
+margin_top = 685.0
+margin_right = 1269.0
+margin_bottom = 721.0
+custom_fonts/font = SubResource( 3 )
+text = "LOADING . . ."
+align = 2
+autowrap = true
+
+[node name="save_warning" type="Panel" parent="save_load_overlay"]
+visible = false
+margin_left = 326.0
+margin_top = 216.0
+margin_right = 946.0
+margin_bottom = 462.0
+custom_styles/panel = SubResource( 4 )
+
+[node name="export_window" type="Panel" parent="save_load_overlay/save_warning"]
+self_modulate = Color( 1, 1, 1, 0.94902 )
+margin_left = 9.0
+margin_top = 32.0
+margin_right = 613.0
+margin_bottom = 168.0
+rect_min_size = Vector2( 100, 100 )
+custom_styles/panel = SubResource( 5 )
+
+[node name="export_description2" type="Label" parent="save_load_overlay/save_warning/export_window"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 601.0
+margin_bottom = 104.0
+custom_fonts/font = SubResource( 7 )
+text = "Are you sure you want to Save your game?
+This will overwrite any previous savefile."
+align = 1
+valign = 1
+autowrap = true
+
+[node name="export_description3" type="Label" parent="save_load_overlay/save_warning/export_window"]
+margin_left = -7.0
+margin_top = 86.0
+margin_right = 609.0
+margin_bottom = 133.0
+custom_colors/font_color = Color( 0.729412, 0.247059, 0.247059, 1 )
+custom_fonts/font = SubResource( 8 )
+text = "File is stored at %appdata%/Godot/app_userdata/Modern Memories"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="button_close" type="Control" parent="save_load_overlay/save_warning"]
+margin_left = 254.0
+margin_top = 180.0
+margin_right = 374.0
+margin_bottom = 233.0
+rect_min_size = Vector2( 120, 0 )
+rect_pivot_offset = Vector2( 60, 26 )
+
+[node name="export_close" type="Button" parent="save_load_overlay/save_warning/button_close"]
+margin_left = 4.0
+margin_right = 117.0
+margin_bottom = 51.0
+rect_scale = Vector2( 1.3, 1 )
+rect_pivot_offset = Vector2( 56, 25 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 10 )
+flat = true
+
+[node name="label" type="Label" parent="save_load_overlay/save_warning/button_close"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 117.0
+margin_bottom = 46.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 6 )
+text = "Confirm"
+align = 1
+valign = 1
+
+[connection signal="button_up" from="website_button" to="." method="_on_website_button_button_up"]
+[connection signal="mouse_entered" from="website_button" to="." method="_on_website_button_mouse_entered"]
+[connection signal="mouse_exited" from="website_button" to="." method="_on_website_button_mouse_exited"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/btn_campaign" to="." method="_on_btn_campaign_button_up"]
+[connection signal="mouse_entered" from="CenterContainer/VBoxContainer/btn_campaign" to="." method="_on_btn_campaign_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer/VBoxContainer/btn_campaign" to="." method="_on_btn_campaign_mouse_exited"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/btn_tournament" to="." method="_on_btn_tournament_button_up"]
+[connection signal="mouse_entered" from="CenterContainer/VBoxContainer/btn_tournament" to="." method="_on_btn_tournament_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer/VBoxContainer/btn_tournament" to="." method="_on_btn_tournament_mouse_exited"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/btn_free_duel" to="." method="_on_btn_free_duel_button_up"]
+[connection signal="mouse_entered" from="CenterContainer/VBoxContainer/btn_free_duel" to="." method="_on_btn_free_duel_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer/VBoxContainer/btn_free_duel" to="." method="_on_btn_free_duel_mouse_exited"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/btn_build_deck" to="." method="_on_btn_build_deck_button_up"]
+[connection signal="mouse_entered" from="CenterContainer/VBoxContainer/btn_build_deck" to="." method="_on_btn_build_deck_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer/VBoxContainer/btn_build_deck" to="." method="_on_btn_build_deck_mouse_exited"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/btn_library" to="." method="_on_btn_library_button_up"]
+[connection signal="mouse_entered" from="CenterContainer/VBoxContainer/btn_library" to="." method="_on_btn_library_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer/VBoxContainer/btn_library" to="." method="_on_btn_library_mouse_exited"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/btn_password" to="." method="_on_btn_password_button_up"]
+[connection signal="mouse_entered" from="CenterContainer/VBoxContainer/btn_password" to="." method="_on_btn_password_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer/VBoxContainer/btn_password" to="." method="_on_btn_password_mouse_exited"]
+[connection signal="button_up" from="CenterContainer/VBoxContainer/btn_save" to="." method="_on_btn_save_button_up"]
+[connection signal="mouse_entered" from="CenterContainer/VBoxContainer/btn_save" to="." method="_on_btn_save_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer/VBoxContainer/btn_save" to="." method="_on_btn_save_mouse_exited"]
+[connection signal="button_up" from="CenterContainer2/VBoxContainer/btn_new_game" to="." method="_on_btn_new_game_button_up"]
+[connection signal="mouse_entered" from="CenterContainer2/VBoxContainer/btn_new_game" to="." method="_on_btn_new_game_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer2/VBoxContainer/btn_new_game" to="." method="_on_btn_new_game_mouse_exited"]
+[connection signal="button_up" from="CenterContainer2/VBoxContainer/btn_load_game" to="." method="_on_btn_load_game_button_up"]
+[connection signal="mouse_entered" from="CenterContainer2/VBoxContainer/btn_load_game" to="." method="_on_btn_load_game_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer2/VBoxContainer/btn_load_game" to="." method="_on_btn_load_game_mouse_exited"]
+[connection signal="button_up" from="CenterContainer2/VBoxContainer/btn_options" to="." method="_on_btn_options_button_up"]
+[connection signal="mouse_entered" from="CenterContainer2/VBoxContainer/btn_options" to="." method="_on_btn_options_mouse_entered"]
+[connection signal="mouse_exited" from="CenterContainer2/VBoxContainer/btn_options" to="." method="_on_btn_options_mouse_exited"]
+[connection signal="request_completed" from="game_version/HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
+[connection signal="button_up" from="save_load_overlay/Button" to="." method="_on_Button_button_up"]
+[connection signal="button_up" from="save_load_overlay/save_warning/button_close/export_close" to="." method="_on_export_close_button_up"]

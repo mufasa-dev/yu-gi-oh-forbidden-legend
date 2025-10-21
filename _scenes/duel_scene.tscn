@@ -1,0 +1,2347 @@
+[gd_scene load_steps=35 format=2]
+
+[ext_resource path="res://_resources/scene_duel/yellow_background.png" type="Texture" id=1]
+[ext_resource path="res://_resources/scene_duel/top_info_box.png" type="Texture" id=2]
+[ext_resource path="res://_scenes/card_info_box.tscn" type="PackedScene" id=3]
+[ext_resource path="res://_scenes/reward_scene.tscn" type="PackedScene" id=4]
+[ext_resource path="res://_resources/fonts/BankGothic Md BT.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://_resources/scene_duel/icon_watch.png" type="Texture" id=6]
+[ext_resource path="res://_resources/free_duel/focus_shadow.png" type="Texture" id=7]
+[ext_resource path="res://_resources/fonts/Yu-Gi-Oh! Matrix Regular Small Caps 2.ttf" type="DynamicFontData" id=8]
+[ext_resource path="res://_scripts/side_menu.gd" type="Script" id=9]
+[ext_resource path="res://_scenes/card_node.tscn" type="PackedScene" id=10]
+[ext_resource path="res://_scripts/duel_scene.gd" type="Script" id=11]
+[ext_resource path="res://_resources/scene_deck_building/big_button.png" type="Texture" id=12]
+[ext_resource path="res://_scripts/player_logic.gd" type="Script" id=13]
+[ext_resource path="res://_resources/scene_duel/darken_bg.png" type="Texture" id=14]
+[ext_resource path="res://_scripts/game_logic.gd" type="Script" id=15]
+[ext_resource path="res://_scripts/debug_menu.gd" type="Script" id=16]
+[ext_resource path="res://_resources/scene_duel/slot_monster.png" type="Texture" id=17]
+[ext_resource path="res://_resources/scene_duel/button_hand.png" type="Texture" id=18]
+[ext_resource path="res://_resources/scene_duel/white_bg.png" type="Texture" id=19]
+[ext_resource path="res://_resources/scene_duel/button_field.png" type="Texture" id=20]
+[ext_resource path="res://_scripts/enemy_logic.gd" type="Script" id=21]
+[ext_resource path="res://_scenes/card_visual_only.tscn" type="PackedScene" id=22]
+[ext_resource path="res://_scenes/scene_transitioner.tscn" type="PackedScene" id=24]
+[ext_resource path="res://_scripts/npc_decks.gd" type="Script" id=25]
+[ext_resource path="res://_scripts/effects.gd" type="Script" id=26]
+[ext_resource path="res://_scripts/fusions.gd" type="Script" id=27]
+
+[sub_resource type="DynamicFont" id=8]
+size = 150
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 95
+outline_size = 4
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+extra_spacing_char = -10
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 66
+outline_size = 4
+use_filter = true
+extra_spacing_char = -8
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 24
+outline_size = 2
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 68
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+use_filter = true
+extra_spacing_char = -4
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 30
+use_mipmaps = true
+use_filter = true
+extra_spacing_bottom = -10
+extra_spacing_char = -2
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 120
+outline_size = 2
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 8 )
+
+[sub_resource type="DynamicFont" id=10]
+size = 20
+outline_size = 2
+font_data = ExtResource( 5 )
+
+[node name="duel_scene" type="Node2D"]
+script = ExtResource( 11 )
+
+[node name="game_logic" type="Node" parent="."]
+script = ExtResource( 15 )
+
+[node name="player_logic" type="Node" parent="game_logic"]
+script = ExtResource( 13 )
+
+[node name="fusion_animation" type="Node2D" parent="game_logic/player_logic"]
+visible = false
+
+[node name="dark_bg" type="Sprite" parent="game_logic/player_logic/fusion_animation"]
+modulate = Color( 1, 1, 1, 0.870588 )
+scale = Vector2( 10, 5.7 )
+texture = ExtResource( 14 )
+centered = false
+
+[node name="fusion_result_card" parent="game_logic/player_logic/fusion_animation" instance=ExtResource( 10 )]
+visible = false
+margin_left = 476.0
+margin_top = 80.0
+margin_right = 806.0
+margin_bottom = 560.0
+rect_scale = Vector2( 0.8, 0.8 )
+
+[node name="fusion_order_0" parent="game_logic/player_logic/fusion_animation" instance=ExtResource( 10 )]
+margin_left = 83.0
+margin_top = 141.0
+margin_right = 413.0
+margin_bottom = 621.0
+rect_scale = Vector2( 0.66, 0.66 )
+
+[node name="white_bg" type="Sprite" parent="game_logic/player_logic/fusion_animation/fusion_order_0"]
+show_behind_parent = true
+scale = Vector2( 2.57931, 3.76894 )
+texture = ExtResource( 19 )
+centered = false
+
+[node name="fusion_order_1" parent="game_logic/player_logic/fusion_animation" instance=ExtResource( 10 )]
+margin_left = 856.0
+margin_top = 141.0
+margin_right = 1186.0
+margin_bottom = 621.0
+rect_scale = Vector2( 0.66, 0.66 )
+
+[node name="white_bg" type="Sprite" parent="game_logic/player_logic/fusion_animation/fusion_order_1"]
+show_behind_parent = true
+scale = Vector2( 2.57931, 3.76894 )
+texture = ExtResource( 19 )
+centered = false
+
+[node name="tween_fusion" type="Tween" parent="game_logic/player_logic/fusion_animation"]
+
+[node name="player_timer" type="Timer" parent="game_logic/player_logic"]
+
+[node name="enemy_logic" type="Node" parent="game_logic"]
+script = ExtResource( 21 )
+
+[node name="npc_decks_gd" type="Node" parent="game_logic/enemy_logic"]
+script = ExtResource( 25 )
+
+[node name="fusion_animation" type="Node2D" parent="game_logic/enemy_logic"]
+visible = false
+
+[node name="dark_bg" type="Sprite" parent="game_logic/enemy_logic/fusion_animation"]
+modulate = Color( 1, 1, 1, 0.870588 )
+scale = Vector2( 10, 5.7 )
+texture = ExtResource( 14 )
+centered = false
+
+[node name="fusion_result_card" parent="game_logic/enemy_logic/fusion_animation" instance=ExtResource( 10 )]
+visible = false
+margin_left = 476.0
+margin_top = 80.0
+margin_right = 806.0
+margin_bottom = 560.0
+rect_scale = Vector2( 0.8, 0.8 )
+
+[node name="fusion_order_0" parent="game_logic/enemy_logic/fusion_animation" instance=ExtResource( 10 )]
+margin_left = 83.0
+margin_top = 141.0
+margin_right = 413.0
+margin_bottom = 621.0
+rect_scale = Vector2( 0.66, 0.66 )
+
+[node name="white_bg" type="Sprite" parent="game_logic/enemy_logic/fusion_animation/fusion_order_0"]
+show_behind_parent = true
+scale = Vector2( 2.57931, 3.76894 )
+texture = ExtResource( 19 )
+centered = false
+
+[node name="fusion_order_1" parent="game_logic/enemy_logic/fusion_animation" instance=ExtResource( 10 )]
+margin_left = 856.0
+margin_top = 141.0
+margin_right = 1186.0
+margin_bottom = 621.0
+rect_scale = Vector2( 0.66, 0.66 )
+
+[node name="white_bg" type="Sprite" parent="game_logic/enemy_logic/fusion_animation/fusion_order_1"]
+show_behind_parent = true
+scale = Vector2( 2.57931, 3.76894 )
+texture = ExtResource( 19 )
+centered = false
+
+[node name="tween_fusion" type="Tween" parent="game_logic/enemy_logic/fusion_animation"]
+
+[node name="enemy_timer" type="Timer" parent="game_logic/enemy_logic"]
+one_shot = true
+
+[node name="effects" type="Node" parent="game_logic"]
+script = ExtResource( 26 )
+
+[node name="effect_visuals" type="Node2D" parent="game_logic/effects"]
+visible = false
+z_index = 3
+
+[node name="darken_screen" type="Button" parent="game_logic/effects/effect_visuals"]
+margin_top = 1.0
+margin_right = 1280.0
+margin_bottom = 721.0
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
+[node name="dark_sprite" type="Sprite" parent="game_logic/effects/effect_visuals/darken_screen"]
+position = Vector2( 640, 360 )
+scale = Vector2( 10, 10 )
+texture = ExtResource( 14 )
+
+[node name="visual_cardA" parent="game_logic/effects/effect_visuals" instance=ExtResource( 22 )]
+margin_left = 476.0
+margin_top = 123.0
+margin_right = 807.0
+margin_bottom = 603.0
+rect_scale = Vector2( 1.4, 1.4 )
+
+[node name="lp_change_visuals" type="Node2D" parent="game_logic/effects"]
+visible = false
+z_index = 10
+
+[node name="LP_damage" type="Label" parent="game_logic/effects/lp_change_visuals"]
+margin_left = 696.0
+margin_top = 21.0
+margin_right = 1160.0
+margin_bottom = 699.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 5
+custom_constants/shadow_offset_y = 5
+custom_fonts/font = SubResource( 8 )
+text = "8000"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="lp_anim_tween" type="Tween" parent="game_logic/effects/lp_change_visuals"]
+
+[node name="tween_effect" type="Tween" parent="game_logic/effects"]
+
+[node name="effect_timer_node" type="Timer" parent="game_logic/effects"]
+
+[node name="extra_timer_godot_sucks" type="Timer" parent="game_logic/effects"]
+
+[node name="just_visual_field_slots" type="Node2D" parent="game_logic/effects"]
+visible = false
+
+[node name="slot_0" type="Button" parent="game_logic/effects/just_visual_field_slots"]
+margin_left = 4.0
+margin_top = 58.0
+margin_right = 259.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_1" type="Button" parent="game_logic/effects/just_visual_field_slots"]
+margin_left = 258.0
+margin_top = 58.0
+margin_right = 513.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_2" type="Button" parent="game_logic/effects/just_visual_field_slots"]
+margin_left = 513.0
+margin_top = 58.0
+margin_right = 768.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_3" type="Button" parent="game_logic/effects/just_visual_field_slots"]
+margin_left = 767.0
+margin_top = 58.0
+margin_right = 1022.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_4" type="Button" parent="game_logic/effects/just_visual_field_slots"]
+margin_left = 1021.0
+margin_top = 58.0
+margin_right = 1276.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="tween_slots" type="Tween" parent="game_logic/effects/just_visual_field_slots"]
+
+[node name="fusions" type="Node" parent="game_logic"]
+script = ExtResource( 27 )
+
+[node name="battle_visuals" type="Node2D" parent="game_logic"]
+visible = false
+z_index = 3
+
+[node name="darken_screen" type="Button" parent="game_logic/battle_visuals"]
+margin_top = -22.0
+margin_right = 1280.0
+margin_bottom = 698.0
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
+[node name="dark_sprite" type="Sprite" parent="game_logic/battle_visuals/darken_screen"]
+position = Vector2( 640, 360 )
+scale = Vector2( 10, 10 )
+texture = ExtResource( 14 )
+
+[node name="visual_cardA" parent="game_logic/battle_visuals" instance=ExtResource( 22 )]
+margin_left = 188.0
+margin_top = 120.0
+margin_right = 519.0
+margin_bottom = 600.0
+rect_scale = Vector2( 1.4, 1.4 )
+
+[node name="visual_cardB" parent="game_logic/battle_visuals" instance=ExtResource( 22 )]
+margin_left = 763.0
+margin_top = 120.0
+margin_right = 1094.0
+margin_bottom = 600.0
+rect_scale = Vector2( 1.4, 1.4 )
+
+[node name="LP_damage" type="Label" parent="game_logic/battle_visuals"]
+visible = false
+margin_left = 696.0
+margin_top = 21.0
+margin_right = 1160.0
+margin_bottom = 699.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 5
+custom_constants/shadow_offset_y = 5
+custom_fonts/font = SubResource( 8 )
+text = "8000"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="tween_battle" type="Tween" parent="game_logic/battle_visuals"]
+
+[node name="battle_timer_node" type="Timer" parent="game_logic/battle_visuals"]
+
+[node name="duel_field" type="Node2D" parent="."]
+
+[node name="player_side_zones" type="Sprite" parent="duel_field"]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="not_a_card_on_field" type="Button" parent="duel_field/player_side_zones"]
+margin_right = 1279.0
+margin_bottom = 779.0
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
+[node name="monster_0" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -69.0
+margin_top = -48.0
+margin_right = 261.0
+margin_bottom = 432.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/monster_0"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_0/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_0/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/monster_0"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_0/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_0/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="monster_1" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = 185.0
+margin_top = -48.0
+margin_right = 515.0
+margin_bottom = 432.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/monster_1"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_1/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_1/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/monster_1"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_1/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_1/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="monster_2" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = 440.0
+margin_top = -48.0
+margin_right = 770.0
+margin_bottom = 432.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/monster_2"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_2/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_2/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/monster_2"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_2/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_2/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="monster_3" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = 694.0
+margin_top = -48.0
+margin_right = 1024.0
+margin_bottom = 432.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/monster_3"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_3/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_3/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/monster_3"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_3/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_3/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="monster_4" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = 948.0
+margin_top = -48.0
+margin_right = 1278.0
+margin_bottom = 432.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/monster_4"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_4/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_4/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/monster_4"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/monster_4/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/monster_4/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_0" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -69.0
+margin_top = 208.0
+margin_right = 261.0
+margin_bottom = 688.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_0"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_0/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_0/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_0"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_0/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_0/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_1" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = 185.0
+margin_top = 208.0
+margin_right = 515.0
+margin_bottom = 688.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_1"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_1/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_1/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_1"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_1/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_1/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_2" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = 440.0
+margin_top = 208.0
+margin_right = 770.0
+margin_bottom = 688.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_2"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_2/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_2/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_2"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_2/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_2/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_3" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = 694.0
+margin_top = 208.0
+margin_right = 1024.0
+margin_bottom = 688.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_3"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_3/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_3/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_3"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_3/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_3/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_4" parent="duel_field/player_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = 948.0
+margin_top = 208.0
+margin_right = 1278.0
+margin_bottom = 688.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_4"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_4/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_4/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/player_side_zones/spelltrap_4"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/player_side_zones/spelltrap_4/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/player_side_zones/spelltrap_4/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="tween_field_cards" type="Tween" parent="duel_field/player_side_zones"]
+
+[node name="monster_field_slots" type="Node2D" parent="duel_field/player_side_zones"]
+visible = false
+
+[node name="slot_0" type="Button" parent="duel_field/player_side_zones/monster_field_slots"]
+margin_left = 4.0
+margin_top = 58.0
+margin_right = 259.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_1" type="Button" parent="duel_field/player_side_zones/monster_field_slots"]
+margin_left = 258.0
+margin_top = 58.0
+margin_right = 513.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_2" type="Button" parent="duel_field/player_side_zones/monster_field_slots"]
+margin_left = 513.0
+margin_top = 58.0
+margin_right = 768.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_3" type="Button" parent="duel_field/player_side_zones/monster_field_slots"]
+margin_left = 767.0
+margin_top = 58.0
+margin_right = 1022.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_4" type="Button" parent="duel_field/player_side_zones/monster_field_slots"]
+margin_left = 1021.0
+margin_top = 58.0
+margin_right = 1276.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="tween_slots" type="Tween" parent="duel_field/player_side_zones/monster_field_slots"]
+
+[node name="spelltrap_field_slots" type="Node2D" parent="duel_field/player_side_zones"]
+visible = false
+position = Vector2( 0, 255 )
+
+[node name="slot_0" type="Button" parent="duel_field/player_side_zones/spelltrap_field_slots"]
+margin_left = 4.0
+margin_top = 58.0
+margin_right = 259.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_1" type="Button" parent="duel_field/player_side_zones/spelltrap_field_slots"]
+margin_left = 258.0
+margin_top = 58.0
+margin_right = 513.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_2" type="Button" parent="duel_field/player_side_zones/spelltrap_field_slots"]
+margin_left = 513.0
+margin_top = 58.0
+margin_right = 768.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_3" type="Button" parent="duel_field/player_side_zones/spelltrap_field_slots"]
+margin_left = 767.0
+margin_top = 58.0
+margin_right = 1022.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="slot_4" type="Button" parent="duel_field/player_side_zones/spelltrap_field_slots"]
+margin_left = 1021.0
+margin_top = 58.0
+margin_right = 1276.0
+margin_bottom = 328.0
+rect_pivot_offset = Vector2( 127, 135 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 17 )
+flat = true
+
+[node name="tween_slots" type="Tween" parent="duel_field/player_side_zones/spelltrap_field_slots"]
+
+[node name="enemy_side_zones" type="Sprite" parent="duel_field"]
+position = Vector2( -42, 227 )
+rotation = -3.14159
+texture = ExtResource( 1 )
+centered = false
+offset = Vector2( -1322, 227.003 )
+
+[node name="direct_attack_area" type="Button" parent="duel_field/enemy_side_zones"]
+margin_left = -1322.0
+margin_top = 287.0
+margin_right = -42.0
+margin_bottom = 550.0
+focus_mode = 0
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+flat = true
+
+[node name="monster_0" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -1468.0
+margin_top = 179.003
+margin_right = -1138.0
+margin_bottom = 659.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_0"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_0/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_0/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_0"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_0/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_0/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="monster_1" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -1214.0
+margin_top = 179.003
+margin_right = -884.0
+margin_bottom = 659.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_1"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_1/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_1/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_1"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_1/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_1/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="monster_2" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -958.999
+margin_top = 179.003
+margin_right = -628.999
+margin_bottom = 659.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_2"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_2/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_2/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_2"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_2/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_2/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="monster_3" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -704.999
+margin_top = 179.003
+margin_right = -374.999
+margin_bottom = 659.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_3"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_3/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_3/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_3"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_3/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_3/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="monster_4" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -450.999
+margin_top = 179.003
+margin_right = -120.999
+margin_bottom = 659.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_4"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_4/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_4/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/monster_4"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/monster_4/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/monster_4/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_0" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -1468.0
+margin_top = 435.003
+margin_right = -1138.0
+margin_bottom = 915.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_0"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_0/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_0/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_0"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_0/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_0/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_1" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -1214.0
+margin_top = 435.003
+margin_right = -884.0
+margin_bottom = 915.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_1"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_1/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_1/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_1"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_1/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_1/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_2" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -958.999
+margin_top = 435.003
+margin_right = -628.999
+margin_bottom = 915.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_2"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_2/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_2/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_2"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_2/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_2/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_3" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -704.999
+margin_top = 435.003
+margin_right = -374.999
+margin_bottom = 915.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_3"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_3/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_3/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_3"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_3/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_3/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="spelltrap_4" parent="duel_field/enemy_side_zones" instance=ExtResource( 10 )]
+visible = false
+margin_left = -451.0
+margin_top = 435.003
+margin_right = -121.0
+margin_bottom = 915.003
+rect_rotation = 180.0
+rect_scale = Vector2( 0.518, 0.517 )
+
+[node name="stat_ATKpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_4"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_4/stat_ATKpos"]
+margin_right = 308.0
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "3000"
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_4/stat_ATKpos"]
+margin_left = 263.359
+margin_top = 23.0326
+margin_right = 571.359
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "/2500"
+
+[node name="stat_DEFpos" type="Node2D" parent="duel_field/enemy_side_zones/spelltrap_4"]
+visible = false
+position = Vector2( -66, 402.052 )
+
+[node name="def" type="Label" parent="duel_field/enemy_side_zones/spelltrap_4/stat_DEFpos"]
+margin_left = 193.05
+margin_right = 501.05
+margin_bottom = 106.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 5 )
+text = "2500"
+
+[node name="atk" type="Label" parent="duel_field/enemy_side_zones/spelltrap_4/stat_DEFpos"]
+margin_left = 4.67169
+margin_top = 23.0326
+margin_right = 312.672
+margin_bottom = 129.033
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 4
+custom_constants/shadow_offset_y = 4
+custom_fonts/font = SubResource( 6 )
+text = "3000/"
+
+[node name="tween_field_cards" type="Tween" parent="duel_field/enemy_side_zones"]
+
+[node name="player_hand" type="Node2D" parent="."]
+position = Vector2( -33, 22 )
+
+[node name="darken_screen" type="Button" parent="player_hand"]
+visible = false
+margin_top = -22.0
+margin_right = 1280.0
+margin_bottom = 698.0
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
+[node name="dark_sprite" type="Sprite" parent="player_hand/darken_screen"]
+modulate = Color( 1, 1, 1, 0.65098 )
+position = Vector2( 640, 360 )
+scale = Vector2( 10, 10 )
+texture = ExtResource( 14 )
+
+[node name="card_0" parent="player_hand" instance=ExtResource( 10 )]
+margin_left = 185.0
+margin_top = 280.0
+margin_right = 515.0
+margin_bottom = 760.0
+rect_rotation = -11.0
+rect_scale = Vector2( 0.524, 0.524 )
+
+[node name="card_1" parent="player_hand" instance=ExtResource( 10 )]
+margin_left = 330.0
+margin_top = 258.0
+margin_right = 660.0
+margin_bottom = 738.0
+rect_rotation = -6.0
+rect_scale = Vector2( 0.524, 0.524 )
+
+[node name="card_2" parent="player_hand" instance=ExtResource( 10 )]
+margin_left = 475.0
+margin_top = 250.0
+margin_right = 805.0
+margin_bottom = 730.0
+rect_scale = Vector2( 0.524, 0.524 )
+
+[node name="card_3" parent="player_hand" instance=ExtResource( 10 )]
+margin_left = 620.0
+margin_top = 258.0
+margin_right = 950.0
+margin_bottom = 738.0
+rect_rotation = 6.0
+rect_scale = Vector2( 0.524, 0.524 )
+
+[node name="card_4" parent="player_hand" instance=ExtResource( 10 )]
+margin_left = 765.0
+margin_top = 280.0
+margin_right = 1095.0
+margin_bottom = 760.0
+rect_rotation = 11.0
+rect_scale = Vector2( 0.524, 0.524 )
+
+[node name="hand_tween" type="Tween" parent="player_hand"]
+
+[node name="user_interface" type="Node2D" parent="."]
+z_index = 2
+
+[node name="card_info_box" parent="user_interface" instance=ExtResource( 3 )]
+
+[node name="top_info_box" type="Sprite" parent="user_interface"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="player_info" type="Control" parent="user_interface/top_info_box"]
+margin_left = 10.0
+margin_right = 274.0
+margin_bottom = 52.0
+
+[node name="YOU" type="Label" parent="user_interface/top_info_box/player_info"]
+margin_left = -8.0
+margin_top = -1.0
+margin_right = 66.0
+margin_bottom = 25.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 3 )
+text = "YOU"
+align = 2
+
+[node name="deck" type="Label" parent="user_interface/top_info_box/player_info"]
+margin_left = 28.0
+margin_top = 21.0
+margin_right = 66.0
+margin_bottom = 47.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 3 )
+text = "40"
+align = 2
+
+[node name="lifepoints" type="Label" parent="user_interface/top_info_box/player_info"]
+margin_left = 64.0
+margin_top = -14.0
+margin_right = 264.0
+margin_bottom = 59.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 4 )
+text = "8000"
+valign = 1
+
+[node name="com_info" type="Control" parent="user_interface/top_info_box"]
+margin_left = 1006.0
+margin_right = 1270.0
+margin_bottom = 52.0
+
+[node name="COM" type="Label" parent="user_interface/top_info_box/com_info"]
+margin_left = 193.0
+margin_top = -1.0
+margin_right = 255.0
+margin_bottom = 54.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 3 )
+text = "COM
+"
+
+[node name="deck" type="Label" parent="user_interface/top_info_box/com_info"]
+margin_left = 193.0
+margin_top = 21.0
+margin_right = 227.0
+margin_bottom = 47.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 3 )
+text = "40"
+
+[node name="lifepoints" type="Label" parent="user_interface/top_info_box/com_info"]
+margin_left = -7.0
+margin_top = -14.0
+margin_right = 193.0
+margin_bottom = 59.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+custom_fonts/font = SubResource( 4 )
+text = "8000"
+align = 2
+valign = 1
+
+[node name="field_info" type="Control" parent="user_interface/top_info_box"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="turn" type="Label" parent="user_interface/top_info_box/field_info"]
+margin_left = 269.0
+margin_top = -1.0
+margin_right = 1003.0
+margin_bottom = 48.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 3 )
+text = "Turn 0"
+align = 1
+
+[node name="field_name" type="Label" parent="user_interface/top_info_box/field_info"]
+margin_left = 269.0
+margin_top = -1.0
+margin_right = 1003.0
+margin_bottom = 46.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 3 )
+text = "no field bonus"
+align = 1
+valign = 2
+
+[node name="tween_LP" type="Tween" parent="user_interface/top_info_box"]
+
+[node name="change_field_view" type="Button" parent="."]
+margin_left = 1274.0
+margin_top = 276.0
+margin_right = 1386.0
+margin_bottom = 366.0
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 20 )
+flat = true
+
+[node name="shadow" type="Sprite" parent="change_field_view"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 58, 47 )
+texture = ExtResource( 18 )
+
+[node name="tween" type="Tween" parent="change_field_view"]
+
+[node name="turn_end_button" type="Button" parent="."]
+margin_left = 1274.0
+margin_top = 366.0
+margin_right = 1386.0
+margin_bottom = 456.0
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 20 )
+flat = true
+
+[node name="shadow" type="Sprite" parent="turn_end_button"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 58, 47 )
+texture = ExtResource( 18 )
+
+[node name="tween" type="Tween" parent="turn_end_button"]
+
+[node name="dark" type="Sprite" parent="turn_end_button"]
+position = Vector2( 70, 44 )
+scale = Vector2( 0.5625, 0.421875 )
+texture = ExtResource( 14 )
+
+[node name="end" type="Label" parent="turn_end_button"]
+margin_left = 26.0
+margin_top = 9.0
+margin_right = 104.0
+margin_bottom = 73.0
+custom_fonts/font = SubResource( 7 )
+text = "Turn
+End"
+align = 1
+valign = 1
+
+[node name="back_to_hand" type="Button" parent="."]
+margin_left = 1274.0
+margin_top = 276.0
+margin_right = 1386.0
+margin_bottom = 366.0
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 18 )
+flat = true
+
+[node name="shadow" type="Sprite" parent="back_to_hand"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 58, 47 )
+texture = ExtResource( 18 )
+
+[node name="tween" type="Tween" parent="back_to_hand"]
+
+[node name="debug_menu" type="Control" parent="."]
+visible = false
+margin_top = 128.0
+margin_right = 40.0
+margin_bottom = 168.0
+script = ExtResource( 16 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="debug_menu"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="reset_scene_button" type="Button" parent="debug_menu/VBoxContainer"]
+visible = false
+margin_right = 100.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 100, 33 )
+text = "RESET SCENE"
+
+[node name="change_card_id" type="Button" parent="debug_menu/VBoxContainer"]
+margin_right = 100.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 100, 33 )
+text = "Change Card"
+
+[node name="print_phase" type="Button" parent="debug_menu/VBoxContainer"]
+margin_top = 37.0
+margin_right = 100.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 100, 33 )
+text = "print phase"
+
+[node name="change_field_view" type="Button" parent="debug_menu/VBoxContainer"]
+margin_top = 74.0
+margin_right = 100.0
+margin_bottom = 107.0
+rect_min_size = Vector2( 100, 33 )
+text = "change field"
+
+[node name="phase_rewind" type="Button" parent="debug_menu/VBoxContainer"]
+margin_top = 111.0
+margin_right = 100.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 100, 33 )
+text = "Next turn"
+
+[node name="end_duel" type="Button" parent="debug_menu/VBoxContainer"]
+margin_top = 148.0
+margin_right = 100.0
+margin_bottom = 181.0
+rect_min_size = Vector2( 100, 33 )
+text = "End Duel"
+
+[node name="mill_Com" type="Button" parent="debug_menu/VBoxContainer"]
+margin_top = 185.0
+margin_right = 100.0
+margin_bottom = 218.0
+rect_min_size = Vector2( 100, 33 )
+text = "lose duel"
+
+[node name="debug_timer" type="Timer" parent="debug_menu"]
+
+[node name="history_button" type="Button" parent="."]
+margin_left = -23.0
+margin_top = 39.0
+margin_right = 89.0
+margin_bottom = 129.0
+rect_scale = Vector2( -0.666, 0.666 )
+rect_pivot_offset = Vector2( 56, 45 )
+focus_mode = 0
+enabled_focus_mode = 0
+icon = ExtResource( 20 )
+flat = true
+
+[node name="shadow" type="Sprite" parent="history_button"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+position = Vector2( 58, 47 )
+texture = ExtResource( 18 )
+
+[node name="tween" type="Tween" parent="history_button"]
+
+[node name="dark" type="Sprite" parent="history_button"]
+position = Vector2( 70, 44 )
+scale = Vector2( 0.5625, 0.421875 )
+texture = ExtResource( 14 )
+
+[node name="IconWatch" type="Sprite" parent="history_button"]
+position = Vector2( 56.9512, 45.2864 )
+scale = Vector2( -0.12, 0.12 )
+texture = ExtResource( 6 )
+
+[node name="side_menu" type="Node2D" parent="."]
+visible = false
+z_index = 1
+script = ExtResource( 9 )
+
+[node name="block_clicks_behind" type="Button" parent="side_menu"]
+margin_right = 1281.0
+margin_bottom = 720.0
+focus_mode = 0
+enabled_focus_mode = 0
+flat = true
+
+[node name="shadow_bg" type="Sprite" parent="side_menu"]
+modulate = Color( 1, 1, 1, 0.94902 )
+position = Vector2( 539.936, 362.491 )
+rotation = 1.5708
+scale = Vector2( 0.563, 1.5 )
+texture = ExtResource( 7 )
+
+[node name="dark_sprite" type="Sprite" parent="side_menu"]
+modulate = Color( 1, 1, 1, 0.65098 )
+position = Vector2( 1061.5, 362 )
+scale = Vector2( 16.5859, 5.59375 )
+texture = ExtResource( 14 )
+
+[node name="top_row" type="HBoxContainer" parent="side_menu"]
+margin_top = 51.0
+margin_right = 278.0
+margin_bottom = 153.0
+alignment = 1
+
+[node name="rank_indicator" type="Control" parent="side_menu/top_row"]
+margin_left = 29.0
+margin_right = 129.0
+margin_bottom = 102.0
+rect_min_size = Vector2( 100, 100 )
+
+[node name="duel_rank_indicator" type="Label" parent="side_menu/top_row/rank_indicator"]
+margin_top = 3.0
+margin_right = 100.0
+margin_bottom = 103.0
+rect_min_size = Vector2( 100, 100 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 3 )
+text = "Rank"
+align = 1
+
+[node name="rank_letter" type="Label" parent="side_menu/top_row/rank_indicator"]
+anchor_left = -1.97348
+anchor_top = -2.43018
+anchor_right = -1.94348
+anchor_bottom = -2.43018
+margin_left = 197.348
+margin_top = 270.879
+margin_right = 327.348
+margin_bottom = 390.879
+rect_scale = Vector2( 0.666, 0.666 )
+rect_pivot_offset = Vector2( 22, 0 )
+custom_colors/font_color = Color( 0.721569, 0.721569, 0.721569, 1 )
+custom_colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0.309804, 0.309804, 0.309804, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 9 )
+text = "F"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="buttons" type="Control" parent="side_menu/top_row"]
+margin_left = 133.0
+margin_right = 249.0
+margin_bottom = 102.0
+rect_min_size = Vector2( 116, 100 )
+
+[node name="button_speed" type="Button" parent="side_menu/top_row/buttons"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 112.0
+margin_bottom = 53.0
+rect_min_size = Vector2( 108, 49 )
+rect_pivot_offset = Vector2( 54, 24 )
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Speed: 1x"
+flat = true
+
+[node name="BigButton" type="Sprite" parent="side_menu/top_row/buttons/button_speed"]
+position = Vector2( 3, 2 )
+texture = ExtResource( 12 )
+centered = false
+
+[node name="label" type="Label" parent="side_menu/top_row/buttons/button_speed"]
+margin_right = 106.0
+margin_bottom = 47.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 3 )
+text = "1X"
+align = 1
+valign = 1
+
+[node name="button_giveup" type="Button" parent="side_menu/top_row/buttons"]
+margin_left = -1.0
+margin_top = 51.0
+margin_right = 115.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 116, 49 )
+rect_pivot_offset = Vector2( 58, 24 )
+focus_mode = 0
+enabled_focus_mode = 0
+text = "Speed: 1x"
+flat = true
+
+[node name="BigButton" type="Sprite" parent="side_menu/top_row/buttons/button_giveup"]
+position = Vector2( 3, 2 )
+scale = Vector2( 1.1, 1 )
+texture = ExtResource( 12 )
+centered = false
+
+[node name="label" type="Label" parent="side_menu/top_row/buttons/button_giveup"]
+margin_right = 113.0
+margin_bottom = 47.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 10 )
+text = "Forfeit"
+align = 1
+valign = 1
+
+[node name="cards_of_fusion" type="Node2D" parent="side_menu"]
+position = Vector2( 0, 17 )
+
+[node name="fusion_history_title" type="Label" parent="side_menu/cards_of_fusion"]
+margin_top = 114.0
+margin_right = 287.0
+margin_bottom = 161.0
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 3
+custom_fonts/font = SubResource( 3 )
+text = "Fusion History"
+align = 1
+valign = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="side_menu/cards_of_fusion"]
+margin_left = 5.0
+margin_top = 161.0
+margin_right = 306.0
+margin_bottom = 563.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="side_menu/cards_of_fusion/ScrollContainer"]
+custom_constants/separation = -5
+alignment = 1
+
+[node name="Tween" type="Tween" parent="side_menu"]
+
+[node name="scene_transitioner" parent="." instance=ExtResource( 24 )]
+visible = false
+
+[node name="reward_scene" parent="." instance=ExtResource( 4 )]
+visible = false
+z_index = 3
+
+[node name="dark_transition" type="Sprite" parent="."]
+visible = false
+scale = Vector2( 10, 5.625 )
+z_index = 4
+texture = ExtResource( 14 )
+centered = false
+
+[node name="fake_transition_tween" type="Tween" parent="dark_transition"]
+
+[connection signal="button_up" from="duel_field/player_side_zones/not_a_card_on_field" to="duel_field/player_side_zones/monster_0" method="_on_not_a_card_on_field_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/monster_field_slots/slot_0" to="game_logic/player_logic" method="_on_slot_0_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/monster_field_slots/slot_1" to="game_logic/player_logic" method="_on_slot_1_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/monster_field_slots/slot_2" to="game_logic/player_logic" method="_on_slot_2_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/monster_field_slots/slot_3" to="game_logic/player_logic" method="_on_slot_3_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/monster_field_slots/slot_4" to="game_logic/player_logic" method="_on_slot_4_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/spelltrap_field_slots/slot_0" to="game_logic/player_logic" method="_on_slot_0_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/spelltrap_field_slots/slot_1" to="game_logic/player_logic" method="_on_slot_1_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/spelltrap_field_slots/slot_2" to="game_logic/player_logic" method="_on_slot_2_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/spelltrap_field_slots/slot_3" to="game_logic/player_logic" method="_on_slot_3_button_up"]
+[connection signal="button_up" from="duel_field/player_side_zones/spelltrap_field_slots/slot_4" to="game_logic/player_logic" method="_on_slot_4_button_up"]
+[connection signal="button_up" from="duel_field/enemy_side_zones/direct_attack_area" to="game_logic" method="_on_direct_attack_area_button_up"]
+[connection signal="button_up" from="player_hand/darken_screen" to="." method="_on_darken_screen_button_up"]
+[connection signal="button_up" from="change_field_view" to="." method="_on_change_field_view_button_up"]
+[connection signal="button_up" from="turn_end_button" to="." method="_on_turn_end_button_button_up"]
+[connection signal="button_up" from="back_to_hand" to="." method="_on_back_to_hand_button_up"]
+[connection signal="button_up" from="debug_menu/VBoxContainer/reset_scene_button" to="debug_menu" method="_on_reset_scene_button_button_up"]
+[connection signal="button_up" from="debug_menu/VBoxContainer/change_card_id" to="debug_menu" method="_on_change_card_id_button_up"]
+[connection signal="button_up" from="debug_menu/VBoxContainer/print_phase" to="debug_menu" method="_on_print_phase_button_up"]
+[connection signal="button_up" from="debug_menu/VBoxContainer/change_field_view" to="debug_menu" method="_on_change_field_view_button_up"]
+[connection signal="button_up" from="debug_menu/VBoxContainer/phase_rewind" to="debug_menu" method="_on_phase_rewind_button_up"]
+[connection signal="button_up" from="debug_menu/VBoxContainer/end_duel" to="debug_menu" method="_on_end_duel_button_up"]
+[connection signal="button_up" from="debug_menu/VBoxContainer/mill_Com" to="debug_menu" method="_on_mill_Com_button_up"]
+[connection signal="button_up" from="history_button" to="side_menu" method="_on_history_button_button_up"]
+[connection signal="button_up" from="side_menu/block_clicks_behind" to="side_menu" method="_on_block_clicks_behind_button_up"]
+[connection signal="button_up" from="side_menu/top_row/buttons/button_speed" to="side_menu" method="_on_button_speed_button_up"]
+[connection signal="button_up" from="side_menu/top_row/buttons/button_giveup" to="side_menu" method="_on_button_giveup_button_up"]
