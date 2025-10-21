@@ -433,14 +433,22 @@
                 nextId = (maxId + 1).toString().padStart(5, '0');
             }
 
-            var newCard = {"id":nextId,
-                "card_name":"Nova carta",
-                "attribute":"light",
-                "level":1,"atk":100,"def":100,
-                "type":"dragon","count_as":null,
-                "effect":[],
-                "passcode":"000000000"
-            }
+            var newCard = {
+                "id": nextId,
+                "card_name": "New card",
+                "card_name_pt": "Nova carta",
+                "text": {"en": "", "pt": ""},
+                "restrict": 3,
+                "color": "normal",
+                "chain": false,
+                "fan": false,
+                "initial": false,
+                "attribute": "light",
+                "level": 1, "atk": 100,"def": 100,
+                "type": "dragon","count_as": null,
+                "effect": [],
+                "passcode": "000000000"
+            };
 
             $scope.cardArray.push(newCard);
             $scope.selected = newCard;
@@ -529,7 +537,6 @@
         }
 
         $scope.downloadGDScript = function() {
-            debugger;
             const gdScriptContent = generateGDScript();
             const blob = new Blob([gdScriptContent], { type: 'text/plain' });
             const url = window.URL.createObjectURL(blob);
@@ -555,14 +562,28 @@
             $scope.cardArray.forEach((item, index) => {
                 text += `    "${item.id}" : { 
                     "card_name": "${item.card_name.replace(/"/g, '\\"')}",
+                    "card_name_pt": "${item.card_name_pt.replace(/"/g, '\\"')}",
                     "attribute": "${item.attribute.replace(/"/g, '\\"')}",
+                    "text": {
+                        "en": "${item.text.en.replace(/"/g, '\\"')}",
+                        "pt": "${item.text.pt.replace(/"/g, '\\"')}"
+                    },
                     "level": ${item.level},
                     "atk": ${item.atk},
                     "def": ${item.def},
                     "type": "${item.type.replace(/"/g, '\\"')}",
+                    "subtype": "${item.subtype.replace(/"/g, '\\"')}",
+                    "effect" : ${JSON.stringify(item.effect, null, 0)},
+                    "passcode": ${item.passcode != null ? `"${item.passcode}"` : null },
+                    "price": ${item.price != null ? `"${item.price}"` : 100 },
                     "count_as": ${item.count_as != null ? `"${item.count_as}"` : null },
-                    "effect" : ${JSON.stringify(item.effect, null, 0)},   
-                    "passcode": ${item.passcode != null ? `"${item.passcode}"` : null } 
+                    "color": "${item.color.replace(/"/g, '\\"')}",
+                    "star1": "${item.star1 != null ? item.star1.replace(/"/g, '\\"') : "Moon" }",
+                    "star2": "${item.star2 != null ? item.star2.replace(/"/g, '\\"') : "Sun" }",
+                    "restrict": ${item.restrict},
+                    "fan": ${item.fan},
+                    "chain": ${item.chain},
+                    "initial": ${item.initial},
                 }`
                 if (index != $scope.cardArray.length - 1) text += ', \n';
             })
