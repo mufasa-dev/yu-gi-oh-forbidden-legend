@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/poc_fusion1.wav-58eb8ff52fd651d8bc9f6247bf720bdf.sample"
+type="AudioStreamWAV"
+uid="uid://ber1dbve2uer7"
+path="res://.godot/imported/poc_fusion1.wav-58eb8ff52fd651d8bc9f6247bf720bdf.sample"
 
 [deps]
 
 source_file="res://_resources/_audio/sound_effects/poc_fusion1.wav"
-dest_files=[ "res://.import/poc_fusion1.wav-58eb8ff52fd651d8bc9f6247bf720bdf.sample" ]
+dest_files=["res://.godot/imported/poc_fusion1.wav-58eb8ff52fd651d8bc9f6247bf720bdf.sample"]
 
 [params]
 

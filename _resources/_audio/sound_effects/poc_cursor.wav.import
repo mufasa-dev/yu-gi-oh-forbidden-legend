@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/poc_cursor.wav-db8e125a523403527aec1c7de8b67504.sample"
+type="AudioStreamWAV"
+uid="uid://h3lo1384o4qo"
+path="res://.godot/imported/poc_cursor.wav-db8e125a523403527aec1c7de8b67504.sample"
 
 [deps]
 
 source_file="res://_resources/_audio/sound_effects/poc_cursor.wav"
-dest_files=[ "res://.import/poc_cursor.wav-db8e125a523403527aec1c7de8b67504.sample" ]
+dest_files=["res://.godot/imported/poc_cursor.wav-db8e125a523403527aec1c7de8b67504.sample"]
 
 [params]
 

@@ -74,12 +74,12 @@ func update_right_panel():
 	#player_deck = PlayerData.player_deck
 	
 	#Update the CardIndicators
-	$panel_right/CardsIndicator/count_deck.text = String(PlayerData.player_deck.size())
-	$panel_right/CardsIndicator/count_normal.text = String(player_deck_normal_cards.size())
-	$panel_right/CardsIndicator/count_effect.text = String(player_deck_effect_cards.size())
-	$panel_right/CardsIndicator/count_spell.text = String(player_deck_spell_cards.size())
-	$panel_right/CardsIndicator/count_trap.text = String(player_deck_trap_cards.size())
-	$panel_right/CardsIndicator/count_ritual.text = String(player_deck_ritual_cards.size())
+	$panel_right/CardsIndicator/count_deck.text = str(PlayerData.player_deck.size())
+	$panel_right/CardsIndicator/count_normal.text = str(player_deck_normal_cards.size())
+	$panel_right/CardsIndicator/count_effect.text = str(player_deck_effect_cards.size())
+	$panel_right/CardsIndicator/count_spell.text = str(player_deck_spell_cards.size())
+	$panel_right/CardsIndicator/count_trap.text = str(player_deck_trap_cards.size())
+	$panel_right/CardsIndicator/count_ritual.text = str(player_deck_ritual_cards.size())
 	
 	#Unable the button to leave the Deck Building screen if the Deck doesn't have 40 cards
 	if PlayerData.player_deck.size() < 40:
@@ -106,12 +106,13 @@ func generate_necessary_left_side_nodes():
 	var referece_parent_node = $panel_left/ScrollContainer/MarginContainer/GridContainer
 	
 	for _i in range(PlayerData.player_trunk.keys().size()):
-		var instance_of_card_node = trunk_card_node_file.instance()
+		var instance_of_card_node = trunk_card_node_file.instantiate()
 		referece_parent_node.add_child(instance_of_card_node)
 
 #---------------------------------------------------------------------------------------------------
 func update_left_panel(player_trunk_as_array):
 	#If sorting by Name, show the Newest cards first
+	print("number cards", player_trunk_as_array.size())
 	for i in range(player_trunk_as_array.size()):
 		if $panel_left/ScrollContainer/MarginContainer/GridContainer.get_child(i).get_node("z_indexer/new_indicator").is_visible():
 			$panel_left/ScrollContainer/MarginContainer/GridContainer.get_child(i).get_node("z_indexer/new_indicator").hide()
@@ -150,7 +151,7 @@ func update_left_panel(player_trunk_as_array):
 			var how_many_in_deck = PlayerData.player_deck.count(card_ID_in_trunk)
 			copies_counter -= how_many_in_deck
 		
-		trunk_counter_label.text = String(copies_counter)
+		trunk_counter_label.text = str(copies_counter)
 		trunk_counter_label.show()
 		
 		#Change the opacity of cards with 0 copies
@@ -219,7 +220,7 @@ func export_player_deck():
 			temp_deck_as_dictionary[card] = 1 #card is not in trunk, so add it's key:value pair as id:count
 	
 	for card in temp_deck_as_dictionary.keys():
-		deck_string += card + String(temp_deck_as_dictionary[card])
+		deck_string += card + str(temp_deck_as_dictionary[card])
 	$import_export_canvas/export_window/exported_string.text = deck_string
 	
 	#Show everything
@@ -253,7 +254,7 @@ func _on_import_close_button_up():
 		return
 	
 	#If there is any character that isn't a number, fail to close the window
-	if not entered_string.is_valid_integer():
+	if not entered_string.is_valid_int():
 		print("has something else than numbers")
 		return
 	
@@ -316,9 +317,8 @@ func button_click_animation(button_node_path : String):
 	var small_scale = Vector2(0.8 , 0.8)
 	var normal_scale = Vector2(1 , 1)
 	
-	$user_interface/UI_tween.interpolate_property(get_node(button_node_path), "rect_scale", get_node(button_node_path).rect_scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$user_interface/UI_tween.interpolate_property(get_node(button_node_path), "scale", get_node(button_node_path).scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
-	yield($user_interface/UI_tween, "tween_completed")
-	$user_interface/UI_tween.interpolate_property(get_node(button_node_path), "rect_scale", get_node(button_node_path).rect_scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $user_interface/UI_tween.tween_completed
+	$user_interface/UI_tween.interpolate_property(get_node(button_node_path), "scale", get_node(button_node_path).scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
-

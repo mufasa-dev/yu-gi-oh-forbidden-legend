@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/poc_destroy.wav-129bda984224ae5affef668b146569ef.sample"
+type="AudioStreamWAV"
+uid="uid://d1t3cduycffoj"
+path="res://.godot/imported/poc_destroy.wav-129bda984224ae5affef668b146569ef.sample"
 
 [deps]
 
 source_file="res://_resources/_audio/sound_effects/poc_destroy.wav"
-dest_files=[ "res://.import/poc_destroy.wav-129bda984224ae5affef668b146569ef.sample" ]
+dest_files=["res://.godot/imported/poc_destroy.wav-129bda984224ae5affef668b146569ef.sample"]
 
 [params]
 

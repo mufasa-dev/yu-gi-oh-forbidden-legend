@@ -283,7 +283,7 @@ var attributes = {
 		"pt" : "Fogo"
 	},
 	"light" : {
-		"en" : "Light",
+		"en" : "Light3D",
 		"pt" : "Luz"
 	},
 	"water" : {
@@ -1345,10 +1345,3 @@ var ritual_litmus = {
 	"en" : "It's ATK and DEF is increased by 300 times the number of Spells and Traps originally in the Deck.",
 	"pt" : "Seu ATK e DEF aumentam em 300 vezes o número de Magias e Armadilhas originalmente no Deck."
 }
-
-
-
-
-
-
-

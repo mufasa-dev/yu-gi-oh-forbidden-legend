@@ -1,7 +1,7 @@
 extends Button
 
-export var this_duelist_name = ""
-onready var free_duel_node_path = get_node("../../../../")
+@export var this_duelist_name = ""
+@onready var free_duel_node_path = get_node("../../../../")
 
 func _ready():
 	$duelist_name.text = this_duelist_name
@@ -10,8 +10,8 @@ func _ready():
 	if not PlayerData.recorded_duels.keys().has(this_duelist_name):
 		PlayerData.recorded_duels[this_duelist_name] = {"W":0, "L":0}
 	
-	$win_count.text = "W: " + String(PlayerData.recorded_duels[this_duelist_name].W)
-	$loss_count.text = "L: " + String(PlayerData.recorded_duels[this_duelist_name].L)
+	$win_count.text = "W: " + str(PlayerData.recorded_duels[this_duelist_name].W)
+	$loss_count.text = "L: " + str(PlayerData.recorded_duels[this_duelist_name].L)
 
 func active_this_duelist():
 	#Darken the previously highlighted button

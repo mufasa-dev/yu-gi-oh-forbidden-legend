@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/fm_nitemare_scream.wav-e7360bf07843d55bc6651553d170e188.sample"
+type="AudioStreamWAV"
+uid="uid://drxav5v7b1jqp"
+path="res://.godot/imported/fm_nitemare_scream.wav-e7360bf07843d55bc6651553d170e188.sample"
 
 [deps]
 
 source_file="res://_resources/_audio/sound_effects/fm_nitemare_scream.wav"
-dest_files=[ "res://.import/fm_nitemare_scream.wav-e7360bf07843d55bc6651553d170e188.sample" ]
+dest_files=["res://.godot/imported/fm_nitemare_scream.wav-e7360bf07843d55bc6651553d170e188.sample"]
 
 [params]
 

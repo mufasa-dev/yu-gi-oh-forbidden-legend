@@ -1,0 +1,54 @@
+# Godot-specific
+.import/
+.export/
+.godot/
+mono/
+data_*/
+
+# Ignore exported builds
+export/
+build/
+bin/
+*.exe
+*.app
+*.x86*
+*.pck
+*.zip
+*.tar.gz
+*.dmg
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor backups and autosaves
+*.bak
+*.old
+*.orig
+*.autosave
+
+# User-specific Godot editor settings
+.editor_settings-*
+project_metadata.cfg
+
+# VSCode / JetBrains / other IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# Godot 4 C# (Mono) projects
+.mono/
+.vs/
+*.csproj
+*.sln
+*.user
+*.mdb
+*.pdb
+obj/
+bin/

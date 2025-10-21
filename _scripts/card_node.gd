@@ -1,5 +1,5 @@
 extends Button
-var this_card_id : String = String(101).pad_zeros(5)
+var this_card_id : String = str(101).pad_zeros(5)
 
 #This card personal flags
 var this_card_flags : Dictionary = {
@@ -25,7 +25,7 @@ func generate_random_card():
 	
 	randomize()
 	var random_number : int = randi() % CardList.card_list.keys().size()
-	card_id = String(random_number).pad_zeros(5)
+	card_id = str(random_number).pad_zeros(5)
 	
 	return card_id
 
@@ -45,12 +45,16 @@ func update_card_information(card_id : String):
 	#try to fit the card name as much as it can on the card
 	$card_design/card_name.text = this_card.card_name
 	var card_name_length : int = this_card.card_name.length()
+	if PlayerData.game_language == "pt":  
+		$card_design/card_name.text = this_card.card_name_pt
+		card_name_length = this_card.card_name_pt.length()
+	
 	var correction : float = clamp(((card_name_length - 14) * 0.033), 0, 0.4) #completely arbitrary, try-and-error based, values
-	$card_design/card_name.rect_scale.x = 1
+	$card_design/card_name.scale.x = 1
 	$card_design/card_name.clip_text = false
 	
 	if card_name_length > 14:
-		$card_design/card_name.rect_scale.x = 1 - correction
+		$card_design/card_name.scale.x = 1 - correction
 		$card_design/card_name.clip_text = true
 	
 	#Determine background texture color and type of 'card_frame'
@@ -81,7 +85,7 @@ func update_card_information(card_id : String):
 	#Determine if it will show 'monster_features' or 'spelltrap_features' on the design
 	match this_card.attribute:
 		"spell", "trap": 
-			$card_design/card_name.add_color_override("font_color", Color(1,1,1))
+			$card_design/card_name.add_theme_color_override("font_color", Color(1,1,1))
 			$card_design/monster_features.hide()
 			$card_design/spelltrap_features.show()
 			
@@ -91,7 +95,7 @@ func update_card_information(card_id : String):
 				$card_design/spelltrap_features/type_of_spelltrap.text = this_card.attribute + " card"
 			
 		_: 
-			$card_design/card_name.add_color_override("font_color", Color(0,0,0))
+			$card_design/card_name.add_theme_color_override("font_color", Color(0,0,0))
 			$card_design/spelltrap_features.hide()
 			$card_design/monster_features.show()
 			
@@ -104,13 +108,13 @@ func update_card_information(card_id : String):
 				$card_design/monster_features/level/upto11.show()
 				
 				for i in range(1, 12):
-					get_node("card_design/monster_features/level/upto11/level" + String(i)).hide()
+					get_node("card_design/monster_features/level/upto11/level" + str(i)).hide()
 				for i in range(0, this_card.level):
-					get_node("card_design/monster_features/level/upto11/level" + String(i+1)).show()
+					get_node("card_design/monster_features/level/upto11/level" + str(i+1)).show()
 			
 			#Show ATK and DEF
-			$card_design/monster_features/atk_def/atk.text = String(clamp(this_card.atk + this_card_flags.atk_up, 0, 9999))
-			$card_design/monster_features/atk_def/def.text = String(clamp(this_card.def + this_card_flags.def_up, 0, 9999))
+			$card_design/monster_features/atk_def/atk.text = str(clamp(this_card.atk + this_card_flags.atk_up, 0, 9999))
+			$card_design/monster_features/atk_def/def.text = str(clamp(this_card.def + this_card_flags.def_up, 0, 9999))
 	
 	#Show or hide card_back based on 'is_facedown' flag
 	if this_card_flags.is_facedown == true:
@@ -120,13 +124,13 @@ func update_card_information(card_id : String):
 
 #-------------------------------------------------------------------------------
 #MOUSE FUNCTIONS SHOULD BE DEPENDENT ON WHAT SCENE THE NODE IS CURRENTLY IN
-onready var scene_root := get_tree().get_current_scene()
-onready var scene_root_name : String = scene_root.get_name()
-onready var GAME_LOGIC := get_tree().get_current_scene().get_child(0)
+@onready var scene_root := get_tree().get_current_scene()
+@onready var scene_root_name : String = scene_root.get_name()
+@onready var GAME_LOGIC := get_tree().get_current_scene().get_child(0)
 
 #-------------------------------------------------------------------------------
-var recorded_position : Vector2 = self.rect_position
-var recorded_rotation : float = self.rect_rotation
+var recorded_position : Vector2 = self.position
+var recorded_rotation : float = self.rotation
 var middle_screen_position : Vector2 = Vector2(475-25, -104) #arbitrary middle of the screen
 var middle_screen_scale : Vector2 = Vector2(0.666, 0.666)
 var to_middle_time : float = 0.2 #in seconds
@@ -158,9 +162,9 @@ func _on_card_node_button_up():
 				#Move card to the middle of the screen, darken background and show summoning options
 				get_node("../darken_screen").show()
 				scene_root.hide_player_entire_hand()
-				card_self_tween.interpolate_property(self, "rect_position", self.rect_position, middle_screen_position, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-				card_self_tween.interpolate_property(self, "rect_rotation", self.rect_rotation, 0, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-				card_self_tween.interpolate_property(self, "rect_scale", self.rect_scale, middle_screen_scale, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+				card_self_tween.interpolate_property(self, "position", self.position, middle_screen_position, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+				card_self_tween.interpolate_property(self, "rotation", self.rotation, 0, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+				card_self_tween.interpolate_property(self, "scale", self.scale, middle_screen_scale, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 				card_self_tween.start()
 				
 				SoundControl.play_sound("poc_decide")
@@ -216,7 +220,7 @@ func show_card_combat_controls():
 	var initial_size : Vector2 = Vector2(GAME_LOGIC.atk_orientation_x_scale, GAME_LOGIC.atk_orientation_y_scale)
 	var scaled_up_size : Vector2 = Vector2(initial_size[0]*1.05, initial_size[1]*1.05)
 	var scale_timer : float = 0.2 #in seconds 
-	card_self_tween.interpolate_property(self, "rect_scale", self.rect_scale, scaled_up_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	card_self_tween.interpolate_property(self, "scale", self.scale, scaled_up_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	card_self_tween.start()
 	
 	#If it's a spell/trap card, hide combat options and show activate option
@@ -245,8 +249,8 @@ func show_card_combat_controls():
 func cancel_all_combat_controls():
 	#Cancel the combat controls for ALL CARDS at the same time, as a safety mesure
 	for i in range(5):
-		var node_to_cancel_M = get_node("../monster_" + String(i))
-		var node_to_cancel_ST = get_node("../spelltrap_" + String(i))
+		var node_to_cancel_M = get_node("../monster_" + str(i))
+		var node_to_cancel_ST = get_node("../spelltrap_" + str(i))
 		
 		node_to_cancel_M.get_node("combat_controls").hide()
 		node_to_cancel_ST.get_node("combat_controls").hide()
@@ -256,15 +260,15 @@ func cancel_all_combat_controls():
 		var scaled_back_size : Vector2 = Vector2(GAME_LOGIC.atk_orientation_x_scale, GAME_LOGIC.atk_orientation_y_scale)
 		var scale_timer : float = 0.2 #in seconds
 		
-		card_self_tween.interpolate_property(node_to_cancel_M, "rect_scale", node_to_cancel_M.rect_scale, scaled_back_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		card_self_tween.interpolate_property(node_to_cancel_ST, "rect_scale", node_to_cancel_ST.rect_scale, scaled_back_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		card_self_tween.interpolate_property(node_to_cancel_M, "scale", node_to_cancel_M.scale, scaled_back_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		card_self_tween.interpolate_property(node_to_cancel_ST, "scale", node_to_cancel_ST.scale, scaled_back_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		card_self_tween.start()
 		
 		#For visual coherency, force all  cards that are facedown to show it's facedown texture completely
-		if get_node("../monster_" + String(i)).get_name() != self.get_name():
-			get_node("../monster_" + String(i)).facedown_transparency_animation("make_opaque")
-		if get_node("../spelltrap_" + String(i)).get_name() != self.get_name():
-			get_node("../spelltrap_" + String(i)).facedown_transparency_animation("make_opaque")
+		if get_node("../monster_" + str(i)).get_name() != self.get_name():
+			get_node("../monster_" + str(i)).facedown_transparency_animation("make_opaque")
+		if get_node("../spelltrap_" + str(i)).get_name() != self.get_name():
+			get_node("../spelltrap_" + str(i)).facedown_transparency_animation("make_opaque")
 	
 	#Show again the buttons to Change Field View, if they are not visible
 	if !(get_node("../../../").is_change_field_visible):
@@ -282,10 +286,10 @@ func _on_not_a_card_on_field_button_up():
 #-------------------------------------------------------------------------------
 var height_variant : int = 60 #in pixels
 var movement_time : float = 0.2 #in seconds
-onready var card_self_tween = $card_self_tween
-onready var card_hand_id : int = int(self.get_name()[-1])
-onready var original_hand_heights : Array = [280, 258, 250, 258, 280]
-onready var upped_hand_heights : Array = [280-height_variant, 258-height_variant, 250-height_variant, 258-height_variant, 280-height_variant]
+@onready var card_self_tween = $card_self_tween
+@onready var card_hand_id : int = int(self.get_name()[-1])
+@onready var original_hand_heights : Array = [280, 258, 250, 258, 280]
+@onready var upped_hand_heights : Array = [280-height_variant, 258-height_variant, 250-height_variant, 258-height_variant, 280-height_variant]
 
 func _on_card_node_mouse_entered():
 	match scene_root_name:
@@ -311,13 +315,13 @@ func _on_card_node_mouse_entered():
 			if GAME_LOGIC.GAME_PHASE == "looking_at_hand" and self.get_parent().get_name() == "player_hand":
 				#Move any other card that is up so it will be down
 				for i in range(5):
-					var card_to_move = get_node("../card_" + String(i))
-					if card_to_move != self and card_to_move.rect_position.y != original_hand_heights[i]:
-						card_self_tween.interpolate_property(card_to_move, "rect_position:y", card_to_move.rect_position.y, original_hand_heights[i], movement_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+					var card_to_move = get_node("../card_" + str(i))
+					if card_to_move != self and card_to_move.position.y != original_hand_heights[i]:
+						card_self_tween.interpolate_property(card_to_move, "position:y", card_to_move.position.y, original_hand_heights[i], movement_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 						card_self_tween.start()
 				#Move card Up
-				if self.rect_position.y == original_hand_heights[card_hand_id]:
-					card_self_tween.interpolate_property(self, "rect_position:y", self.rect_position.y, upped_hand_heights[card_hand_id], movement_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+				if self.position.y == original_hand_heights[card_hand_id]:
+					card_self_tween.interpolate_property(self, "position:y", self.position.y, upped_hand_heights[card_hand_id], movement_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 					card_self_tween.start()
 			
 			#When mousing over a card on Field, during main Phase (Player Turn only) or 'selecting_combat_target' phase
@@ -331,7 +335,7 @@ func _on_card_node_mouse_entered():
 				var scaled_up_size : Vector2 = Vector2(initial_size[0]*1.05, initial_size[1]*1.05)
 				var scale_timer : float = 0.2 #in seconds 
 				
-				card_self_tween.interpolate_property(self, "rect_scale", initial_size, scaled_up_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+				card_self_tween.interpolate_property(self, "scale", initial_size, scaled_up_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 				card_self_tween.start()
 			
 			#When mousing over a facedown card during the combat options of any card (usually only on player field)
@@ -346,8 +350,8 @@ func _on_card_node_mouse_exited():
 			#Mouse out of the hand card, during looking_at_hand phase
 			if GAME_LOGIC.GAME_PHASE == "looking_at_hand" and self.get_parent().get_name() == "player_hand":
 				#Move card Down
-				if self.rect_position.y != original_hand_heights[card_hand_id]:
-					card_self_tween.interpolate_property(self, "rect_position:y", self.rect_position.y, original_hand_heights[card_hand_id], movement_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+				if self.position.y != original_hand_heights[card_hand_id]:
+					card_self_tween.interpolate_property(self, "position:y", self.position.y, original_hand_heights[card_hand_id], movement_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 					card_self_tween.start()
 			
 			#Mouse out of a card on Field, during main Phase or 'selecting_combat_target' phase
@@ -360,7 +364,7 @@ func _on_card_node_mouse_exited():
 				var scaled_back_size : Vector2 = Vector2(GAME_LOGIC.atk_orientation_x_scale, GAME_LOGIC.atk_orientation_y_scale)
 				var scale_timer : float = 0.2 #in seconds
 				
-				card_self_tween.interpolate_property(self, "rect_scale", self.rect_scale, scaled_back_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+				card_self_tween.interpolate_property(self, "scale", self.scale, scaled_back_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 				card_self_tween.start()
 			
 			#When mousing out a facedown card during the combat options of any card
@@ -401,7 +405,7 @@ func _on_defense_button_mouse_entered():
 	enlarge_button($combat_controls/defense_button)
 
 func enlarge_button(button_to_enlarge):
-	$summon_controls/summons_tween.interpolate_property(button_to_enlarge, "rect_scale", original_size, big_size, time_to_enlarge, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$summon_controls/summons_tween.interpolate_property(button_to_enlarge, "scale", original_size, big_size, time_to_enlarge, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$summon_controls/summons_tween.start()
 
 func _on_fusion_summon_mouse_exited():
@@ -419,11 +423,11 @@ func _on_defense_button_mouse_exited():
 	reduce_button($combat_controls/defense_button)
 
 func reduce_button(button_to_reduce):
-	$summon_controls/summons_tween.interpolate_property(button_to_reduce, "rect_scale", big_size, original_size, time_to_enlarge, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$summon_controls/summons_tween.interpolate_property(button_to_reduce, "scale", big_size, original_size, time_to_enlarge, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$summon_controls/summons_tween.start()
 
 #-------------------------------------------------------------------------------
-onready var PLAYER_LOGIC = GAME_LOGIC.get_child(0)
+@onready var PLAYER_LOGIC = GAME_LOGIC.get_child(0)
 
 func _on_fusion_summon_button_up():
 	if GAME_LOGIC.GAME_PHASE == "card_options":
@@ -435,7 +439,7 @@ func _on_fusion_summon_button_up():
 			remove_a_card_from_fusion_order(scene_root.card_in_the_middle)
 		
 		#Show the indicator with the proper value
-		$fusion_indicator/fusion_order_no.text = String(PLAYER_LOGIC.fusion_order.find(scene_root.card_in_the_middle) +1)
+		$fusion_indicator/fusion_order_no.text = str(PLAYER_LOGIC.fusion_order.find(scene_root.card_in_the_middle) +1)
 		if $fusion_indicator/fusion_order_no.text != "0":
 			$fusion_indicator.show()
 		
@@ -451,7 +455,7 @@ func remove_a_card_from_fusion_order(card_to_remove):
 	
 	#Remove the 'card_node' from the Fusion Order list
 	if PLAYER_LOGIC.fusion_order.has(card_to_remove):
-		PLAYER_LOGIC.fusion_order.remove(PLAYER_LOGIC.fusion_order.find(card_to_remove))
+		PLAYER_LOGIC.fusion_order.remove_at(PLAYER_LOGIC.fusion_order.find(card_to_remove))
 	
 	#Hide the indicator for this card
 	$fusion_indicator.hide()
@@ -459,7 +463,7 @@ func remove_a_card_from_fusion_order(card_to_remove):
 	#Update all other indicators to their new position in the order
 	for i in range(PLAYER_LOGIC.fusion_order.size()):
 		var card_node_to_modify = PLAYER_LOGIC.fusion_order[i].get_path()
-		get_node(String(card_node_to_modify) + "/fusion_indicator/fusion_order_no").text = String(i +1)
+		get_node(str(card_node_to_modify) + "/fusion_indicator/fusion_order_no").text = str(i +1)
 
 #-------------------------------------------------------------------------------
 func _on_faceup_summon_button_up():
@@ -496,13 +500,13 @@ func toggle_battle_position():
 	if this_card_flags.is_defense_position == false: #it's in attack, toggle to defense
 		this_card_flags.is_defense_position = true
 		$combat_controls/defense_button.icon = load("res://_resources/scene_duel/button_atk.png")
-		$combat_controls/combat_tween.interpolate_property($card_design, "rect_rotation", 0, -90, position_rotate_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$combat_controls/combat_tween.interpolate_property($card_design, "rotation", 0, -90, position_rotate_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$combat_controls/combat_tween.interpolate_property($combat_controls/attack_button, "modulate", $combat_controls/attack_button.modulate, Color(1,1,1, 0.3), position_rotate_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$combat_controls/combat_tween.start()
 	else: #it's in defense, toggle to attack
 		this_card_flags.is_defense_position = false
 		$combat_controls/defense_button.icon = load("res://_resources/scene_duel/button_def.png")
-		$combat_controls/combat_tween.interpolate_property($card_design, "rect_rotation", -90, 0, position_rotate_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$combat_controls/combat_tween.interpolate_property($card_design, "rotation", -90, 0, position_rotate_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		if self.this_card_flags.has_battled == false: #if it hasn't battled, change the Attack Button to be visible again
 			$combat_controls/combat_tween.interpolate_property($combat_controls/attack_button, "modulate", $combat_controls/attack_button.modulate, Color(1,1,1, 1), position_rotate_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$combat_controls/combat_tween.start()

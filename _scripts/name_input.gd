@@ -21,4 +21,3 @@ func _ready():
 	for i in range(special_grid.get_child_count()):
 		var button = special_grid.get_child(i)
 		button.get_node("player_name_visual").text = special[i]
-

@@ -1,5 +1,5 @@
 extends Button
-var this_card_id : String = String(101).pad_zeros(5)
+var this_card_id : String = str(101).pad_zeros(5)
 
 #This card personal flags
 var this_card_flags : Dictionary = {
@@ -29,7 +29,7 @@ func generate_random_card():
 	
 	randomize()
 	var random_number : int = randi() % CardList.card_list.keys().size()
-	card_id = String(random_number).pad_zeros(5)
+	card_id = str(random_number).pad_zeros(5)
 	
 	return card_id
 
@@ -50,11 +50,11 @@ func update_card_information(card_id : String):
 	$card_design/card_name.text = this_card.card_name
 	var card_name_length : int = this_card.card_name.length()
 	var correction : float = clamp(((card_name_length - 14) * 0.033), 0, 0.4) #completely arbitrary, try-and-error based, values
-	$card_design/card_name.rect_scale.x = 1
+	$card_design/card_name.scale.x = 1
 	$card_design/card_name.clip_text = false
 	
 	if card_name_length > 14:
-		$card_design/card_name.rect_scale.x = 1 - correction
+		$card_design/card_name.scale.x = 1 - correction
 		$card_design/card_name.clip_text = true
 	
 	#Determine background texture color and type of 'card_frame'
@@ -85,7 +85,7 @@ func update_card_information(card_id : String):
 	#Determine if it will show 'monster_features' or 'spelltrap_features' on the design
 	match this_card.attribute:
 		"spell", "trap": 
-			$card_design/card_name.add_color_override("font_color", Color(1,1,1))
+			$card_design/card_name.add_theme_color_override("font_color", Color(1,1,1))
 			$card_design/monster_features.hide()
 			$card_design/spelltrap_features.show()
 			
@@ -95,7 +95,7 @@ func update_card_information(card_id : String):
 				$card_design/spelltrap_features/type_of_spelltrap.text = this_card.attribute + " card"
 			
 		_: 
-			$card_design/card_name.add_color_override("font_color", Color(0,0,0))
+			$card_design/card_name.add_theme_color_override("font_color", Color(0,0,0))
 			$card_design/spelltrap_features.hide()
 			$card_design/monster_features.show()
 			
@@ -108,14 +108,14 @@ func update_card_information(card_id : String):
 				$card_design/monster_features/level/upto11.show()
 				
 				for i in range(1, 12):
-					get_node("card_design/monster_features/level/upto11/level" + String(i)).hide()
+					get_node("card_design/monster_features/level/upto11/level" + str(i)).hide()
 				for i in range(0, this_card.level):
-					get_node("card_design/monster_features/level/upto11/level" + String(i+1)).show()
+					get_node("card_design/monster_features/level/upto11/level" + str(i+1)).show()
 			
-			#Show ATK and DEF
-			$card_design/monster_features/atk_def/atk.text = String(clamp(this_card.atk + this_card_flags.atk_up, 0, 9999))
-			$card_design/monster_features/atk_def/def.text = String(clamp(this_card.def + this_card_flags.def_up, 0, 9999))
-	
+			#Show ATK and str
+			$card_design/monster_features/atk_def/atk.text = str(clamp(this_card.atk + this_card_flags.atk_up, 0, 9999))
+			$card_design/monster_features/atk_def/def.text = str(clamp(this_card.def + this_card_flags.def_up, 0, 9999))
+	str
 	#Show or hide card_back based on 'is_facedown' flag
 	if this_card_flags.is_facedown == true:
 		$card_design/card_back.show()

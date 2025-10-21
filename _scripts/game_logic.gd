@@ -33,7 +33,7 @@ func check_for_trap_cards(attacking_card : Node):
 	
 	var side_to_check = get_node("../duel_field/" + trap_side + "_side_zones")
 	for i in range(5):
-		var card_to_check = side_to_check.get_node("spelltrap_" + String(i))
+		var card_to_check = side_to_check.get_node("spelltrap_" + str(i))
 		if card_to_check.is_visible() and CardList.card_list[card_to_check.this_card_id].attribute == "trap":
 			return card_to_check #Node
 	
@@ -42,7 +42,7 @@ func check_for_trap_cards(attacking_card : Node):
 #------------------------------------------------------------------------------
 #FUSION LOGIC
 #const fusion_list_gd = preload("res://_scripts/fusions.gd")
-onready var fusion_list = $fusions
+@onready var fusion_list = $fusions
 
 func fusing_cards_logic(card_1 : Node, card_2 : Node):
 	var card_1_id : String = card_1.this_card_id
@@ -91,8 +91,8 @@ func destroy_a_card(card_node_to_destroy):
 	reset_a_card_node_properties(card_node_to_destroy)
 	
 	#Force reset rotation back to attack position for cards in defense position
-	if card_node_to_destroy.get_node("card_design").rect_rotation == -90 or card_node_to_destroy.get_node("card_design").rect_rotation == 90:
-		card_node_to_destroy.get_node("card_design").rect_rotation = 0
+	if card_node_to_destroy.get_node("card_design").rotation == -90 or card_node_to_destroy.get_node("card_design").rotation == 90:
+		card_node_to_destroy.get_node("card_design").rotation = 0
 	
 	#Then remove the card from the field (by making it invisible)
 	card_node_to_destroy.hide()
@@ -131,8 +131,8 @@ func do_battle(attacking_card : Node, defending_card : Node):
 			"on_summon":
 				attacking_card.this_card_flags.is_facedown = false
 				effect_activation(attacking_card, "on_summon")
-		yield($effects, "effect_fully_executed")
-		$battle_visuals/battle_timer_node.start(0.3); yield($battle_visuals/battle_timer_node, "timeout")
+		await $effects.effect_fully_executed
+		$battle_visuals/battle_timer_node.start(0.3); await $battle_visuals/battle_timer_node.timeout
 	
 	#Attacker flags
 	attacking_card.this_card_flags.has_battled = true
@@ -159,8 +159,8 @@ func do_battle(attacking_card : Node, defending_card : Node):
 				"on_summon":
 					attacking_card.this_card_flags.is_facedown = false
 					effect_activation(defending_card, "on_summon")
-			yield($effects, "effect_fully_executed")
-			$battle_visuals/battle_timer_node.start(0.3); yield($battle_visuals/battle_timer_node, "timeout")
+			await $effects.effect_fully_executed
+			$battle_visuals/battle_timer_node.start(0.3); await $battle_visuals/battle_timer_node.timeout
 	
 	#Catch end of Flip Effect
 	if not attacking_card.is_visible() or not defending_card.is_visible():
@@ -176,13 +176,13 @@ func do_battle(attacking_card : Node, defending_card : Node):
 	var on_attack_NOT_before_battle = ["change_position", "toon", "piercing"]
 	if CardList.card_list[attacking_card.this_card_id].effect.size() > 0 and CardList.card_list[attacking_card.this_card_id].effect[0] == "on_attack" and not CardList.card_list[attacking_card.this_card_id].effect[1] in on_attack_NOT_before_battle:
 		effect_activation(attacking_card, "on_attack")
-		yield($effects, "effect_fully_executed")
-		$battle_visuals/battle_timer_node.start(0.3); yield($battle_visuals/battle_timer_node, "timeout")
+		await $effects.effect_fully_executed
+		$battle_visuals/battle_timer_node.start(0.3); await $battle_visuals/battle_timer_node.timeout
 	#Check for Ritual Monsters Attack effects
 	if attacking_card.this_card_flags.fusion_type == "ritual" and CardList.card_list[attacking_card.this_card_id].card_name in ["Blue-Eyes Chaos MAX Dragon", "Gearfried the Swordmaster"]:
 		effect_activation(attacking_card, "on_attack")
-		yield($effects, "effect_fully_executed")
-		$battle_visuals/battle_timer_node.start(0.3); yield($battle_visuals/battle_timer_node, "timeout")
+		await $effects.effect_fully_executed
+		$battle_visuals/battle_timer_node.start(0.3); await $battle_visuals/battle_timer_node.timeout
 	
 	#Catch end of Attack Effect
 	if not attacking_card.is_visible() or not defending_card.is_visible():
@@ -194,7 +194,7 @@ func do_battle(attacking_card : Node, defending_card : Node):
 	var fell_into_trap : Node = check_for_trap_cards(attacking_card)
 	if fell_into_trap != null:
 		effect_activation(fell_into_trap, "on_flip")
-		yield($effects, "effect_fully_executed")
+		await $effects.effect_fully_executed
 		
 		#Set the attacker flags
 		attacking_card.this_card_flags.has_battled = true
@@ -216,8 +216,8 @@ func do_battle(attacking_card : Node, defending_card : Node):
 	if CardList.card_list[defending_card.this_card_id].effect.size() > 0 and CardList.card_list[defending_card.this_card_id].effect[0] == "on_defend" and CardList.card_list[defending_card.this_card_id].effect[1] in on_defend_before_battle:
 		card_ready_to_attack = attacking_card
 		effect_activation(defending_card, "on_defend")
-		yield($effects, "effect_fully_executed")
-		$battle_visuals/battle_timer_node.start(0.3); yield($battle_visuals/battle_timer_node, "timeout")
+		await $effects.effect_fully_executed
+		$battle_visuals/battle_timer_node.start(0.3); await $battle_visuals/battle_timer_node.timeout
 	
 	var battle_timer_node = $battle_visuals/battle_timer_node
 	var battle_timer : float = 0.2 #in seconds
@@ -265,8 +265,8 @@ func do_battle(attacking_card : Node, defending_card : Node):
 	$battle_visuals/visual_cardB.modulate = Color(1,1,1,1)
 	$battle_visuals/darken_screen.modulate  = Color(1,1,1,0)
 	$battle_visuals/LP_damage.modulate = Color(1,1,1,0)
-	$battle_visuals/visual_cardA.rect_scale = Vector2(1.4, 1.4)
-	$battle_visuals/visual_cardB.rect_scale = Vector2(1.4, 1.4)
+	$battle_visuals/visual_cardA.scale = Vector2(1.4, 1.4)
+	$battle_visuals/visual_cardB.scale = Vector2(1.4, 1.4)
 	
 	#Do all the animations of this battle
 	$battle_visuals/visual_cardA/card_design/card_back.show()
@@ -277,44 +277,44 @@ func do_battle(attacking_card : Node, defending_card : Node):
 	#First the black background fade in
 	$battle_visuals/tween_battle.interpolate_property($battle_visuals/darken_screen, "modulate", Color(1,1,1, 0), Color(1,1,1, 1), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer*1.5); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer*1.5); await battle_timer_node.timeout
 	
 	#The card flip
 	SoundControl.play_sound("poc_move")
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_scale", Vector2(1.4, 1.4), Vector2(0.1, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "rect_scale", Vector2(1.4, 1.4), Vector2(0.1, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "scale", Vector2(1.4, 1.4), Vector2(0.1, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "scale", Vector2(1.4, 1.4), Vector2(0.1, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
 	$battle_visuals/visual_cardA/card_design/card_back.hide()
 	$battle_visuals/visual_cardB/card_design/card_back.hide()
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_scale", Vector2(0.1, 1.4), Vector2(1.4, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "rect_scale", Vector2(0.1, 1.4), Vector2(1.4, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "scale", Vector2(0.1, 1.4), Vector2(1.4, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "scale", Vector2(0.1, 1.4), Vector2(1.4, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
 	
 	#The attacking movements
 	SoundControl.play_sound("poc_attack")
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_position:x", $battle_visuals/visual_cardA.rect_position.x, $battle_visuals/visual_cardA.rect_position.x + 120, battle_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "position:x", $battle_visuals/visual_cardA.position.x, $battle_visuals/visual_cardA.position.x + 120, battle_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_position:x", $battle_visuals/visual_cardA.rect_position.x, $battle_visuals/visual_cardA.rect_position.x - 120, battle_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "position:x", $battle_visuals/visual_cardA.position.x, $battle_visuals/visual_cardA.position.x - 120, battle_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 	#The defender Shaking
-	var original_size_register = $battle_visuals/visual_cardB.rect_scale
+	var original_size_register = $battle_visuals/visual_cardB.scale
 	for i in range(4):
 		if i%2 == 0:
-			$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "rect_scale", $battle_visuals/visual_cardB.rect_scale, Vector2(1.5, 1.5), 0.05, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT)
+			$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "scale", $battle_visuals/visual_cardB.scale, Vector2(1.5, 1.5), 0.05, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT)
 		else:
-			$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "rect_scale", $battle_visuals/visual_cardB.rect_scale, Vector2(1.3, 1.3), 0.05, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT)
+			$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "scale", $battle_visuals/visual_cardB.scale, Vector2(1.3, 1.3), 0.05, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT)
 		if battle_loser_anim_path != null: #animate the attacker as well if both cards had the same stats
 			if i%2 == 0:
-				$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_scale", $battle_visuals/visual_cardA.rect_scale, Vector2(1.5, 1.5), 0.05, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT)
+				$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "scale", $battle_visuals/visual_cardA.scale, Vector2(1.5, 1.5), 0.05, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT)
 			else:
-				$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_scale", $battle_visuals/visual_cardA.rect_scale, Vector2(1.3, 1.3), 0.05, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT)
+				$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "scale", $battle_visuals/visual_cardA.scale, Vector2(1.3, 1.3), 0.05, Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT)
 		$battle_visuals/tween_battle.start()
-		battle_timer_node.start(0.1); yield(battle_timer_node, "timeout")
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "rect_scale", $battle_visuals/visual_cardB.rect_scale, original_size_register, 0.05, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+		battle_timer_node.start(0.1); await battle_timer_node.timeout
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "scale", $battle_visuals/visual_cardB.scale, original_size_register, 0.05, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
 	
 	#Figure out which card should be destroyed (Placed here to be visually hidden by the animations of battle)
 	var fix_for_relinquished_ritual_effect = false
@@ -376,25 +376,25 @@ func do_battle(attacking_card : Node, defending_card : Node):
 	if battle_loser_anim_path != null:
 		$battle_visuals/tween_battle.interpolate_property(battle_loser_anim_path, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$battle_visuals/tween_battle.start()
-		battle_timer_node.start(battle_timer*1.5); yield(battle_timer_node, "timeout")
+		battle_timer_node.start(battle_timer*1.5); await battle_timer_node.timeout
 	else:
 		$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardB, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$battle_visuals/tween_battle.start()
-		battle_timer_node.start(battle_timer*1.5); yield(battle_timer_node, "timeout")
+		battle_timer_node.start(battle_timer*1.5); await battle_timer_node.timeout
 	
 	#Show Lifepoint Damage
 	if LP_damage > 0:
-		$battle_visuals/LP_damage.text = "-" + String(LP_damage)
-		$battle_visuals/LP_damage.rect_position = LP_position
+		$battle_visuals/LP_damage.text = "-" + str(LP_damage)
+		$battle_visuals/LP_damage.position = LP_position
 		$battle_visuals/LP_damage.show()
 		$battle_visuals/tween_battle.interpolate_property($battle_visuals/LP_damage, "modulate", Color(1,1,1, 0), Color(1,1,1, 1), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer*2); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer*2); await battle_timer_node.timeout
 	if LP_damage > 0:
 		$battle_visuals/tween_battle.interpolate_property($battle_visuals/LP_damage, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
 	
 	#Finally destroy the card
 	var store_fusion_info = ""
@@ -410,7 +410,7 @@ func do_battle(attacking_card : Node, defending_card : Node):
 	#Battle scene fadeout
 	$battle_visuals/tween_battle.interpolate_property($battle_visuals, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer*2); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer*2); await battle_timer_node.timeout
 	$battle_visuals/LP_damage.hide()
 	$battle_visuals.hide()
 	
@@ -418,7 +418,7 @@ func do_battle(attacking_card : Node, defending_card : Node):
 	if store_fusion_info == "ritual" and CardList.card_list[card_to_be_destroyed.this_card_id].card_name in ["Five-Headed Dragon", "Arcana Knight Joker", "Valkyrion the Magna Warrior", "Lord of the Red", "Paladin of White Dragon", "Paladin of Dark Dragon", "Knight of Armor Dragon", "Chakra", "Demise, Agent of Armageddon", "Demise, King of Armageddon",
 																																			"Cyber Angel Natasha", "Cyber Angel Idaten", "Cyber Angel Benten", "Cyber Angel Izana", "Cyber Angel Dakini", "Cyber Angel Vrash"]:
 		battle_timer_node.start(3);
-		yield(battle_timer_node, "timeout")
+		await battle_timer_node.timeout
 	
 	#Finish Battle phase in different ways depending on whose turn it is
 	if attacking_card.get_parent().get_name().find("player") != -1: #it's players turn
@@ -439,13 +439,13 @@ func do_battle(attacking_card : Node, defending_card : Node):
 			
 			#check for return_damage that Enemy will inflict on the player
 			if CardList.card_list[defending_card.this_card_id].effect.size() > 1 and CardList.card_list[defending_card.this_card_id].effect[1] == "return_damage":
-				$battle_visuals/battle_timer_node.start(0.9); yield($battle_visuals/battle_timer_node, "timeout")
+				$battle_visuals/battle_timer_node.start(0.9); await $battle_visuals/battle_timer_node.timeout
 				if LP_damage >= int(get_node("../user_interface/top_info_box/player_info/lifepoints").get_text()):
 					check_for_game_end("player_lp_out")
 				change_lifepoints("player", LP_damage)
 			#check for Relinquished ritual effect
 			if fix_for_relinquished_ritual_effect:
-				$battle_visuals/battle_timer_node.start(0.9); yield($battle_visuals/battle_timer_node, "timeout")
+				$battle_visuals/battle_timer_node.start(0.9); await $battle_visuals/battle_timer_node.timeout
 				if LP_damage >= int(get_node("../user_interface/top_info_box/player_info/lifepoints").get_text()):
 					check_for_game_end("player_lp_out")
 				change_lifepoints("player", LP_damage)
@@ -463,13 +463,13 @@ func do_battle(attacking_card : Node, defending_card : Node):
 			
 			#check for return_damage that player will inflict on the enemy
 			if CardList.card_list[defending_card.this_card_id].effect.size() > 1 and CardList.card_list[defending_card.this_card_id].effect[1] == "return_damage":
-				$battle_visuals/battle_timer_node.start(0.9); yield($battle_visuals/battle_timer_node, "timeout")
+				$battle_visuals/battle_timer_node.start(0.9); await $battle_visuals/battle_timer_node.timeout
 				if LP_damage >= int(get_node("../user_interface/top_info_box/com_info/lifepoints").get_text()):
 					check_for_game_end("com_lp_out")
 				change_lifepoints("enemy", LP_damage)
 			#check for Relinquished ritual effect
 			if fix_for_relinquished_ritual_effect:
-				$battle_visuals/battle_timer_node.start(0.9); yield($battle_visuals/battle_timer_node, "timeout")
+				$battle_visuals/battle_timer_node.start(0.9); await $battle_visuals/battle_timer_node.timeout
 				if LP_damage >= int(get_node("../user_interface/top_info_box/com_info/lifepoints").get_text()):
 					check_for_game_end("com_lp_out")
 				change_lifepoints("enemy", LP_damage)
@@ -509,8 +509,8 @@ func do_battle(attacking_card : Node, defending_card : Node):
 	for battler in [attacking_card, defending_card]:
 		if CardList.card_list[battler.this_card_id].effect.size() > 1 and CardList.card_list[battler.this_card_id].effect[1] == "change_position":
 			effect_activation(battler, CardList.card_list[battler.this_card_id].effect[0])
-			yield($effects, "effect_fully_executed")
-			$battle_visuals/battle_timer_node.start(0.5); yield($battle_visuals/battle_timer_node, "timeout")
+			await $effects.effect_fully_executed
+			$battle_visuals/battle_timer_node.start(0.5); await $battle_visuals/battle_timer_node.timeout
 	
 	#Reset these to null
 	card_ready_to_attack = null
@@ -534,7 +534,7 @@ func _on_direct_attack_area_button_up():
 	#Check if the player can direct attack the enemy (only when 0 monsters on the field)
 	var enemy_monsters_on_field : int = 0
 	for i in range(5):
-		if get_node("../duel_field/enemy_side_zones/monster_" + String(i)).is_visible():
+		if get_node("../duel_field/enemy_side_zones/monster_" + str(i)).is_visible():
 			enemy_monsters_on_field += 1
 			break
 	
@@ -584,13 +584,13 @@ func do_direct_attack(attacking_card):
 	#Check for on_attack effects right before battle starts
 	if CardList.card_list[attacking_card.this_card_id].effect.size() > 0 and CardList.card_list[attacking_card.this_card_id].effect[0] == "on_attack" and CardList.card_list[attacking_card.this_card_id].effect[1] != "piercing":
 		effect_activation(attacking_card, "on_attack")
-		yield($effects, "effect_fully_executed")
-		$battle_visuals/battle_timer_node.start(0.3); yield($battle_visuals/battle_timer_node, "timeout")
+		await $effects.effect_fully_executed
+		$battle_visuals/battle_timer_node.start(0.3); await $battle_visuals/battle_timer_node.timeout
 	#Check for Ritual Monsters Attack effects
 	if attacking_card.this_card_flags.fusion_type == "ritual" and CardList.card_list[attacking_card.this_card_id].card_name in ["Blue-Eyes Chaos MAX Dragon", "Gearfried the Swordmaster"]:
 		effect_activation(attacking_card, "on_attack")
-		yield($effects, "effect_fully_executed")
-		$battle_visuals/battle_timer_node.start(0.3); yield($battle_visuals/battle_timer_node, "timeout")
+		await $effects.effect_fully_executed
+		$battle_visuals/battle_timer_node.start(0.3); await $battle_visuals/battle_timer_node.timeout
 		
 	#Catch end of Attack Effect
 	if not attacking_card.is_visible():
@@ -602,7 +602,7 @@ func do_direct_attack(attacking_card):
 	if fell_into_trap != null:
 		card_ready_to_attack = attacking_card
 		effect_activation(fell_into_trap, "on_flip")
-		yield($effects, "effect_fully_executed")
+		await $effects.effect_fully_executed
 		
 #		#Set the attacker flags
 #		attacking_card.this_card_flags.has_battled = true
@@ -646,44 +646,44 @@ func do_direct_attack(attacking_card):
 	#First the black background fade in
 	$battle_visuals/tween_battle.interpolate_property($battle_visuals/darken_screen, "modulate", Color(1,1,1, 0), Color(1,1,1, 1), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer*1.5); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer*1.5); await battle_timer_node.timeout
 	
 	#The card flip
 	SoundControl.play_sound("poc_move")
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_scale", Vector2(1.4, 1.4), Vector2(0.1, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "scale", Vector2(1.4, 1.4), Vector2(0.1, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
 	$battle_visuals/visual_cardA/card_design/card_back.hide()
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_scale", Vector2(0.1, 1.4), Vector2(1.4, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "scale", Vector2(0.1, 1.4), Vector2(1.4, 1.4), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
 	
 	#The attacking movements
 	SoundControl.play_sound("poc_attack")
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_position:x", $battle_visuals/visual_cardA.rect_position.x, $battle_visuals/visual_cardA.rect_position.x + 120, battle_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "position:x", $battle_visuals/visual_cardA.position.x, $battle_visuals/visual_cardA.position.x + 120, battle_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
-	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "rect_position:x", $battle_visuals/visual_cardA.rect_position.x, $battle_visuals/visual_cardA.rect_position.x - 120, battle_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
+	$battle_visuals/tween_battle.interpolate_property($battle_visuals/visual_cardA, "position:x", $battle_visuals/visual_cardA.position.x, $battle_visuals/visual_cardA.position.x - 120, battle_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
 	
 	#Show Lifepoint Damage
 	if LP_damage > 0:
-		$battle_visuals/LP_damage.text = "-" + String(LP_damage)
-		$battle_visuals/LP_damage.rect_position = LP_position
+		$battle_visuals/LP_damage.text = "-" + str(LP_damage)
+		$battle_visuals/LP_damage.position = LP_position
 		$battle_visuals/LP_damage.show()
 		$battle_visuals/tween_battle.interpolate_property($battle_visuals/LP_damage, "modulate", Color(1,1,1, 0), Color(1,1,1, 1), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer*2); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer*2); await battle_timer_node.timeout
 	if LP_damage > 0:
 		$battle_visuals/tween_battle.interpolate_property($battle_visuals/LP_damage, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer); await battle_timer_node.timeout
 	
 	#Battle scene fadeout
 	$battle_visuals/tween_battle.interpolate_property($battle_visuals, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), battle_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$battle_visuals/tween_battle.start()
-	battle_timer_node.start(battle_timer*2); yield(battle_timer_node, "timeout")
+	battle_timer_node.start(battle_timer*2); await battle_timer_node.timeout
 	$battle_visuals/LP_damage.hide()
 	$battle_visuals.hide()
 	
@@ -763,7 +763,7 @@ func change_lifepoints(target : String, LP_damage : int, adding = false):
 		check_for_game_end(target + "_lp_out")
 
 func LP_method_for_tween(value : int):
-	LP_info_node.text = String(value)
+	LP_info_node.text = str(value)
 
 #---------------------------------------------------------------------------------------------------
 func check_for_camera_movement_on_effect_return(attacking_card : Node):
@@ -822,7 +822,7 @@ func check_for_game_end(optional_passed_condition : String = "nothing"):
 				reward_scene.final_player_LP = int(self.get_parent().get_node("user_interface/top_info_box/player_info/lifepoints").get_text())
 				var total_field_atk = 0
 				for i in range(5):
-					var checking_node = self.get_parent().get_node("duel_field/player_side_zones/monster_" + String(i))
+					var checking_node = self.get_parent().get_node("duel_field/player_side_zones/monster_" + str(i))
 					if checking_node.is_visible():
 						total_field_atk += int(checking_node.get_node("card_design/monster_features/atk_def/atk").get_text())
 				reward_scene.final_field_atk = total_field_atk
@@ -840,16 +840,3 @@ func check_for_game_end(optional_passed_condition : String = "nothing"):
 		reward_scene.start_reward_scene()
 		
 		return "endscreen"
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@ func _ready():
 	#Start free duels with the registered speed up
 	if PlayerData.scene_to_return_after_duel == "free_duel":
 		Engine.set_time_scale(PlayerData.registered_freeduel_speed)
-		$top_row/buttons/button_speed/label.text = String(PlayerData.registered_freeduel_speed) + "X"
+		$top_row/buttons/button_speed/label.text = str(PlayerData.registered_freeduel_speed) + "X"
 	
 	#Properly load the texts in the correct language
 	$cards_of_fusion/fusion_history_title.text = GameLanguage.duel_scene.side_menu.fusion_history[PlayerData.game_language]
@@ -29,7 +29,7 @@ func _on_block_clicks_behind_button_up():
 		$Tween.interpolate_property(self, "position", position_in, position_out, animation_timer/2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$Tween.interpolate_property(self, "modulate", Color(1,1,1,1), Color(1,1,1,0), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$Tween.start()
-		yield($Tween, "tween_completed")
+		await $Tween.tween_completed
 		
 		self.hide()
 
@@ -43,17 +43,17 @@ func _on_history_button_button_up():
 	
 	#Animate the click
 	history_button_out()
-	yield(get_tree().create_timer(0.5), "timeout")
+	await get_tree().create_timer(0.5).timeout
 	history_button_in()
 
-onready var button = get_node("../history_button")
+@onready var button = get_node("../history_button")
 var history_in = Vector2(-23,39)
 var history_out = Vector2(-90,39)
 func history_button_out():
-	$Tween.interpolate_property(button, "rect_position", history_in, history_out, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$Tween.interpolate_property(button, "position", history_in, history_out, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()
 func history_button_in():
-	$Tween.interpolate_property(button, "rect_position", history_out, history_in, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$Tween.interpolate_property(button, "position", history_out, history_in, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()
 
 func show_side_menu():
@@ -81,13 +81,13 @@ func update_fusion_history():
 		var new_history_instance = fusion_history_node_ref.instance()
 		var fusion_record = list_of_fusions_in_this_duel[i]
 		
-		new_history_instance.get_node("card_a").update_card_information(String(fusion_record[0])) #card_a
-		new_history_instance.get_node("card_b").update_card_information(String(fusion_record[1])) #card_b
+		new_history_instance.get_node("card_a").update_card_information(str(fusion_record[0])) #card_a
+		new_history_instance.get_node("card_b").update_card_information(str(fusion_record[1])) #card_b
 		
 		if fusion_record[2] != fusion_record[0] and fusion_record[2] != fusion_record[1]:
 			new_history_instance.get_node("card_c").this_card_flags.fusion_type = "fusion"
 		
-		new_history_instance.get_node("card_c").update_card_information(String(fusion_record[2])) #fusion_result
+		new_history_instance.get_node("card_c").update_card_information(str(fusion_record[2])) #fusion_result
 		
 		container_for_fusion_history.add_child(new_history_instance)
 		container_for_fusion_history.move_child(new_history_instance, 0)
@@ -108,7 +108,7 @@ func update_current_rank():
 	reward_scene.final_player_LP = int(get_node("../user_interface/top_info_box/player_info/lifepoints").get_text())
 	var total_field_atk = 0
 	for i in range(5):
-		var checking_node = get_node("../duel_field/player_side_zones/monster_" + String(i))
+		var checking_node = get_node("../duel_field/player_side_zones/monster_" + str(i))
 		if checking_node.is_visible():
 			total_field_atk += int(checking_node.get_node("card_design/monster_features/atk_def/atk").get_text())
 	reward_scene.final_field_atk = total_field_atk
@@ -128,8 +128,8 @@ func update_current_rank():
 	
 	#Update it visually
 	$top_row/rank_indicator/rank_letter.text = get_rank_letter
-	$top_row/rank_indicator/rank_letter.add_color_override("font_color", rank_letter_colors[get_rank_letter][0])
-	$top_row/rank_indicator/rank_letter.add_color_override("font_color_shadow", rank_letter_colors[get_rank_letter][1])
+	$top_row/rank_indicator/rank_letter.add_theme_color_override("font_color", rank_letter_colors[get_rank_letter][0])
+	$top_row/rank_indicator/rank_letter.add_theme_color_override("font_color_shadow", rank_letter_colors[get_rank_letter][1])
 
 var current_game_speed = PlayerData.registered_freeduel_speed
 func _on_button_speed_button_up():
@@ -145,7 +145,7 @@ func _on_button_speed_button_up():
 		3.0:
 			current_game_speed = 1.0
 	
-	$top_row/buttons/button_speed/label.text = String(current_game_speed) + "X"
+	$top_row/buttons/button_speed/label.text = str(current_game_speed) + "X"
 	PlayerData.registered_freeduel_speed = current_game_speed
 	Engine.set_time_scale(current_game_speed)
 
@@ -162,9 +162,9 @@ func animate_button(button_node):
 	var small_scale = Vector2(0.9 , 0.9)
 	var normal_scale = Vector2(1 , 1)
 	
-	$Tween.interpolate_property(button_node, "rect_scale", button_node.rect_scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$Tween.interpolate_property(button_node, "scale", button_node.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()
-	yield($Tween, "tween_completed")
-	$Tween.interpolate_property(button_node, "rect_scale", button_node.rect_scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $Tween.tween_completed
+	$Tween.interpolate_property(button_node, "scale", button_node.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()
 	

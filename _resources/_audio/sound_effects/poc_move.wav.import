@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/poc_move.wav-3f4652cd46a4d067e9cf4f41c04f4ecb.sample"
+type="AudioStreamWAV"
+uid="uid://b1r8auwniqj43"
+path="res://.godot/imported/poc_move.wav-3f4652cd46a4d067e9cf4f41c04f4ecb.sample"
 
 [deps]
 
 source_file="res://_resources/_audio/sound_effects/poc_move.wav"
-dest_files=[ "res://.import/poc_move.wav-3f4652cd46a4d067e9cf4f41c04f4ecb.sample" ]
+dest_files=["res://.godot/imported/poc_move.wav-3f4652cd46a4d067e9cf4f41c04f4ecb.sample"]
 
 [params]
 

@@ -5,7 +5,7 @@ var tournament_progression : Array = [] #green, blue, purple, red, gold
 func _ready():
 	#Animate the transition when starting this scene
 	$scene_transitioner.entering_this_scene()
-	yield(get_tree().create_timer(0.5), "timeout")
+	await get_tree().create_timer(0.5).timeout
 	
 	#If player is entering this scene after a duel it will have PlayerData.tournament_progression set to it's last value, so recover it. Otherwise just start the green tier.
 	if PlayerData.tournament_last_progression_saved == "":
@@ -37,7 +37,7 @@ func get_tournament_competitors(color_tier : String):
 				randomize()
 				var random_npc_id = randi()%pool_of_npcs.size()
 				tournament_selected_competitors.append(pool_of_npcs[random_npc_id])
-				pool_of_npcs.remove(random_npc_id)
+				pool_of_npcs.remove_at(random_npc_id)
 			
 			#Also add the player to the list and shuffle it
 			tournament_selected_competitors.append("player")
@@ -82,7 +82,7 @@ func update_duelist_boxes(box_color : String):
 	for color in tier_colors:
 		var saved_competitors_in_color = PlayerData.tournament_competitors_saved[color]
 		for i in range(saved_competitors_in_color.size()):
-			var duelist_face_node = get_node("tournament_brackets/duelists_faces/" + color + "/face" + String(i+1))
+			var duelist_face_node = get_node("tournament_brackets/duelists_faces/" + color + "/face" + str(i+1))
 			duelist_face_node.texture = load("res://_resources/character_faces/" + saved_competitors_in_color[i] + "0.png")
 	
 	#Black out tiers above
@@ -123,7 +123,7 @@ func toggle_tournament_brackets_visibility():
 		$background_art/background_tween.interpolate_property($background_art/blurred_bg, "modulate", Color(1,1,1, 0), Color(1,1,1, 1), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$background_art/background_tween.start()
 		
-		yield($tournament_tween, "tween_completed")
+		await $tournament_tween.tween_completed
 		
 	else:
 		#Animate the brackets disappearing
@@ -133,7 +133,7 @@ func toggle_tournament_brackets_visibility():
 		$background_art/background_tween.interpolate_property($background_art/blurred_bg, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$background_art/background_tween.start()
 		
-		yield($tournament_tween, "tween_completed")
+		await $tournament_tween.tween_completed
 		
 		$tournament_brackets.hide()
 		$background_art/blurred_bg.hide()
@@ -336,7 +336,3 @@ func tournament_flow():
 			PlayerData.last_duel_result = ""
 			$scene_transitioner.scene_transition("game_over")
 	
-
-
-
-

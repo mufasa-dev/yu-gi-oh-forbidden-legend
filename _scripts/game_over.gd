@@ -8,7 +8,7 @@ func _ready():
 	#Reload all "zeroed" stuff into playerdata
 	reset_player_data_to_empty_status()
 	
-	$timer.start(9.5); yield($timer, "timeout")
+	$timer.start(9.5); await $timer.timeout
 	
 	SoundControl.play_sound("lohweo_main_menu", "music")
 	$scene_transitioner.scene_transition("main_menu")

@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/poc_unable.wav-1e6e64899c69b6b506e18ba419a549e2.sample"
+type="AudioStreamWAV"
+uid="uid://8hdm4x7ywrtw"
+path="res://.godot/imported/poc_unable.wav-1e6e64899c69b6b506e18ba419a549e2.sample"
 
 [deps]
 
 source_file="res://_resources/_audio/sound_effects/poc_unable.wav"
-dest_files=[ "res://.import/poc_unable.wav-1e6e64899c69b6b506e18ba419a549e2.sample" ]
+dest_files=["res://.godot/imported/poc_unable.wav-1e6e64899c69b6b506e18ba419a549e2.sample"]
 
 [params]
 

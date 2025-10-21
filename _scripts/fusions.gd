@@ -104,7 +104,7 @@ func equip_fusion(card_1 : String, card_2 : String):
 			spell_caller = "enemy"
 		var target_side_of_field = get_node("../").get_parent().get_node("duel_field/" + spell_caller + "_side_zones")
 		for i in range(5):
-			var card_being_checked = target_side_of_field.get_node("spelltrap_" + String(i))
+			var card_being_checked = target_side_of_field.get_node("spelltrap_" + str(i))
 			if card_being_checked.is_visible():
 				spelltrap_count_on_field += 1
 		
@@ -481,7 +481,21 @@ var specific_fusion_list = {
 	"00582_00593" : "00576",                                                        #Toon World + Harpie Lady = Toon Harpie Lady
 	"00582_00823" : "00565",                                                        #Toon World + Cyber Dragon = Toon Cyber Dragon
 	"00582_01201" : "00552",                                                        #Toon World + Barrel Dragon = Toon Barrel Dragon
-	
+	"00582_00014" : "01602",                                                        #Toon World + Celtic Guardian = Toon Celtic Guardian
+	"00242_00428" : "01605",                                                        #Blue-eyes Ultimate Dragon + Chaos Magician = Dragon Magia Master
+	"00242_00427" : "01605",                                                        #Blue-eyes Ultimate Dragon + Dark Master of Chaos = Dragon Magia Master
+	"01596_01597" : "01598",                                                        #Labyrinth Wall + Magical Labyrinth = Wall Shadow
+	"00355_00073" : "01606",                                                        #Archfiend Giant + Red-Eyes Black Dragon = Archfiend Black Skull Dragon
+	"00357_00073" : "01606",                                                        #Archfiend of Gilfer + Red-Eyes Black Dragon = Archfiend Black Skull Dragon
+
+	"00006_00078" : "01609",                                                        #Flame Swordman + Time Wizzard = Older Flame Swordman
+	"01608_00078" : "01609",                                                        #Ferocious Flame Swordman + Time Wizzard = Older Flame Swordman
+	"01607_00078" : "01609",                                                        #Blue Flame Swordman + Time Wizzard = Older Flame Swordman
+	"01612_00078" : "01609",                                                        #Fighting Flame Swordman + Time Wizzard = Older Flame Swordman
+	"00006_01611" : "01610",                                                        #Flame Swordman + Fighting Flame Dragon = Ultimate Flame Swordsman
+	"01608_01611" : "01610",                                                        #Ferocious Flame Swordman + Fighting Flame Dragon = Ultimate Flame Swordsman
+	"01607_01611" : "01610",                                                        #Blue Flame Swordman + Fighting Flame Dragon = Ultimate Flame Swordsman
+	"01612_01611" : "01610",                                                        #Fighting Flame Swordman + Fighting Flame Dragon = Ultimate Flame Swordsman
 }
 
 #Fusions that consider a Keyworded card + correct attribute
@@ -489,7 +503,7 @@ var attribute_fusion_list = {
 	"Elemental HERO" : {"wind" : ["00766"],                                                         # Elemental HERO + Wind = Elemental Hero Great Tornado
 						"fire" : ["00767"],                                                         # Elemental HERO + Fire = Elemental Hero Nova Master
 						"earth": ["00768"],                                                         # Elemental HERO + Earth = Elemental Hero Gaia
-						"light": ["00769"],                                                         # Elemental HERO + Light = Elemental Hero The Shinig
+						"light": ["00769"],                                                         # Elemental HERO + Light3D = Elemental Hero The Shinig
 						"water": ["00770"],                                                         # Elemental HERO + Water = Elemental Hero Absolute Zero
 						"dark" : ["00771"]},                                                        # Elemental HERO + Dark = Elemental Hero Escuridao
 	
@@ -502,10 +516,10 @@ var attribute_fusion_list = {
 					"water": ["00712", "00693"],                                                    # Mask Change + Water = Masked HERO Vapor, Masked HERO Acid
 					"dark" : ["00713", "00694"]},                                                   # Mask Change + Dark = Masked HERO Dark Law, Masked HERO Anki
 	
-	"Gem-Knight" : {"light": ["00787"]},                                                            # Gem-Knight + Light = Gem-Knight Seraphinite
+	"Gem-Knight" : {"light": ["00787"]},                                                            # Gem-Knight + Light3D = Gem-Knight Seraphinite
 	
 	"Dharc" : {"dark"  : ["00250", "00252"]},                                                       # Dharc the Dark Charmer, Dharc - Familiar-Possessed
-	"Lyna" : {"light"  : ["00247", "00249"]},                                                       # Lyna the Light Charmer, Lyna - Familiar-Possessed
+	"Lyna" : {"light"  : ["00247", "00249"]},                                                       # Lyna the Light3D Charmer, Lyna - Familiar-Possessed
 	"Aussa" : {"earth" : ["00253", "00255", "00258", "00259"]},                                     # Aussa the Earth Charmer, Avalanching Aussa, Aussa - Familiar-Possessed, Cataclysmic Crusted Calcifida
 	"Hiita" : {"fire"  : ["00260", "00262", "00265", "00266"]},                                     # Hiita the Fire Charmer, Blazing Hiita, Hiita - Familiar-Possessed, Cataclysmic Scorching Sunburner
 	"Eria" : {"water"  : ["00267", "00269", "00272", "00273"]},                                     # Eria the Water Charmer, Raging Eria, Eria - Familiar-Possessed, Cataclysmic Circumpolar Chilblainia
@@ -768,7 +782,7 @@ var generic_fusion_list = {
 	"fairy_plant":        ["00389", "00390"],                                      #Spirit of the Fall Wind, Iris the Earth Mother
 	"fairy_spellcaster":  ["00058"],                                              #Dark Elf
 	"fairy_warrior":      ["00014"],                                              #Celtic Guardian
-	"fairy_winged beast": ["00391", "00392", "00393"],                              #Hysteric Fairy, Soul of Purity and Light, Wingweaver
+	"fairy_winged beast": ["00391", "00392", "00393"],                              #Hysteric Fairy, Soul of Purity and Light3D, Wingweaver
 	
 	"female_fiend":   ["00213", "00214"],                                          #Darklord Marie, Oracle King d'Arc
 	"female_fish":    ["00036", "00037", "00038"],                                  #Ice Water, Enchanting Mermaid, Amazon of the Seas

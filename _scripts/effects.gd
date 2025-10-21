@@ -2,7 +2,7 @@ extends Node
 #All about Effects and their functions
 
 #Reference to game_logic node
-onready var GAME_LOGIC = get_node("../")
+@onready var GAME_LOGIC = get_node("../")
 
 #Signals to be used as timers for other parts of code
 signal effect_animation_finished #emitted by the animation
@@ -30,7 +30,7 @@ func call_effect(card_node : Node, type_of_activation : String): #The 'card_node
 		force_animation_on_special_cases = true
 	
 	do_activation_animation(card_node, force_animation_on_special_cases)
-	yield(self, "effect_animation_finished")
+	await self.effect_animation_finished
 	
 	#Increment the correct counters for Duel Reward
 	if CardList.card_list[card_node.this_card_id].effect.size() > 0:
@@ -146,23 +146,23 @@ func do_activation_animation(card_node : Node, force_animation = false):
 	#First the black background fade in
 	$tween_effect.interpolate_property($effect_visuals/darken_screen, "modulate", Color(1,1,1, 0), Color(1,1,1, 1), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$tween_effect.start()
-	$effect_timer_node.start(animation_timer*1.5); yield($effect_timer_node, "timeout")
+	$effect_timer_node.start(animation_timer*1.5); await $effect_timer_node.timeout
 	
 	#The card flip
-	$tween_effect.interpolate_property($effect_visuals/visual_cardA, "rect_scale", Vector2(1.4, 1.4), Vector2(0.1, 1.4), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$tween_effect.interpolate_property($effect_visuals/visual_cardA, "scale", Vector2(1.4, 1.4), Vector2(0.1, 1.4), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$tween_effect.start()
-	$effect_timer_node.start(animation_timer); yield($effect_timer_node, "timeout")
+	$effect_timer_node.start(animation_timer); await $effect_timer_node.timeout
 	$effect_visuals/visual_cardA/card_design/card_back.hide()
-	$tween_effect.interpolate_property($effect_visuals/visual_cardA, "rect_scale", Vector2(0.1, 1.4), Vector2(1.4, 1.4), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$tween_effect.interpolate_property($effect_visuals/visual_cardA, "scale", Vector2(0.1, 1.4), Vector2(1.4, 1.4), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$tween_effect.start()
 	
 	#Hold the activated card visible for a while
-	$effect_timer_node.start(animation_timer*4); yield($effect_timer_node, "timeout")
+	$effect_timer_node.start(animation_timer*4); await $effect_timer_node.timeout
 	
 	#Animation fade out
 	$tween_effect.interpolate_property($effect_visuals, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$tween_effect.start()
-	$effect_timer_node.start(animation_timer*2); yield($effect_timer_node, "timeout")
+	$effect_timer_node.start(animation_timer*2); await $effect_timer_node.timeout
 	$effect_visuals.hide()
 	
 	#Emit the signal to indicate the animation has ended
@@ -206,13 +206,13 @@ func recursive_slot_animation():
 	
 	#Slots Animation
 	for i in range(5):
-		if slots_for_animation.get_child(i).rect_scale == small_size:
-			tween_slots.interpolate_property(slots_for_animation.get_child(i), "rect_scale", small_size, big_size, animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		if slots_for_animation.get_child(i).scale == small_size:
+			tween_slots.interpolate_property(slots_for_animation.get_child(i), "scale", small_size, big_size, animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			tween_slots.start()
-		elif slots_for_animation.get_child(i).rect_scale == big_size:
-			tween_slots.interpolate_property(slots_for_animation.get_child(i), "rect_scale", big_size, small_size, animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		elif slots_for_animation.get_child(i).scale == big_size:
+			tween_slots.interpolate_property(slots_for_animation.get_child(i), "scale", big_size, small_size, animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			tween_slots.start()
-	$effect_timer_node.start(animation_time + 0.3); yield($effect_timer_node, "timeout")
+	$effect_timer_node.start(animation_time + 0.3); await $effect_timer_node.timeout
 	
 	#Recursive
 	if $just_visual_field_slots.is_visible():
@@ -228,14 +228,14 @@ func simulate_fusion_animation_resulting_in_card1(card_1_caller : Node, card_2_m
 	var fusion_final_pos : Vector2 = Vector2(475, 80)
 	
 	#Update info regarding card_1
-	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0").rect_position = fusion_start_pos_0
+	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0").position = fusion_start_pos_0
 	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0").this_card_flags.fusion_type = card_1_caller.this_card_flags.fusion_type
 	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0").this_card_flags.atk_up = card_1_caller.this_card_flags.atk_up 
 	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0").this_card_flags.def_up = card_1_caller.this_card_flags.def_up
 	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0").update_card_information(card_1_caller.this_card_id)
 	
 	#Update info regardin card_2
-	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_1").rect_position = fusion_start_pos_1
+	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_1").position = fusion_start_pos_1
 	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_1").this_card_flags.fusion_type = card_2_material.this_card_flags.fusion_type
 	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_1").this_card_flags.atk_up = card_2_material.this_card_flags.atk_up 
 	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_1").this_card_flags.def_up = card_2_material.this_card_flags.def_up
@@ -246,12 +246,12 @@ func simulate_fusion_animation_resulting_in_card1(card_1_caller : Node, card_2_m
 	GAME_LOGIC.get_node("player_logic/fusion_animation").show()
 	
 	SoundControl.play_sound("poc_fusion1")
-	GAME_LOGIC.get_node("player_logic/fusion_animation/tween_fusion").interpolate_property(GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0"), "rect_position", fusion_start_pos_0, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+	GAME_LOGIC.get_node("player_logic/fusion_animation/tween_fusion").interpolate_property(GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0"), "position", fusion_start_pos_0, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 	GAME_LOGIC.get_node("player_logic/fusion_animation/tween_fusion").interpolate_property(GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0"), "modulate", Color(1, 1, 1, 1), Color(10, 10, 10, 0.666), fusion_timer*0.9, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	GAME_LOGIC.get_node("player_logic/fusion_animation/tween_fusion").interpolate_property(GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_1"), "rect_position", fusion_start_pos_1, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+	GAME_LOGIC.get_node("player_logic/fusion_animation/tween_fusion").interpolate_property(GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_1"), "position", fusion_start_pos_1, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 	GAME_LOGIC.get_node("player_logic/fusion_animation/tween_fusion").interpolate_property(GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_1"), "modulate", Color(1, 1, 1, 1), Color(10, 10, 10, 0.666), fusion_timer*0.9, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	GAME_LOGIC.get_node("player_logic/fusion_animation/tween_fusion").start()
-	GAME_LOGIC.get_node("player_logic/player_timer").start(fusion_timer); yield(GAME_LOGIC.get_node("player_logic/player_timer"), "timeout")
+	GAME_LOGIC.get_node("player_logic/player_timer").start(fusion_timer); await GAME_LOGIC.get_node("player_logic/player_timer").timeout
 	
 	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_0").hide()
 	GAME_LOGIC.get_node("player_logic/fusion_animation/fusion_order_1").hide()
@@ -266,23 +266,23 @@ func lifepoint_change_animation(signed_lifepoint : String, left_or_right : Strin
 	$lp_change_visuals/LP_damage.text = signed_lifepoint
 	$lp_change_visuals/LP_damage.modulate  = Color(1,1,1,0)
 	if left_or_right == "left":
-		$lp_change_visuals/LP_damage.rect_position.x = 96
+		$lp_change_visuals/LP_damage.position.x = 96
 	elif left_or_right == "right":
-		$lp_change_visuals/LP_damage.rect_position.x = 696
+		$lp_change_visuals/LP_damage.position.x = 696
 	
 	#Delay for the start of animation so it syncs up with the battle animation
-	$extra_timer_godot_sucks.start(animation_timer*1.8); yield($extra_timer_godot_sucks, "timeout")
+	$extra_timer_godot_sucks.start(animation_timer*1.8); await $extra_timer_godot_sucks.timeout
 	
 	#Animate the text being shown
 	$lp_change_visuals.show()
 	$lp_change_visuals/lp_anim_tween.interpolate_property($lp_change_visuals/LP_damage, "modulate", Color(1,1,1, 0), Color(1,1,1, 1), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$lp_change_visuals/lp_anim_tween.start()
-	$effect_timer_node.start(animation_timer*1.5); yield($effect_timer_node, "timeout")
+	$effect_timer_node.start(animation_timer*1.5); await $effect_timer_node.timeout
 	
 	#Animate the text fading away
 	$lp_change_visuals/lp_anim_tween.interpolate_property($lp_change_visuals/LP_damage, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), animation_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$lp_change_visuals/lp_anim_tween.start()
-	$effect_timer_node.start(animation_timer*1.5); yield($effect_timer_node, "timeout")
+	$effect_timer_node.start(animation_timer*1.5); await $effect_timer_node.timeout
 	$lp_change_visuals.hide()
 	
 	emit_signal("lifepoint_animation_finished")
@@ -333,7 +333,7 @@ func make_the_field_change(attribute : String):
 func field_bonus(field_element : String):
 	for i in range(5):
 		for side_of_the_field in ["player_side_zones", "enemy_side_zones"]:
-			var monster_being_checked = GAME_LOGIC.get_parent().get_node("duel_field/"+ side_of_the_field +"/monster_" + String(i))
+			var monster_being_checked = GAME_LOGIC.get_parent().get_node("duel_field/"+ side_of_the_field +"/monster_" + str(i))
 			
 			#A visible monster that matches the attribute will have it's field boost applied if it doesn't have it already
 			if monster_being_checked.is_visible() and CardList.card_list[monster_being_checked.this_card_id].attribute == field_element and monster_being_checked.this_card_flags.has_field_boost == false:
@@ -359,7 +359,7 @@ func activate_spell_equip(card_node : Node): #Activating an equip on the field (
 	var player_has_at_least_one_monster = false
 	var caller_and_target = get_caller_and_target(card_node)
 	for i in range(5):
-		var monster_being_checked = GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + String(i))
+		var monster_being_checked = GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + str(i))
 		if monster_being_checked.is_visible():
 			player_has_at_least_one_monster = true
 			break
@@ -392,7 +392,7 @@ func equip_from_field_to_target(target_card_node : Node):
 	
 	#Call for the animation
 	simulate_fusion_animation_resulting_in_card1(target_card_node, equip_from_field_node)
-	yield(self, "simulated_fusion_animation_finished")
+	await self.simulated_fusion_animation_finished
 	
 	#If the equip successeded, it will be returned as [monster_id : string, [status_to_agument : String, value_to_agument : int]]
 	if typeof(equip_result[1]) == TYPE_ARRAY:
@@ -426,9 +426,9 @@ func equip_from_field_to_target(target_card_node : Node):
 		call_effect(target_card_node, CardList.card_list[target_card_node.this_card_id].effect[0])
 	
 	#Go back to regular main phase and FORCE the buttons to be shown
-	GAME_LOGIC.get_parent().get_node("change_field_view/tween").interpolate_property(GAME_LOGIC.get_parent().get_node("change_field_view"), "rect_position", GAME_LOGIC.get_parent().get_node("change_field_view").rect_position, Vector2(1174, 276), 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	GAME_LOGIC.get_parent().get_node("change_field_view/tween").interpolate_property(GAME_LOGIC.get_parent().get_node("change_field_view"), "position", GAME_LOGIC.get_parent().get_node("change_field_view").position, Vector2(1174, 276), 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	GAME_LOGIC.get_parent().get_node("change_field_view/tween").start()
-	GAME_LOGIC.get_parent().get_node("turn_end_button/tween").interpolate_property(GAME_LOGIC.get_parent().get_node("turn_end_button"), "rect_position", GAME_LOGIC.get_parent().get_node("turn_end_button").rect_position, Vector2(1174, 366), 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	GAME_LOGIC.get_parent().get_node("turn_end_button/tween").interpolate_property(GAME_LOGIC.get_parent().get_node("turn_end_button"), "position", GAME_LOGIC.get_parent().get_node("turn_end_button").position, Vector2(1174, 366), 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	GAME_LOGIC.get_parent().get_node("turn_end_button/tween").start()
 	GAME_LOGIC.GAME_PHASE = "main_phase"
 	
@@ -448,7 +448,7 @@ func activate_spell_generic(card_node : Node):
 				"enemy_monsters", "enemy_spelltraps": #all of the opposing cards of that type
 					var get_keyword = target_type_of_destruction.split("_")[1].trim_suffix("s") #returns 'monster' or 'spelltrap
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + String(i))
+						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + str(i))
 						if card_being_checked.is_visible():
 							GAME_LOGIC.destroy_a_card(card_being_checked)
 					return target_type_of_destruction + "destroyed."
@@ -457,7 +457,7 @@ func activate_spell_generic(card_node : Node):
 					#Get a list of possible targets to be randomly selected for destruction
 					var list_of_possible_targets : Array = []
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if card_being_checked.is_visible() and card_being_checked.this_card_flags.fusion_type == target_type_of_destruction:
 							list_of_possible_targets.append(card_being_checked)
 					
@@ -471,7 +471,7 @@ func activate_spell_generic(card_node : Node):
 					
 				_: #Destroys all Monsters on opposing side based on it's types, i.e. Dragon, Zombie, Warrior, etc
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false and CardList.card_list[card_being_checked.this_card_id].type == target_type_of_destruction:
 							GAME_LOGIC.destroy_a_card(card_being_checked)
 					return target_type_of_destruction + "destroyed."
@@ -493,13 +493,13 @@ func activate_spell_generic(card_node : Node):
 			
 			#Do the actual changes of stats for the monsters
 			for i in range(5):
-				var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if monster_being_checked.is_visible() and monster_being_checked.this_card_flags.is_facedown == false:
 					monster_being_checked.this_card_flags.atk_up += value_change * dice_100s_multiplier
 					monster_being_checked.update_card_information(monster_being_checked.this_card_id)
 			
 			#print(value_change * dice_100s_multiplier)
-			return String(value_change * dice_100s_multiplier)
+			return str(value_change * dice_100s_multiplier)
 			
 		"power_bond": #Double the ATK of your strongest Fusion Machine, at the cost of the same amount of life points
 			#Get the target
@@ -508,7 +508,7 @@ func activate_spell_generic(card_node : Node):
 			var previous_highest_atk = 0
 			
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.fusion_type == "fusion" and CardList.card_list[card_being_checked.this_card_id].type == "machine":
 					if int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text) >= previous_highest_atk:
 						target_monster_node = card_being_checked
@@ -533,7 +533,7 @@ func activate_spell_generic(card_node : Node):
 			
 			#Do the changes on the targets
 			for i in range(5):
-				var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				
 				if monster_being_checked.is_visible():
 					if type_of_effect == "block_attack" and monster_being_checked.this_card_flags.is_defense_position == false:
@@ -550,7 +550,7 @@ func activate_spell_generic(card_node : Node):
 				var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + both_targets + "_side_zones")
 				
 				for i in range(5):
-					var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+					var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 					if monster_being_checked.is_visible() and monster_being_checked.this_card_flags.is_facedown == false:
 						var registered_atk = int(monster_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
 						var registered_def = int(monster_being_checked.get_node("card_design/monster_features/atk_def/def").text)
@@ -572,10 +572,10 @@ func activate_spell_generic(card_node : Node):
 			
 			for _i in range(token_quantity):
 				for j in [2,1,3,0,4]:
-					var monster_being_checked = target_side_of_field.get_node("monster_" + String(j))
+					var monster_being_checked = target_side_of_field.get_node("monster_" + str(j))
 					if not monster_being_checked.is_visible():
 						#Summon the resulting monster on the field
-						monster_being_checked.this_card_id = String(int(card_node.this_card_id) + 1).pad_zeros(5)
+						monster_being_checked.this_card_id = str(int(card_node.this_card_id) + 1).pad_zeros(5)
 						monster_being_checked.this_card_flags.fusion_type = "token"
 						monster_being_checked.update_card_information(monster_being_checked.this_card_id)
 						monster_being_checked.toggle_battle_position()
@@ -608,7 +608,7 @@ func activate_spell_generic(card_node : Node):
 			var number_of_monsters : int = 0
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.fusion_type == "token":
 					number_of_monsters += 1
 			
@@ -616,14 +616,14 @@ func activate_spell_generic(card_node : Node):
 			var is_to_heal = CardList.card_list[card_node.this_card_id].effect[0] == "tokens_for_life" #smart way to reference it bellow
 			GAME_LOGIC.change_lifepoints(caller_and_target[int(!is_to_heal)], value * number_of_monsters, is_to_heal)
 			
-			return "Token Heal: " + String(value * number_of_monsters)
+			return "Token Heal: " + str(value * number_of_monsters)
 		
 		"change_of_heart":
 			#Get a random monster from Enemy's Side of the Field
 			var list_of_targets : Array = []
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible():
 					list_of_targets.append(card_being_checked)
 			
@@ -637,7 +637,7 @@ func activate_spell_generic(card_node : Node):
 			if monster_to_copy != null:
 				target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 				for i in [2,1,3,0,4]:
-					var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+					var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 					if not monster_being_checked.is_visible():
 						monster_being_checked.this_card_id = monster_to_copy.this_card_id
 						monster_being_checked.this_card_flags = monster_to_copy.this_card_flags
@@ -657,7 +657,7 @@ func activate_spell_generic(card_node : Node):
 
 func activate_spell_ritual(card_node : Node):
 	#Ritual will look for one monster with a specific type, and more monsters to Sum the star level of result
-	var ritual_result_monster_id = String(CardList.card_list[card_node.this_card_id].effect[1]).pad_zeros(5)
+	var ritual_result_monster_id = str(CardList.card_list[card_node.this_card_id].effect[1]).pad_zeros(5)
 	var ritual_type_restriction = CardList.card_list[ritual_result_monster_id].type
 	var ritual_level_goal = CardList.card_list[ritual_result_monster_id].level
 	
@@ -665,7 +665,7 @@ func activate_spell_ritual(card_node : Node):
 	var caller_and_target = get_caller_and_target(card_node)
 	var monster_with_type_restriction : Node = null
 	for i in range(5):
-		var monster_being_checked = GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + String(i))
+		var monster_being_checked = GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + str(i))
 		if monster_being_checked.is_visible() and CardList.card_list[monster_being_checked.this_card_id].type == ritual_type_restriction:
 			monster_with_type_restriction = monster_being_checked
 			break
@@ -675,8 +675,8 @@ func activate_spell_ritual(card_node : Node):
 	#Second restriction: caller will have enough monsters to sum the level goal (or more)
 	var temp_level_array : Array = []
 	for i in range(5):
-		if GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + String(i)).is_visible():
-			var monster_level = CardList.card_list[GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + String(i)).this_card_id].level
+		if GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + str(i)).is_visible():
+			var monster_level = CardList.card_list[GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + str(i)).this_card_id].level
 			temp_level_array.append(monster_level)
 	temp_level_array.sort()
 	
@@ -685,9 +685,9 @@ func activate_spell_ritual(card_node : Node):
 	var monsters_sorted_by_level : Array = []
 	for i in range(temp_level_array.size()):
 		for j in range(5):
-			if temp_level_array[i] == CardList.card_list[GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + String(j)).this_card_id].level and GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + String(j)).is_visible():
-				if not monsters_sorted_by_level.has(GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + String(j))):
-					monsters_sorted_by_level.append(GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + String(j)))
+			if temp_level_array[i] == CardList.card_list[GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + str(j)).this_card_id].level and GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + str(j)).is_visible():
+				if not monsters_sorted_by_level.has(GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + str(j))):
+					monsters_sorted_by_level.append(GAME_LOGIC.get_parent().get_node("duel_field/"+ caller_and_target[0] +"_side_zones/monster_" + str(j)))
 	
 	#print("monsters sorted by level: ", monsters_sorted_by_level)
 	
@@ -799,7 +799,7 @@ func activate_trap(card_node : Node):
 			var attacker_attack = int(current_attacker.get_node("card_design/monster_features/atk_def/atk").text)
 			
 			var COM_LP = get_node("../../user_interface/top_info_box/com_info/lifepoints").get_text()
-			get_node("../../user_interface/top_info_box/com_info/lifepoints").text = String( clamp(int(COM_LP) - attacker_attack, 0, 9999) )
+			get_node("../../user_interface/top_info_box/com_info/lifepoints").text = str( clamp(int(COM_LP) - attacker_attack, 0, 9999) )
 			GAME_LOGIC.change_lifepoints(caller_and_target[0], attacker_attack)
 			
 			GAME_LOGIC.destroy_a_card(current_attacker)
@@ -807,7 +807,7 @@ func activate_trap(card_node : Node):
 		"mirror_force": #destroy all monsters from attacker
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 			for i in range(5):
-				var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if monster_being_checked.is_visible() and monster_being_checked.this_card_flags.is_defense_position == false:
 					GAME_LOGIC.destroy_a_card(monster_being_checked)
 		
@@ -817,7 +817,7 @@ func activate_trap(card_node : Node):
 			#print("copy_as_token caller: ", caller_and_target)
 			
 			for i in [2,1,3,0,4]:
-				var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if not monster_being_checked.is_visible():
 					monster_being_checked.this_card_flags.fusion_type = "token"
 					monster_being_checked.update_card_information(current_attacker.this_card_id)
@@ -828,7 +828,7 @@ func activate_trap(card_node : Node):
 			#Substitutes the attacking monster for a Token with half of it's strenght
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 			for i in range(5):
-				var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if monster_being_checked == current_attacker:
 					monster_being_checked.this_card_flags.fusion_type = "token"
 					monster_being_checked.this_card_flags.atk_up -= int(current_attacker.get_node("card_design/monster_features/atk_def/atk").text)/2.0
@@ -839,7 +839,7 @@ func activate_trap(card_node : Node):
 		"fortify_tokens":
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.fusion_type == "token":
 					#card_being_checked.this_card_flags.atk_up += 1000
 					card_being_checked.this_card_flags.def_up += 1000
@@ -855,7 +855,7 @@ func activate_trap(card_node : Node):
 			for side in ["player", "enemy"]:
 				var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + side + "_side_zones")
 				for i in range(5):
-					var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+					var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 					if card_being_checked.is_visible():
 						monster_count += 1
 			GAME_LOGIC.change_lifepoints(caller_and_target[0], 300 * monster_count, true)
@@ -881,7 +881,7 @@ func activate_trap(card_node : Node):
 		"reveal_face_down": #flip monsters that are face down, without calling their effects
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == true:
 					card_being_checked.this_card_flags.is_facedown = false
 					card_being_checked.update_card_information(card_being_checked.this_card_id)
@@ -922,7 +922,7 @@ func monster_on_summon(card_node : Node):
 			for both_targets in ["player", "enemy"]:
 				var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + both_targets + "_side_zones")
 				for i in range(5):
-					var monster_target = target_side_of_field.get_node("monster_" + String(i))
+					var monster_target = target_side_of_field.get_node("monster_" + str(i))
 					#UP for positive attribute
 					if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].attribute == positive_attribute:
 						monster_target.this_card_flags.atk_up += 500
@@ -940,7 +940,7 @@ func monster_on_summon(card_node : Node):
 			
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for i in range(5):
-				var monster_target = target_side_of_field.get_node("monster_" + String(i))
+				var monster_target = target_side_of_field.get_node("monster_" + str(i))
 				if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].type == friendly_type and monster_target != card_node:
 					monster_target.this_card_flags.atk_up += boost_value
 					monster_target.this_card_flags.def_up += boost_value
@@ -954,7 +954,7 @@ func monster_on_summon(card_node : Node):
 			
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for i in range(5):
-				var monster_target = target_side_of_field.get_node("monster_" + String(i))
+				var monster_target = target_side_of_field.get_node("monster_" + str(i))
 				if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].type in friendly_type and monster_target != card_node:
 					monster_target.this_card_flags.atk_up += boost_value
 					monster_target.this_card_flags.def_up += boost_value
@@ -970,7 +970,7 @@ func monster_on_summon(card_node : Node):
 					var count_attribute_on_field : int = 0
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for i in range(5):
-						var monster_target = target_side_of_field.get_node("monster_" + String(i))
+						var monster_target = target_side_of_field.get_node("monster_" + str(i))
 						if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].attribute == CardList.card_list[card_id].attribute and monster_target != card_node:
 							count_attribute_on_field += 1
 					
@@ -980,7 +980,7 @@ func monster_on_summon(card_node : Node):
 					var count_type_on_field : int = 0
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for i in range(5):
-						var monster_target = target_side_of_field.get_node("monster_" + String(i))
+						var monster_target = target_side_of_field.get_node("monster_" + str(i))
 						if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].type == "dragon":
 							count_type_on_field += 1
 					
@@ -990,7 +990,7 @@ func monster_on_summon(card_node : Node):
 					var count_spelltrap_on_field : int = 0
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for i in range(5):
-						var spelltrap_target = target_side_of_field.get_node("spelltrap_" + String(i))
+						var spelltrap_target = target_side_of_field.get_node("spelltrap_" + str(i))
 						if spelltrap_target.is_visible():
 							count_spelltrap_on_field += 1
 					
@@ -1005,7 +1005,7 @@ func monster_on_summon(card_node : Node):
 					var count_type_on_field : int = 0
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for i in range(5):
-						var monster_target = target_side_of_field.get_node("monster_" + String(i))
+						var monster_target = target_side_of_field.get_node("monster_" + str(i))
 						if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].type == CardList.card_list[card_id].type and monster_target != card_node:
 							count_type_on_field += 1
 					
@@ -1025,7 +1025,7 @@ func monster_on_summon(card_node : Node):
 			var count_as_on_field : int = 0
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for i in range(5):
-				var monster_target = target_side_of_field.get_node("monster_" + String(i))
+				var monster_target = target_side_of_field.get_node("monster_" + str(i))
 				if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].count_as == count_as_type and monster_target != card_node:
 					count_as_on_field += 1
 			
@@ -1041,7 +1041,7 @@ func monster_on_summon(card_node : Node):
 			var monsters_on_field : int = 0
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for i in range(5):
-				var monster_target = target_side_of_field.get_node("monster_" + String(i))
+				var monster_target = target_side_of_field.get_node("monster_" + str(i))
 				if monster_target.is_visible() and monster_target != card_node:
 					monsters_on_field += 1
 			
@@ -1084,8 +1084,8 @@ func monster_on_summon(card_node : Node):
 			var cards_removed : int = 0
 			for _i in range(3):
 				if current_deck_size - 1 >= 0:
-					deck.remove(0) #remove that same card from deck
-					get_node("../../user_interface/top_info_box/"+ who_is +"_info/deck").text = String(deck.size())
+					deck.remove_at(0) #remove that same card from deck
+					get_node("../../user_interface/top_info_box/"+ who_is +"_info/deck").text = str(deck.size())
 					cards_removed += 1
 			
 			#Update the card itself
@@ -1095,7 +1095,7 @@ func monster_on_summon(card_node : Node):
 				"def": card_node.this_card_flags.def_up += boost_value
 			card_node.update_card_information(card_node.this_card_id)
 			
-			return String(cards_removed)
+			return str(cards_removed)
 		
 		"equip_boost":
 			#Count for 300 multiples since that is the lowest equipment possible
@@ -1126,7 +1126,7 @@ func monster_on_summon(card_node : Node):
 			#Other gender robos on the field power up
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for i in range(5):
-				var monster_target = target_side_of_field.get_node("monster_" + String(i))
+				var monster_target = target_side_of_field.get_node("monster_" + str(i))
 				if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].card_name == other_robo_name:
 					monster_target.this_card_flags.atk_up += robo_power_up_value
 					monster_target.update_card_information(monster_target.this_card_id)
@@ -1142,7 +1142,7 @@ func monster_on_summon(card_node : Node):
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 					
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + String(i))
+						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + str(i))
 						if card_being_checked.is_visible():
 							GAME_LOGIC.destroy_a_card(card_being_checked)
 					
@@ -1154,7 +1154,7 @@ func monster_on_summon(card_node : Node):
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 					
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + String(i))
+						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + str(i))
 						if card_being_checked.is_visible():
 							list_of_targets.append(card_being_checked)
 					
@@ -1173,7 +1173,7 @@ func monster_on_summon(card_node : Node):
 					
 					#List all of the targetable monsters
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false:
 							list_of_monsters.append(card_being_checked)
 					
@@ -1203,7 +1203,7 @@ func monster_on_summon(card_node : Node):
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 					
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false and CardList.card_list[card_being_checked.this_card_id].type == destruction_target:
 							list_of_targets.append(card_being_checked)
 					
@@ -1223,7 +1223,7 @@ func monster_on_summon(card_node : Node):
 			for both_sides in ["player_side_zones", "enemy_side_zones"]:
 				var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + both_sides)
 				for i in range(5):
-					var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+					var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 					if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false and CardList.card_list[card_being_checked.this_card_id].attribute != reptile_attribute:
 						GAME_LOGIC.destroy_a_card(card_being_checked)
 		
@@ -1234,7 +1234,7 @@ func monster_on_summon(card_node : Node):
 			
 			var list_of_targets : Array = []
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false and CardList.card_list[card_being_checked.this_card_id].attribute == attribute_to_compare:
 					list_of_targets.append(card_being_checked)
 			
@@ -1254,7 +1254,7 @@ func monster_on_summon(card_node : Node):
 			var highest_atk = 0
 			var associated_def = 0
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false:
 					if int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text) >= highest_atk:
 						highest_atk = int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
@@ -1313,7 +1313,7 @@ func monster_on_summon(card_node : Node):
 				#Update deck count
 				var deck_fix = "player"
 				if caller_and_target[0] == "enemy": deck_fix = "com"
-				GAME_LOGIC.get_parent().get_node("user_interface/top_info_box/"+ deck_fix +"_info/deck").text = String(caller_deck.size())
+				GAME_LOGIC.get_parent().get_node("user_interface/top_info_box/"+ deck_fix +"_info/deck").text = str(caller_deck.size())
 			
 			return "Cyber-Stein transformed"
 		
@@ -1322,7 +1322,7 @@ func monster_on_summon(card_node : Node):
 			
 			#Do the changes on the targets
 			for i in range(5):
-				var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if monster_being_checked.is_visible() and monster_being_checked.this_card_flags.is_defense_position == true:
 					monster_being_checked.toggle_battle_position() #handles the setting of the flag and the rotation
 			
@@ -1334,7 +1334,7 @@ func monster_on_summon(card_node : Node):
 			#Get a random target to be flipped facedown and defense position
 			var list_of_targets : Array = []
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false:
 					list_of_targets.append(card_being_checked)
 			
@@ -1360,7 +1360,7 @@ func monster_on_summon(card_node : Node):
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 			
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("spelltrap_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("spelltrap_" + str(i))
 				if card_being_checked.is_visible():
 					GAME_LOGIC.destroy_a_card(card_being_checked)
 					number_of_cards_destroyed += 1
@@ -1383,7 +1383,7 @@ func monster_on_summon(card_node : Node):
 			for both_sides in ["player_side_zones", "enemy_side_zones"]:
 				var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + both_sides)
 				for i in range(5):
-					var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+					var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 					if card_being_checked.is_visible() and card_being_checked != card_node:
 						GAME_LOGIC.destroy_a_card(card_being_checked)
 						number_of_cards_destroyed += 1
@@ -1400,7 +1400,7 @@ func monster_on_summon(card_node : Node):
 			var number_of_cards_destroyed : int = 0
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("spelltrap_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("spelltrap_" + str(i))
 				if card_being_checked.is_visible():
 					GAME_LOGIC.destroy_a_card(card_being_checked)
 					number_of_cards_destroyed += 1
@@ -1427,7 +1427,7 @@ func monster_on_summon(card_node : Node):
 			var number_of_monsters : int = 0
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible():
 					number_of_monsters += 1
 			
@@ -1435,7 +1435,7 @@ func monster_on_summon(card_node : Node):
 			var is_to_heal = CardList.card_list[card_node.this_card_id].effect[1] == "lifeup_monster_count" #smart way to reference it bellow
 			GAME_LOGIC.change_lifepoints(caller_and_target[int(!is_to_heal)], value * number_of_monsters, is_to_heal)
 			
-			return "Is to Heal: " + String(is_to_heal)
+			return "Is to Heal: " + str(is_to_heal)
 		
 		"mill":
 			var card_quantity = CardList.card_list[card_node.this_card_id].effect[2]
@@ -1452,21 +1452,21 @@ func monster_on_summon(card_node : Node):
 			var cards_removed : int = 0
 			for _i in range(card_quantity):
 				if current_deck_size > 0:
-					deck.remove(0) #remove that same card from deck
-					get_node("../../user_interface/top_info_box/"+ target_is +"_info/deck").text = String(deck.size())
+					deck.remove_at(0) #remove that same card from deck
+					get_node("../../user_interface/top_info_box/"+ target_is +"_info/deck").text = str(deck.size())
 					cards_removed += 1
 			
-			return String(cards_removed)
+			return str(cards_removed)
 		
 		"summon_pharaoh":
-			var friend_card_id_1 = String(CardList.card_list[card_node.this_card_id].effect[2]).pad_zeros(5)
-			var friend_card_id_2 = String(CardList.card_list[card_node.this_card_id].effect[3]).pad_zeros(5)
+			var friend_card_id_1 = str(CardList.card_list[card_node.this_card_id].effect[2]).pad_zeros(5)
+			var friend_card_id_2 = str(CardList.card_list[card_node.this_card_id].effect[3]).pad_zeros(5)
 			
 			#Summon one friend on field
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for summons in [friend_card_id_1, friend_card_id_2]:
 				for i in [2,1,3,0,4]:
-					var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+					var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 					if not monster_being_checked.is_visible():
 						#Summon the resulting monster on the field
 						monster_being_checked.this_card_id = summons
@@ -1509,7 +1509,7 @@ func monster_on_summon(card_node : Node):
 			for side in ["player", "enemy"]:
 				var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + side + "_side_zones")
 				for i in range(5):
-					var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+					var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 					var atk_on_field = int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
 					var def_on_field = int(card_being_checked.get_node("card_design/monster_features/atk_def/def").text)
 					
@@ -1526,7 +1526,7 @@ func monster_on_summon(card_node : Node):
 			for both_sides in ["player_side_zones", "enemy_side_zones"]:
 				var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + both_sides)
 				for i in range(5):
-					var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+					var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 					if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false and int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text) > highest_atk:
 						highest_atk = int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
 			
@@ -1542,7 +1542,7 @@ func monster_on_summon(card_node : Node):
 			
 			for card_type in ["monster_", "spelltrap_"]:
 				for i in range(5):
-					var card_being_checked = target_side_of_field.get_node(card_type + String(i))
+					var card_being_checked = target_side_of_field.get_node(card_type + str(i))
 					if card_being_checked.is_visible():
 						card_count += 1
 			
@@ -1558,7 +1558,7 @@ func monster_on_summon(card_node : Node):
 			
 			var final_atk_gain = 0
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false:
 					match type_of_count:
 						"sum"   : final_atk_gain += int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
@@ -1592,7 +1592,7 @@ func monster_on_summon(card_node : Node):
 			
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false:
 					card_being_checked.this_card_flags.atk_up -= debuff_value
 					card_being_checked.update_card_information(card_being_checked.this_card_id)
@@ -1606,7 +1606,7 @@ func monster_on_summon(card_node : Node):
 			var highest_atk = 0
 			var keep_monster_node = null
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false:
 					if int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text) >= highest_atk:
 						highest_atk = int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
@@ -1649,7 +1649,7 @@ func monster_on_flip(card_node : Node):
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 					
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + String(i))
+						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + str(i))
 						if card_being_checked.is_visible():
 							list_of_targets.append(card_being_checked)
 					
@@ -1667,7 +1667,7 @@ func monster_on_flip(card_node : Node):
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 					
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false and CardList.card_list[card_being_checked.this_card_id].level == 4:
 							list_of_targets.append(card_being_checked)
 					
@@ -1679,7 +1679,7 @@ func monster_on_flip(card_node : Node):
 				"all_enemy_monsters":
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if card_being_checked.is_visible():
 							GAME_LOGIC.destroy_a_card(card_being_checked)
 					
@@ -1689,7 +1689,7 @@ func monster_on_flip(card_node : Node):
 					for side in ["player", "enemy"]:
 						var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + side + "_side_zones")
 						for i in range(5):
-							var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+							var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 							if card_being_checked.is_visible():
 								GAME_LOGIC.destroy_a_card(card_being_checked)
 					
@@ -1699,7 +1699,7 @@ func monster_on_flip(card_node : Node):
 			var value : int = CardList.card_list[card_node.this_card_id].effect[2]
 			GAME_LOGIC.change_lifepoints(caller_and_target[0], value, true)
 			
-			return String(value)
+			return str(value)
 		
 		"mill":
 			var card_quantity = CardList.card_list[card_node.this_card_id].effect[2]
@@ -1716,11 +1716,11 @@ func monster_on_flip(card_node : Node):
 			var cards_removed : int = 0
 			for _i in range(card_quantity):
 				if current_deck_size > 0:
-					deck.remove(0) #remove that same card from deck
-					get_node("../../user_interface/top_info_box/"+ target_is +"_info/deck").text = String(deck.size())
+					deck.remove_at(0) #remove that same card from deck
+					get_node("../../user_interface/top_info_box/"+ target_is +"_info/deck").text = str(deck.size())
 					cards_removed += 1
 			
-			return String(cards_removed)
+			return str(cards_removed)
 		
 		"jigen_bakudan":
 			var atk_sum : int = 0
@@ -1728,7 +1728,7 @@ func monster_on_flip(card_node : Node):
 			#Destroys all of caller's monsters and add their atk to the sum
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible():
 					atk_sum += int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
 					GAME_LOGIC.destroy_a_card(card_being_checked)
@@ -1769,7 +1769,7 @@ func monster_on_attack(card_node : Node):
 			var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 			var target_number_of_monsters : int = 0
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible():
 					target_number_of_monsters += 1
 			
@@ -1824,9 +1824,9 @@ func monster_on_attack(card_node : Node):
 			var is_up = get_keyword == "up"
 			
 			if get_keyword == "up":
-				lifepoint_change_animation("+" + String(value), "left")
+				lifepoint_change_animation("+" + str(value), "left")
 			else:
-				lifepoint_change_animation("-" + String(value), "left")
+				lifepoint_change_animation("-" + str(value), "left")
 			
 			GAME_LOGIC.change_lifepoints(caller_and_target[0], value, is_up)
 			
@@ -1842,7 +1842,7 @@ func monster_on_attack(card_node : Node):
 					
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						print(card_being_checked, " and ", get_attacked_monster)
 						if card_being_checked == get_attacked_monster:
 							found_attacked_on_field = true
@@ -1856,7 +1856,7 @@ func monster_on_attack(card_node : Node):
 					final_value = int(value)
 			
 			if final_value > 0:
-				lifepoint_change_animation("-" + String(final_value), "right")
+				lifepoint_change_animation("-" + str(final_value), "right")
 				GAME_LOGIC.change_lifepoints(caller_and_target[1], final_value)
 			
 			return "burn damage"
@@ -1876,11 +1876,11 @@ func monster_on_attack(card_node : Node):
 			var cards_removed : int = 0
 			for _i in range(card_quantity):
 				if current_deck_size > 0:
-					deck.remove(0) #remove that same card from deck
-					get_node("../../user_interface/top_info_box/"+ target_is +"_info/deck").text = String(deck.size())
+					deck.remove_at(0) #remove that same card from deck
+					get_node("../../user_interface/top_info_box/"+ target_is +"_info/deck").text = str(deck.size())
 					cards_removed += 1
 			
-			return String(cards_removed)
+			return str(cards_removed)
 		
 		"get_power": #each time the monster attack it is powered up
 			var atk_boost_value = CardList.card_list[card_node.this_card_id].effect[2]
@@ -1895,7 +1895,7 @@ func monster_on_attack(card_node : Node):
 			#List all of the targetable monsters
 			var highest_atk = 0
 			for i in range(5):
-				var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+				var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 				if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false:
 					if int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text) >= highest_atk:
 						highest_atk = int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
@@ -1958,7 +1958,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 	
 	if not ritual_monster_name in monsters_to_not_animate:
 		do_activation_animation(card_node, true)
-		yield(self, "effect_animation_finished")
+		await self.effect_animation_finished
 	
 	#The effects will happen individually for each monster
 	match ritual_activation_condition:
@@ -1973,7 +1973,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					}
 					#Summon one friend on field
 					for i in [2,1,3,0,4]:
-						var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if not monster_being_checked.is_visible():
 							#Summon the resulting monster on the field
 							monster_being_checked.this_card_id = friend_match[ritual_monster_name]
@@ -1992,7 +1992,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					
 					#List all of the targetable monsters
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false and int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text) >= target_atk:
 							target_atk = int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
 							target_def = int(card_being_checked.get_node("card_design/monster_features/atk_def/def").text)
@@ -2000,7 +2000,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					#Summon one friend on field
 					for i in [2,1,3,0,4]:
 						target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
-						var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if not monster_being_checked.is_visible():
 							#Summon the resulting monster on the field
 							monster_being_checked.this_card_id = "01246" #Mask Token
@@ -2019,7 +2019,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					var highest_atk_so_far = 0
 					var the_monster : Node = null
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var card_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if card_being_checked.is_visible() and card_being_checked.this_card_flags.is_facedown == false and int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text) >= highest_atk_so_far:
 							highest_atk_so_far = int(card_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
 							the_monster = card_being_checked
@@ -2039,7 +2039,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[1] + "_side_zones")
 					var get_keyword = destroy_keyword.split("_")[1].trim_suffix("s") #returns 'monster' or 'spelltrap
 					for i in range(5):
-						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + String(i))
+						var card_being_checked = target_side_of_field.get_node(get_keyword + "_" + str(i))
 						if card_being_checked.is_visible():
 							GAME_LOGIC.destroy_a_card(card_being_checked)
 				
@@ -2048,7 +2048,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					var count_spelltrap_on_field : int = 0
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for i in range(5):
-						var spelltrap_target = target_side_of_field.get_node("spelltrap_" + String(i))
+						var spelltrap_target = target_side_of_field.get_node("spelltrap_" + str(i))
 						if spelltrap_target.is_visible():
 							count_spelltrap_on_field += 1
 					
@@ -2062,7 +2062,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for i in range(5):
-						var monster_target = target_side_of_field.get_node("monster_" + String(i))
+						var monster_target = target_side_of_field.get_node("monster_" + str(i))
 						if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].type == friendly_type and monster_target != card_node:
 							monster_target.this_card_flags.atk_up += boost_value
 							monster_target.this_card_flags.def_up += boost_value
@@ -2076,7 +2076,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					#Do the actual changes of stats for the monsters
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for i in range(5):
-						var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+						var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 						if monster_being_checked.is_visible() and monster_being_checked.this_card_flags.is_facedown == false:
 							monster_being_checked.this_card_flags.atk_up += value_change * 100
 							monster_being_checked.update_card_information(monster_being_checked.this_card_id)
@@ -2087,7 +2087,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					var count_type_on_field : int = 0
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for i in range(5):
-						var monster_target = target_side_of_field.get_node("monster_" + String(i))
+						var monster_target = target_side_of_field.get_node("monster_" + str(i))
 						if monster_target.is_visible() and monster_target.this_card_flags.is_facedown == false and CardList.card_list[monster_target.this_card_id].type == CardList.card_list[card_node.this_card_id].type and monster_target != card_node:
 							count_type_on_field += 1
 					boost_value = boost_value * count_type_on_field
@@ -2113,7 +2113,7 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 						var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + both_targets + "_side_zones")
 						
 						for i in range(5):
-							var monster_being_checked = target_side_of_field.get_node("monster_" + String(i))
+							var monster_being_checked = target_side_of_field.get_node("monster_" + str(i))
 							if monster_being_checked.is_visible() and monster_being_checked.this_card_flags.is_facedown == false:
 								var registered_atk = int(monster_being_checked.get_node("card_design/monster_features/atk_def/atk").text)
 								var registered_def = int(monster_being_checked.get_node("card_design/monster_features/atk_def/def").text)
@@ -2141,8 +2141,8 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					#Remove cards from the deck, if it has enough
 					for _i in range(card_quantity):
 						if current_deck_size > 0:
-							deck.remove(0) #remove that same card from deck
-							get_node("../../user_interface/top_info_box/"+ target_is +"_info/deck").text = String(deck.size())
+							deck.remove_at(0) #remove that same card from deck
+							get_node("../../user_interface/top_info_box/"+ target_is +"_info/deck").text = str(deck.size())
 		
 		"on_ritual_death":
 			match ritual_monster_name:
@@ -2163,13 +2163,13 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					
 					#At Death, do the animation
 					do_activation_animation(card_node, true)
-					yield(self, "effect_animation_finished")
+					await self.effect_animation_finished
 					
 					#Summon the successor on field
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for i in range(successor_match[ritual_monster_name].size()):
 						for j in [2,1,3,0,4]:
-							var monster_being_checked = target_side_of_field.get_node("monster_" + String(j))
+							var monster_being_checked = target_side_of_field.get_node("monster_" + str(j))
 							if not monster_being_checked.is_visible():
 								monster_being_checked.this_card_id = successor_match[ritual_monster_name][i]
 								
@@ -2191,12 +2191,12 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 					
 					#At Death, do the animation
 					do_activation_animation(card_node, true)
-					yield(self, "effect_animation_finished")
+					await self.effect_animation_finished
 					
 					#Summon next one on the field
 					var target_side_of_field = GAME_LOGIC.get_parent().get_node("duel_field/" + caller_and_target[0] + "_side_zones")
 					for j in [2,1,3,0,4]:
-						var monster_being_checked = target_side_of_field.get_node("monster_" + String(j))
+						var monster_being_checked = target_side_of_field.get_node("monster_" + str(j))
 						if not monster_being_checked.is_visible():
 							#print("Looking for: ", card_node.this_card_id, " in: ", succession_line, " Found it at index: ", succession_line.find(card_node.this_card_id))
 							if succession_line.find(card_node.this_card_id) != succession_line.size() -1:
@@ -2224,7 +2224,3 @@ func ritual_effects_activation(card_node : Node, ritual_activation_condition : S
 			match ritual_monster_name:
 				#Relinquished basically does the same 'return_damage' effect that is purely part of game_logic
 				"Relinquished": pass
-
-
-
-

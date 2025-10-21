@@ -6,7 +6,7 @@ var language_tag = ""
 func _ready():
 	#Animate the transition when starting this scene
 	$scene_transitioner.entering_this_scene()
-	$general_timer.start(0.8); yield($general_timer, "timeout")
+	$general_timer.start(0.8); await $general_timer.timeout
 	
 	#For game languages other than Brazilian Portuguese, fetch the translated version of Dialogs from Dialogic. I hate how redundant that is...
 	if PlayerData.game_language in ["en"]:
@@ -19,7 +19,7 @@ func _ready():
 		match PlayerData.recorded_dialogs[-1]: #based on the last recorded one, figure out the next to play
 			_:
 				var last_dlg_number = PlayerData.recorded_dialogs[-1].split("_")[1]
-				var new_dlg_number = String(int(last_dlg_number) + 1).pad_zeros(3)
+				var new_dlg_number = str(int(last_dlg_number) + 1).pad_zeros(3)
 				enter_new_dialog_from_fade("dlg_" + new_dlg_number + language_tag, "no_fade")
 
 #---------------------------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ func load_dialog_timeline(timeline_name : String):
 func enter_new_dialog_from_fade(timeline_name : String, fade_or_not = "fade"):
 	if fade_or_not == "fade":
 		fade_screen("black")
-		$general_timer.start(1.6); yield($general_timer, "timeout")
+		$general_timer.start(1.6); await $general_timer.timeout
 	
 	#Bug prevention. Add language tag only if the timeline_name doesnt have it already
 	if language_tag != "" and timeline_name.find(language_tag) == -1:
@@ -113,7 +113,7 @@ func _on_Button_button_up():
 	Dialogic.set_variable("Player Name", PlayerData.player_name)
 	name_click_once = true
 	
-	$general_timer.start(0.2); yield($general_timer, "timeout")
+	$general_timer.start(0.2); await $general_timer.timeout
 	$additional_screen_elements/player_name_box.hide()
 	load_dialog_timeline("dlg_002" + language_tag)
 
@@ -137,7 +137,7 @@ func _on_button_yes_button_up():
 	
 	save_game()
 	save_click_once = true
-	$general_timer.start(0.5); yield($general_timer, "timeout")
+	$general_timer.start(0.5); await $general_timer.timeout
 	$scene_transitioner.scene_transition("game_dialog")
 	
 	$additional_screen_elements/pop_up_save.hide()
@@ -159,7 +159,7 @@ func _on_button_return_to_title_button_up():
 	
 	save_game()
 	save_click_once = true
-	$general_timer.start(0.5); yield($general_timer, "timeout")
+	$general_timer.start(0.5); await $general_timer.timeout
 	$scene_transitioner.scene_transition("main_menu")
 
 func save_game():
@@ -179,7 +179,7 @@ func fake_box_moving_up():
 	var timer = 0.5 #in seconds
 	$tween.interpolate_property($reference_dialog_box, "position:y", dialog_box_out, dialog_box_in, timer, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
 	$tween.start()
-	yield($tween, "tween_completed")
+	await $tween.tween_completed
 	
 	emit_signal("dialog_scene_initialized")
 	$reference_dialog_box.hide()
@@ -196,12 +196,12 @@ func fade_screen(color): #'black' or 'white'
 	#print("fading in")
 	$tween.interpolate_property(fade_color_node, "modulate", Color(1,1,1,0), Color(1,1,1,1), fade_time/2, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	$tween.start()
-	yield($tween, "tween_completed")
+	await $tween.tween_completed
 	
 	#print("fading out")
 	$tween.interpolate_property(fade_color_node, "modulate", Color(1,1,1,1), Color(1,1,1,0), fade_time/2, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	$tween.start()
-	yield($tween, "tween_completed")
+	await $tween.tween_completed
 	fade_color_node.hide()
 
 func animate_button(button_path):
@@ -213,10 +213,10 @@ func animate_button(button_path):
 	
 	var tweener = button_path.get_node("tween")
 	
-	tweener.interpolate_property(button_path, "rect_scale", button_path.rect_scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tweener.interpolate_property(button_path, "scale", button_path.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tweener.start()
-	yield(tweener, "tween_completed")
-	tweener.interpolate_property(button_path, "rect_scale", button_path.rect_scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await tweener.tween_completed
+	tweener.interpolate_property(button_path, "scale", button_path.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tweener.start()
 
 func show_special_background(background_name : String, special_animation = "none"):
@@ -244,7 +244,7 @@ func animate_bg(background_node, special_animation):
 			
 			tweener.interpolate_property(background_node, "position", initial_pos, final_pos, movement_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			tweener.start()
-			yield(tweener, "tween_completed")
+			await tweener.tween_completed
 		
 		"move_up":
 			if $additional_screen_elements/special_backgrounds/vs_darknite.is_visible():
@@ -257,7 +257,7 @@ func animate_bg(background_node, special_animation):
 			
 			tweener.interpolate_property(background_node, "position", initial_pos, final_pos, movement_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			tweener.start()
-			yield(tweener, "tween_completed")
+			await tweener.tween_completed
 		
 		"shake": 
 			var shake_time = 0.3
@@ -272,37 +272,27 @@ func animate_bg(background_node, special_animation):
 				
 				tweener.interpolate_property(background_node, "position", position1, position2, shake_time, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 				tweener.start()
-				yield(tweener, "tween_completed")
+				await tweener.tween_completed
 				
 				tweener.interpolate_property(background_node, "position", position2, position3, shake_time, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 				tweener.start()
-				yield(tweener, "tween_completed")
+				await tweener.tween_completed
 				
 				tweener.interpolate_property(background_node, "position", position3, position4, shake_time, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 				tweener.start()
-				yield(tweener, "tween_completed")
+				await tweener.tween_completed
 				
 				tweener.interpolate_property(background_node, "position", position4, position3, shake_time, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 				tweener.start()
-				yield(tweener, "tween_completed")
+				await tweener.tween_completed
 				
 				tweener.interpolate_property(background_node, "position", position3, position2, shake_time, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 				tweener.start()
-				yield(tweener, "tween_completed")
+				await tweener.tween_completed
 				
 				tweener.interpolate_property(background_node, "position", position2, position1, shake_time, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 				tweener.start()
-				yield(tweener, "tween_completed")
+				await tweener.tween_completed
 			
 			#Hide the BG
 			background_node.hide()
-
-
-
-
-
-
-
-
-
-

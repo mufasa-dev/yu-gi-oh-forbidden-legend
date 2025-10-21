@@ -1,7 +1,7 @@
 extends Button
 
-onready var deck_building_root = get_tree().get_current_scene()
-onready var decks_list_node = deck_building_root.get_node("decks_list/")
+@onready var deck_building_root = get_tree().get_current_scene()
+@onready var decks_list_node = deck_building_root.get_node("decks_list/")
 
 func _ready():
 	#Load the 'New' in the proper language
@@ -21,8 +21,8 @@ func _ready():
 		$deck_box.self_modulate = PlayerData.list_of_player_decks[PlayerData.active_deck_name].color
 		$delete.hide()
 		
-		$edit_deckbox/O.add_color_override("font_outline_modulate", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
-		$edit_deckbox/O.add_color_override("font_color_shadow", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
+		$edit_deckbox/O.add_theme_color_override("font_outline_modulate", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
+		$edit_deckbox/O.add_theme_color_override("font_color_shadow", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
 		$edit_deckbox.show()
 
 func _on_deck_slot_button_up():
@@ -57,8 +57,8 @@ func _on_deck_slot_button_up():
 		#Third, update the main deck indicator
 		main_deck_icon_ref.get_node("deck_name").text = PlayerData.active_deck_name
 		main_deck_icon_ref.get_node("deck_box").self_modulate = PlayerData.list_of_player_decks[PlayerData.active_deck_name].color
-		main_deck_icon_ref.get_node("edit_deckbox/O").add_color_override("font_outline_modulate", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
-		main_deck_icon_ref.get_node("edit_deckbox/O").add_color_override("font_color_shadow", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
+		main_deck_icon_ref.get_node("edit_deckbox/O").add_theme_color_override("font_outline_modulate", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
+		main_deck_icon_ref.get_node("edit_deckbox/O").add_theme_color_override("font_color_shadow", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
 		
 		#Finally, hide the window
 		hide_decklist_window()
@@ -68,10 +68,10 @@ func _on_new_deck_button_up():
 	#Animate the button
 	deck_building_root.button_click_animation(decks_list_node.get_node("panel/ScrollContainer/MarginContainer/GridContainer/new_deck").get_path())
 	
-	var new_deck_name = String(PlayerData.list_of_player_decks.keys().size() + 1).pad_zeros(3)
+	var new_deck_name = str(PlayerData.list_of_player_decks.keys().size() + 1).pad_zeros(3)
 	for i in range(1000):
 		if PlayerData.list_of_player_decks.keys().has(new_deck_name):
-			new_deck_name = String(int(new_deck_name) + i).pad_zeros(3)
+			new_deck_name = str(int(new_deck_name) + i).pad_zeros(3)
 		else:
 			break
 	
@@ -87,10 +87,10 @@ func _on_new_deck_button_up():
 
 #Animate the mouse over "New Deck"
 func _on_new_deck_mouse_entered():
-	$box_tween.interpolate_property(decks_list_node.get_node("panel/ScrollContainer/MarginContainer/GridContainer/new_deck"), "rect_scale", Vector2(1,1), Vector2(1.1, 1.1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$box_tween.interpolate_property(decks_list_node.get_node("panel/ScrollContainer/MarginContainer/GridContainer/new_deck"), "scale", Vector2(1,1), Vector2(1.1, 1.1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$box_tween.start()
 func _on_new_deck_mouse_exited():
-	$box_tween.interpolate_property(decks_list_node.get_node("panel/ScrollContainer/MarginContainer/GridContainer/new_deck"), "rect_scale", Vector2(1.1, 1.1), Vector2(1, 1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$box_tween.interpolate_property(decks_list_node.get_node("panel/ScrollContainer/MarginContainer/GridContainer/new_deck"), "scale", Vector2(1.1, 1.1), Vector2(1, 1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$box_tween.start()
 
 func create_deck_box(deck_name : String, deck_color : Color):
@@ -98,7 +98,7 @@ func create_deck_box(deck_name : String, deck_color : Color):
 	var deck_node_file = load("res://_scenes/deck_slot.tscn")
 	
 	#Instance only the exact amount of nodes that is necessary to show
-	var instance_of_deck_node = deck_node_file.instance()
+	var instance_of_deck_node = deck_node_file.instantiate()
 	container_node_ref.add_child(instance_of_deck_node)
 	
 	instance_of_deck_node.get_node("deck_name").text = deck_name
@@ -177,8 +177,8 @@ func _on_customize_darken_screen_button_up():
 	var main_deck_icon_ref = deck_building_root.get_node("panel_right/deck_slot")
 	main_deck_icon_ref.get_node("deck_name").text = PlayerData.active_deck_name
 	main_deck_icon_ref.get_node("deck_box").self_modulate = PlayerData.list_of_player_decks[PlayerData.active_deck_name].color
-	main_deck_icon_ref.get_node("edit_deckbox/O").add_color_override("font_outline_modulate", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
-	main_deck_icon_ref.get_node("edit_deckbox/O").add_color_override("font_color_shadow", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
+	main_deck_icon_ref.get_node("edit_deckbox/O").add_theme_color_override("font_outline_modulate", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
+	main_deck_icon_ref.get_node("edit_deckbox/O").add_theme_color_override("font_color_shadow", PlayerData.list_of_player_decks[PlayerData.active_deck_name].color)
 	
 	customize_window_node.hide()
 
@@ -186,12 +186,9 @@ func _on_customize_darken_screen_button_up():
 #Animate the mouse over
 func _on_deck_slot_mouse_entered():
 	if self.get_parent().get_name() == "GridContainer":
-		$box_tween.interpolate_property(self, "rect_scale", Vector2(1,1), Vector2(1.1, 1.1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$box_tween.interpolate_property(self, "scale", Vector2(1,1), Vector2(1.1, 1.1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$box_tween.start()
 func _on_deck_slot_mouse_exited():
 	if self.get_parent().get_name() == "GridContainer":
-		$box_tween.interpolate_property(self, "rect_scale", Vector2(1.1, 1.1), Vector2(1, 1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$box_tween.interpolate_property(self, "scale", Vector2(1.1, 1.1), Vector2(1, 1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$box_tween.start()
-
-
-

@@ -18,12 +18,12 @@ func _ready():
 	$VBoxContainer/takahashi.text = GameLanguage.credits_scene.takahashi[PlayerData.game_language]
 	
 	var initial_pos = 720 + 20
-	var final_pos = 0 - $VBoxContainer.rect_size.y + 420
+	var final_pos = 0 - $VBoxContainer.size.y + 420
 	var duration_timer = 4.0 * $VBoxContainer.get_child_count() #in seconds
 	
-	$Tween.interpolate_property($VBoxContainer, "rect_position:y", initial_pos, final_pos, duration_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$Tween.interpolate_property($VBoxContainer, "position:y", initial_pos, final_pos, duration_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$Tween.start()
-	yield($Tween, "tween_completed")
+	await $Tween.tween_completed
 	
 	animation_ended = true
 

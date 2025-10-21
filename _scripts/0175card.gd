@@ -1,5 +1,5 @@
 extends Button
-var this_card_id : String = String(101).pad_zeros(5)
+var this_card_id : String = str(101).pad_zeros(5)
 
 #This card personal flags
 var this_card_flags : Dictionary = {
@@ -21,6 +21,8 @@ func update_card_information(card_id : String):
 	
 	#Set the global variable on this script
 	this_card_id = card_id
+	if(card_id == "01605"):
+		print(this_card)
 	
 	#The only basic ones are setting the card Artwork and Attribute
 	$z_indexer/card_design/artwork.texture = load("res://_resources/_card_artwork/" + card_id + ".png")
@@ -30,12 +32,15 @@ func update_card_information(card_id : String):
 	#try to fit the card name as much as it can on the card
 	$z_indexer/card_design/card_name.text = this_card.card_name
 	var card_name_length : int = this_card.card_name.length()
+	if PlayerData.game_language == "pt":  
+		$z_indexer/card_design/card_name.text = this_card.card_name_pt
+		card_name_length = this_card.card_name_pt.length()
 	var correction : float = clamp(((card_name_length - 14) * 0.033), 0, 0.4) #completely arbitrary, try-and-error based, values
-	$z_indexer/card_design/card_name.rect_scale.x = 1
+	$z_indexer/card_design/card_name.scale.x = 1
 	$z_indexer/card_design/card_name.clip_text = false
 	
 	if card_name_length > 14:
-		$z_indexer/card_design/card_name.rect_scale.x = 1 - correction
+		$z_indexer/card_design/card_name.scale.x = 1 - correction
 		$z_indexer/card_design/card_name.clip_text = true
 	
 	#Determine background texture color and type of 'card_frame'
@@ -60,7 +65,7 @@ func update_card_information(card_id : String):
 	#Determine if it will show 'monster_features' or 'spelltrap_features' on the design
 	match this_card.attribute:
 		"spell", "trap": 
-			$z_indexer/card_design/card_name.add_color_override("font_color", Color(1,1,1))
+			$z_indexer/card_design/card_name.add_theme_color_override("font_color", Color(1,1,1))
 			$z_indexer/card_design/monster_features.hide()
 			$z_indexer/card_design/spelltrap_features.show()
 			
@@ -70,7 +75,7 @@ func update_card_information(card_id : String):
 				$z_indexer/card_design/spelltrap_features/type_of_spelltrap.text = this_card.attribute + " card"
 			
 		_: 
-			$z_indexer/card_design/card_name.add_color_override("font_color", Color(0,0,0))
+			$z_indexer/card_design/card_name.add_theme_color_override("font_color", Color(0,0,0))
 			$z_indexer/card_design/spelltrap_features.hide()
 			$z_indexer/card_design/monster_features.show()
 			
@@ -83,17 +88,17 @@ func update_card_information(card_id : String):
 				$z_indexer/card_design/monster_features/level/upto11.show()
 				
 				for i in range(1, 12):
-					get_node("z_indexer/card_design/monster_features/level/upto11/level" + String(i)).hide()
+					get_node("z_indexer/card_design/monster_features/level/upto11/level" + str(i)).hide()
 				for i in range(0, this_card.level):
-					get_node("z_indexer/card_design/monster_features/level/upto11/level" + String(i+1)).show()
+					get_node("z_indexer/card_design/monster_features/level/upto11/level" + str(i+1)).show()
 			
 			#Show ATK and DEF
-			$z_indexer/card_design/monster_features/atk_def/atk.text = String(this_card.atk)
-			$z_indexer/card_design/monster_features/atk_def/def.text = String(this_card.def)
+			$z_indexer/card_design/monster_features/atk_def/atk.text = str(this_card.atk)
+			$z_indexer/card_design/monster_features/atk_def/def.text = str(this_card.def)
 
 #---------------------------------------------------------------------------------------------------
-onready var deck_building_root = get_node("/root/deck_building")
-onready var card_info_box = get_node("/root/deck_building/user_interface/card_info_box")
+@onready var deck_building_root = get_node("/root/deck_building")
+@onready var card_info_box = get_node("/root/deck_building/user_interface/card_info_box")
 var init_scale = Vector2(0.175, 0.175)
 var big_scale = Vector2(0.22, 0.22)
 
@@ -112,11 +117,11 @@ func _on_0175card_button_up():
 	card_info_box.current_highlighted_card = self
 	card_info_box.update_user_interface(self)
 	$z_indexer.z_index = 1
-	$card_self_tween.interpolate_property($z_indexer/card_design, "rect_scale", $z_indexer/card_design.rect_scale, big_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$card_self_tween.interpolate_property($z_indexer/card_design, "scale", $z_indexer/card_design.scale, big_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$card_self_tween.start()
 	
 	#Figure out where to move on second click
-	if $z_indexer/card_design.rect_scale == big_scale:
+	if $z_indexer/card_design.scale == big_scale:
 		var self_onScreen_position_X = self.get_global_transform_with_canvas()[2][0]
 		if self_onScreen_position_X >= 1280/2: #Right side, click should remove from deck
 			if PlayerData.player_deck.has(this_card_id):
@@ -144,22 +149,22 @@ func _on_0175card_button_up():
 	#move the trunk_counter indicator
 	var onBig_trunk_counter_position = Vector2(4, 64)
 	var original_counter_position = Vector2(-1, 54)
-	if $z_indexer/trunk_counter.rect_position == original_counter_position:
-		$card_self_tween2.interpolate_property($z_indexer/trunk_counter, "rect_position", $z_indexer/trunk_counter.rect_position, onBig_trunk_counter_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	if $z_indexer/trunk_counter.position == original_counter_position:
+		$card_self_tween2.interpolate_property($z_indexer/trunk_counter, "position", $z_indexer/trunk_counter.position, onBig_trunk_counter_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$card_self_tween2.start()
 	else:
-		$card_self_tween2.interpolate_property(card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter"), "rect_position", card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter").rect_position, original_counter_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$card_self_tween2.interpolate_property(card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter"), "position", card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter").position, original_counter_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$card_self_tween2.start()
 
 func reset_highlighted_card():
 	if card_info_box.current_highlighted_card != null:
 		card_info_box.current_highlighted_card.get_child(0).z_index = 0
-		$card_self_tween.interpolate_property(card_info_box.current_highlighted_card.get_child(0).get_child(0), "rect_scale", card_info_box.current_highlighted_card.get_child(0).get_child(0).rect_scale, init_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$card_self_tween.interpolate_property(card_info_box.current_highlighted_card.get_child(0).get_child(0), "scale", card_info_box.current_highlighted_card.get_child(0).get_child(0).scale, init_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$card_self_tween.start()
 		
 		#move the trunk_counter indicator back to small position
 		var original_counter_position = Vector2(-1, 54)
-		$card_self_tween2.interpolate_property(card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter"), "rect_position", card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter").rect_position, original_counter_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$card_self_tween2.interpolate_property(card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter"), "position", card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter").position, original_counter_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$card_self_tween2.start()
 		
 		#Reset any "New" indicator that has been interacted with

@@ -1,13 +1,21 @@
 extends Button
 
 func _on_DebugAddAll_button_up():
+	print("O valor de minhaVariavel é:", CardList.card_list.size() - 1)
 	for i in range(CardList.card_list.size()):
-		var id_as_padded_string = String(i).pad_zeros(5)
+		var id_as_padded_string = str(i).pad_zeros(5)
+		if(i > 1550):
+			print(id_as_padded_string)
+		
 		if id_as_padded_string in PlayerData.player_trunk:
 			PlayerData.player_trunk[id_as_padded_string] += 3 #register another copy of the card to the already existing id key
 		else: 
 			PlayerData.player_trunk[id_as_padded_string] = 3 #card is not in trunk, so add it's key:value pair as id:count
+		
+		if(i > 1603):
+			print(PlayerData.player_trunk[id_as_padded_string])
 	
+	print(PlayerData.player_trunk.size())
 	update_panels()
 
 func _on_debug_add_random_button_up():

@@ -46,7 +46,7 @@ func update_screen_dialog(to_show_character_name : String, to_show_dialog : Stri
 		var animation_speed : float = 0.2
 		$character_body/body_tween.interpolate_property($character_body, "position:x", out_screen_x, on_screen_x, animation_speed, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$character_body/body_tween.start()
-		yield($character_body/body_tween, "tween_completed")
+		await $character_body/body_tween.tween_completed
 	
 	#Animate the text character by character
 	$dialogue_box/dialog_text.percent_visible = 0
@@ -58,7 +58,7 @@ func update_screen_dialog(to_show_character_name : String, to_show_dialog : Stri
 	
 	$dialogue_box/dialog_text/typewriter_tween.interpolate_property($dialogue_box/dialog_text, "percent_visible", 0, 1, typewriter_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$dialogue_box/dialog_text/typewriter_tween.start()
-	yield($dialogue_box/dialog_text/typewriter_tween, "tween_completed")
+	await $dialogue_box/dialog_text/typewriter_tween.tween_completed
 	
 	#Show the button animation so player knows he can click to go to the next dialog
 	$dialogue_box/button_animation.show()
@@ -72,7 +72,7 @@ func empty_dialog_box():
 	var animation_speed : float = 0.2
 	$character_body/body_tween.interpolate_property($character_body, "position:x", on_screen_x, out_screen_x, animation_speed, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$character_body/body_tween.start()
-	yield($character_body/body_tween, "tween_completed")
+	await $character_body/body_tween.tween_completed
 	
 #-------------------------------------------------------------------------------
 var dialogs = {
@@ -134,6 +134,3 @@ var dialogs = {
 		},
 	},
 }
-
-
-

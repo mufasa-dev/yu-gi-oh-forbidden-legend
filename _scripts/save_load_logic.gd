@@ -28,7 +28,7 @@ func save_game():
 	save_file.open_encrypted_with_pass("user://savegame.save", File.WRITE, OS.get_unique_id()) #ENCRYPTED
 	
 	#Write info to save_file
-	save_file.store_line(to_json(info_to_save)) #get 'info_to_save' dictionary and turn into JSON
+	save_file.store_line(JSON.new().stringify(info_to_save)) #get 'info_to_save' dictionary and turn into JSON
 	save_file.close()
 	
 	return "sucess"
@@ -47,7 +47,9 @@ func load_game():
 	save_file.open_encrypted_with_pass("user://savegame.save", File.READ, OS.get_unique_id()) #ENCRYPTED
 	
 	var info_to_load = { } #start as empty dictionary and will be loaded key by key
-	info_to_load = parse_json(save_file.get_as_text())
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(save_file.get_as_text())
+	info_to_load = test_json_conv.get_data()
 	
 	#Load it safely. IF the save file has that information, load it. Good for future-proof with backwards compatibility
 	var saved_info = [
@@ -78,7 +80,7 @@ func load_game():
 		if info_to_load.has(saved_info[i][0]):
 			match saved_info[i][1]:
 				"string":
-					PlayerData[saved_info[i][0]] = String(info_to_load[saved_info[i][0]])
+					PlayerData[saved_info[i][0]] = str(info_to_load[saved_info[i][0]])
 				"int":
 					PlayerData[saved_info[i][0]] = int(info_to_load[saved_info[i][0]])
 				"float":

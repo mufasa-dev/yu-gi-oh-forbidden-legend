@@ -2,14 +2,18 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-path="res://.import/lohweo_epilogue.mp3-592e85a63a323ed0bcdb2fecaecffce8.mp3str"
+uid="uid://cno6ffevskd8e"
+path="res://.godot/imported/lohweo_epilogue.mp3-592e85a63a323ed0bcdb2fecaecffce8.mp3str"
 
 [deps]
 
 source_file="res://_resources/_audio/music/lohweo_epilogue.mp3"
-dest_files=[ "res://.import/lohweo_epilogue.mp3-592e85a63a323ed0bcdb2fecaecffce8.mp3str" ]
+dest_files=["res://.godot/imported/lohweo_epilogue.mp3-592e85a63a323ed0bcdb2fecaecffce8.mp3str"]
 
 [params]
 
 loop=true
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

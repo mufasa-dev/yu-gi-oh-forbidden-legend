@@ -46,7 +46,9 @@ func auto_load_options_file():
 	save_file.open_encrypted_with_pass("user://gameoptions.save", File.READ, OS.get_unique_id()) #ENCRYPTED
 	
 	var info_to_load = { } #start as empty dictionary and will be loaded key by key
-	info_to_load = parse_json(save_file.get_as_text())
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(save_file.get_as_text())
+	info_to_load = test_json_conv.get_data()
 	
 	#Load it safely. IF the save file has that information, load it. Good for future-proof with backwards compatibility
 	var saved_info = [
@@ -59,7 +61,7 @@ func auto_load_options_file():
 		if info_to_load.has(saved_info[i][0]):
 			match saved_info[i][1]:
 				"string":
-					PlayerData[saved_info[i][0]] = String(info_to_load[saved_info[i][0]])
+					PlayerData[saved_info[i][0]] = str(info_to_load[saved_info[i][0]])
 				"int":
 					PlayerData[saved_info[i][0]] = int(info_to_load[saved_info[i][0]])
 				"float":
@@ -106,7 +108,7 @@ func _on_HTTPRequest_request_completed(result, _response_code, _headers, body):
 		var game_version_string = $game_version.text.split(" ")[1]
 		
 		if site_version_return != game_version_string:
-			$game_version/version_update_warning.text = GameLanguage.main_menu.update[PlayerData.game_language] + String(site_version_return)
+			$game_version/version_update_warning.text = GameLanguage.main_menu.update[PlayerData.game_language] + str(site_version_return)
 			$game_version/version_update_warning.show()
 		else:
 			print("Game Version matched the current version fetched from the Site: ", site_version_return)
@@ -132,7 +134,7 @@ func _on_export_close_button_up():
 	
 	#Call for the Save Game function
 	$save_load_logic.save_game()
-	$timer.start(0.5); yield($timer, "timeout")
+	$timer.start(0.5); await $timer.timeout
 	
 	$save_load_overlay/save_warning.hide()
 	$save_load_overlay.hide()
@@ -149,12 +151,12 @@ func load_game():
 	
 	#Call for the Load Game function
 	$save_load_logic.load_game()
-	$timer.start(0.6); yield($timer, "timeout") #give it some time
+	$timer.start(0.6); await $timer.timeout #give it some time
 	PlayerData.game_loaded = true
 	
 	$save_load_overlay/tween.interpolate_property($save_load_overlay/darker_screen, "modulate", Color(1,1,1,0.8), Color(1,1,1,0), 0.5, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	separation_of_boxes()
-	$timer.start(0.6); yield($timer, "timeout") #give it some time
+	$timer.start(0.6); await $timer.timeout #give it some time
 	$save_load_overlay.hide()
 
 func separation_of_boxes():
@@ -165,15 +167,15 @@ func separation_of_boxes():
 	for i in range($CenterContainer2.get_node("VBoxContainer").get_child_count()):
 		var the_node = $CenterContainer2.get_node("VBoxContainer").get_child(i)
 		if i%2 == 0:
-			$button_tweener.interpolate_property(the_node, "rect_position:x", the_node.rect_position.x, the_node.rect_position.x + offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+			$button_tweener.interpolate_property(the_node, "position:x", the_node.position.x, the_node.position.x + offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 			$button_tweener.start()
 		else:
-			$button_tweener.interpolate_property(the_node, "rect_position:x", the_node.rect_position.x, the_node.rect_position.x - offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+			$button_tweener.interpolate_property(the_node, "position:x", the_node.position.x, the_node.position.x - offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 			$button_tweener.start()
 	$animation_tweener.interpolate_property($small_logo, "modulate", Color(1,1,1,1), Color(1,1,1, 0), timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	$animation_tweener.interpolate_property($website_button, "modulate", Color(1,1,1,1), Color(1,1,1, 0), timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	$animation_tweener.start()
-	$timer.start(timer); yield($timer, "timeout")
+	$timer.start(timer); await $timer.timeout
 	$CenterContainer2.hide()
 	
 	#Now move in the stuff from the "second page" of the menu
@@ -185,14 +187,14 @@ func separation_of_boxes():
 	for i in range($CenterContainer.get_node("VBoxContainer").get_child_count()):
 		var the_node = $CenterContainer.get_node("VBoxContainer").get_child(i)
 		if i%2 == 0:
-			the_node.rect_position.x += offset
-			$button_tweener.interpolate_property(the_node, "rect_position:x", the_node.rect_position.x, the_node.rect_position.x - offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+			the_node.position.x += offset
+			$button_tweener.interpolate_property(the_node, "position:x", the_node.position.x, the_node.position.x - offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 			$button_tweener.start()
 		else:
-			the_node.rect_position.x -= offset
-			$button_tweener.interpolate_property(the_node, "rect_position:x", the_node.rect_position.x, the_node.rect_position.x + offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+			the_node.position.x -= offset
+			$button_tweener.interpolate_property(the_node, "position:x", the_node.position.x, the_node.position.x + offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 			$button_tweener.start()
-	$timer.start(timer*0.55); yield($timer, "timeout")
+	$timer.start(timer*0.55); await $timer.timeout
 	$CenterContainer.show()
 
 #---------------------------------------------------------------------------------------------------
@@ -231,25 +233,25 @@ func _on_btn_options_button_up():
 		return
 	
 	animate_button($CenterContainer2/VBoxContainer/btn_options)
-	change_scene("options_scene")
+	change_scene_to_file("options_scene")
 
 func _on_btn_campaign_button_up():
 	animate_button($CenterContainer/VBoxContainer/btn_campaign)
-	change_scene("game_dialog")
+	change_scene_to_file("game_dialog")
 func _on_btn_tournament_button_up():
 	animate_button($CenterContainer/VBoxContainer/btn_tournament)
-	change_scene("tournament_scene")
+	change_scene_to_file("tournament_scene")
 func _on_btn_free_duel_button_up():
 	animate_button($CenterContainer/VBoxContainer/btn_free_duel)
-	change_scene("free_duel")
+	change_scene_to_file("free_duel")
 func _on_btn_build_deck_button_up():
 	animate_button($CenterContainer/VBoxContainer/btn_build_deck)
-	change_scene("deck_building")
+	change_scene_to_file("deck_building")
 func _on_btn_library_button_up():
 	pass # Replace with function body.
 func _on_btn_password_button_up():
 	animate_button($CenterContainer/VBoxContainer/btn_password)
-	change_scene("card_shop")
+	change_scene_to_file("card_shop")
 func _on_btn_save_button_up():
 	animate_button($CenterContainer/VBoxContainer/btn_save)
 	save_game()
@@ -265,13 +267,13 @@ func animate_button(node : Node):
 		small_scale = Vector2(1.1, 0.9)
 		normal_scale = Vector2(1.3, 1)
 	
-	$button_tweener.interpolate_property(node, "rect_scale", node.rect_scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$button_tweener.interpolate_property(node, "scale", node.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$button_tweener.start()
-	yield($button_tweener, "tween_completed")
-	$button_tweener.interpolate_property(node, "rect_scale", node.rect_scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $button_tweener.tween_completed
+	$button_tweener.interpolate_property(node, "scale", node.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$button_tweener.start()
 
-func change_scene(scene_to_go_to : String):
+func change_scene_to_file(scene_to_go_to : String):
 	$scene_transitioner.scene_transition(scene_to_go_to)
 
 
@@ -332,6 +334,6 @@ func _on_force_website_mouse_exited():
 
 func hovering_over_button(button : Node):
 	if button.modulate == Color(1,1,1,1):
-		get_node(String(button.get_path()) + "/white_over").show()
+		get_node(str(button.get_path()) + "/white_over").show()
 func unhover_button(button : Node):
-	get_node(String(button.get_path()) + "/white_over").hide()
+	get_node(str(button.get_path()) + "/white_over").hide()

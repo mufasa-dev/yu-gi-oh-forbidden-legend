@@ -2,14 +2,18 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-path="res://.import/lohweo_darknite_theme.mp3-9a3a57caa0622ea25c999a9ed7d98ccf.mp3str"
+uid="uid://ccgy14k87txoo"
+path="res://.godot/imported/lohweo_darknite_theme.mp3-9a3a57caa0622ea25c999a9ed7d98ccf.mp3str"
 
 [deps]
 
 source_file="res://_resources/_audio/music/lohweo_darknite_theme.mp3"
-dest_files=[ "res://.import/lohweo_darknite_theme.mp3-9a3a57caa0622ea25c999a9ed7d98ccf.mp3str" ]
+dest_files=["res://.godot/imported/lohweo_darknite_theme.mp3-9a3a57caa0622ea25c999a9ed7d98ccf.mp3str"]
 
 [params]
 
 loop=true
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

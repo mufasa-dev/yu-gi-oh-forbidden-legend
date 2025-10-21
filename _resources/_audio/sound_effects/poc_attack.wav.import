@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/poc_attack.wav-b77f2f53169d89d6ddc1ab2f5608e1f8.sample"
+type="AudioStreamWAV"
+uid="uid://cmxjsg7jg5far"
+path="res://.godot/imported/poc_attack.wav-b77f2f53169d89d6ddc1ab2f5608e1f8.sample"
 
 [deps]
 
 source_file="res://_resources/_audio/sound_effects/poc_attack.wav"
-dest_files=[ "res://.import/poc_attack.wav-b77f2f53169d89d6ddc1ab2f5608e1f8.sample" ]
+dest_files=["res://.godot/imported/poc_attack.wav-b77f2f53169d89d6ddc1ab2f5608e1f8.sample"]
 
 [params]
 

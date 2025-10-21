@@ -21,8 +21,8 @@ func _ready():
 	$user_interface/card_info_box/card_text.hide()
 	
 	#Initial state of stuff on screen
-	$shop_panels/VBoxContainer/starchips/player_starchips.text = String(PlayerData.player_starchips)
-	$shop_panels/VBoxContainer/price/card_price.text = String(0)
+	$shop_panels/VBoxContainer/starchips/player_starchips.text = str(PlayerData.player_starchips)
+	$shop_panels/VBoxContainer/price/card_price.text = str(0)
 	$shop_panels/VBoxContainer/price/buy_card.modulate = Color(0.3, 0.3, 0.3, 1)
 
 #---------------------------------------------------------------------------------------------------
@@ -32,7 +32,7 @@ func _on_player_input_text_changed(input_password):
 		
 		#Check if it matches any card on the game
 		for i in range(CardList.card_list.keys().size()):
-			var card_id = String(i).pad_zeros(5)
+			var card_id = str(i).pad_zeros(5)
 			var card_to_check = CardList.card_list[card_id]
 			
 			if input_password == card_to_check.passcode:
@@ -97,7 +97,7 @@ func update_shop_card(card_id : String, card_price : int):
 		return
 	
 	#Update visual stuff on screen
-	$shop_panels/VBoxContainer/price/card_price.text = String(card_price)
+	$shop_panels/VBoxContainer/price/card_price.text = str(card_price)
 	$card_slot/card_centerer/card_visual_only.update_card_information(card_id)
 	if PlayerData.player_starchips >= int($shop_panels/VBoxContainer/price/card_price.get_text()):
 		$shop_panels/VBoxContainer/price/buy_card.modulate = Color(1, 1, 1, 1)
@@ -112,19 +112,19 @@ func update_shop_card(card_id : String, card_price : int):
 	
 	$card_slot/shop_tweener.interpolate_property($card_slot/card_back_shop, "scale", $card_slot/card_back_shop.scale, small_scale, flip_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$card_slot/shop_tweener.start()
-	yield($card_slot/shop_tweener,"tween_completed")
+	await $card_slot/shop_tweener.tween_completed
 	$card_slot/card_back_shop.hide()
 	
-	$card_slot/card_centerer.rect_scale = small_scale
+	$card_slot/card_centerer.scale = small_scale
 	$card_slot/card_centerer.show()
 	
-	$card_slot/shop_tweener.interpolate_property($card_slot/card_centerer, "rect_scale", $card_slot/card_centerer.rect_scale, normal_scale, flip_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$card_slot/shop_tweener.interpolate_property($card_slot/card_centerer, "scale", $card_slot/card_centerer.scale, normal_scale, flip_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$card_slot/shop_tweener.start()
-	yield($card_slot/shop_tweener,"tween_completed")
+	await $card_slot/shop_tweener.tween_completed
 
 func flip_down_shop_card():
 	#Update visual stuff on screen
-	$shop_panels/VBoxContainer/price/card_price.text = String(0)
+	$shop_panels/VBoxContainer/price/card_price.text = str(0)
 	$shop_panels/VBoxContainer/price/buy_card.modulate = Color(0.3, 0.3, 0.3, 1)
 	
 	#Erase info on bottom bar
@@ -136,9 +136,9 @@ func flip_down_shop_card():
 	
 	#Animate the flipping of the card
 	SoundControl.play_sound("poc_move")
-	$card_slot/shop_tweener.interpolate_property($card_slot/card_centerer, "rect_scale", $card_slot/card_centerer.rect_scale, small_scale, flip_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$card_slot/shop_tweener.interpolate_property($card_slot/card_centerer, "scale", $card_slot/card_centerer.scale, small_scale, flip_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$card_slot/shop_tweener.start()
-	yield($card_slot/shop_tweener,"tween_completed")
+	await $card_slot/shop_tweener.tween_completed
 	$card_slot/card_centerer.hide()
 	
 	$card_slot/card_back_shop.scale = small_scale
@@ -146,7 +146,7 @@ func flip_down_shop_card():
 	
 	$card_slot/shop_tweener.interpolate_property($card_slot/card_back_shop, "scale", $card_slot/card_back_shop.scale, normal_scale, flip_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$card_slot/shop_tweener.start()
-	yield($card_slot/shop_tweener,"tween_completed")	
+	await $card_slot/shop_tweener.tween_completed	
 
 #---------------------------------------------------------------------------------------------------
 func _on_back_button_button_up():
@@ -155,10 +155,10 @@ func _on_back_button_button_up():
 	#Animate the button being clicked
 	var btn_small_scale = Vector2(0.8 , 0.8)
 	var btn_normal_scale = Vector2(1 , 1)
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "rect_scale", $user_interface/back_button.rect_scale, btn_small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, btn_small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
-	yield($user_interface/UI_tween, "tween_completed")
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "rect_scale", $user_interface/back_button.rect_scale, btn_normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $user_interface/UI_tween.tween_completed
+	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, btn_normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
 	
 	#Return to Main Menu screen
@@ -173,10 +173,10 @@ func _on_buy_card_button_up():
 	#Animate the button being clicked
 	var btn_small_scale = Vector2(0.8 , 0.8)
 	var btn_normal_scale = Vector2(1 , 1)
-	$user_interface/UI_tween.interpolate_property($shop_panels/VBoxContainer/price/buy_card, "rect_scale", $shop_panels/VBoxContainer/price/buy_card.rect_scale, btn_small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$user_interface/UI_tween.interpolate_property($shop_panels/VBoxContainer/price/buy_card, "scale", $shop_panels/VBoxContainer/price/buy_card.scale, btn_small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
-	yield($user_interface/UI_tween, "tween_completed")
-	$user_interface/UI_tween.interpolate_property($shop_panels/VBoxContainer/price/buy_card, "rect_scale", $shop_panels/VBoxContainer/price/buy_card.rect_scale, btn_normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $user_interface/UI_tween.tween_completed
+	$user_interface/UI_tween.interpolate_property($shop_panels/VBoxContainer/price/buy_card, "scale", $shop_panels/VBoxContainer/price/buy_card.scale, btn_normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
 	
 	SoundControl.play_sound("poc_decide")
@@ -200,5 +200,5 @@ func _on_buy_card_button_up():
 
 func reset_scene_after_buy():
 	flip_down_shop_card()
-	$shop_panels/VBoxContainer/starchips/player_starchips.text = String(PlayerData.player_starchips)
+	$shop_panels/VBoxContainer/starchips/player_starchips.text = str(PlayerData.player_starchips)
 	$shop_panels/VBoxContainer/code/player_input.clear()

@@ -18,13 +18,13 @@ func _ready():
 	#$FocusShadow/game_credits.text = GameLanguage.options_scene.credits_soundtrack[PlayerData.game_language] + "\n" + GameLanguage.options_scene.credits_everything[PlayerData.game_language]
 	$btn_credits/button_text.text = GameLanguage.options_scene.credits[PlayerData.game_language]
 	
-	$CenterContainer/VBoxContainer/option_volume/volume_percent_indicator.text = String(PlayerData.game_volume * 100) + "%"
+	$CenterContainer/VBoxContainer/option_volume/volume_percent_indicator.text = str(PlayerData.game_volume * 100) + "%"
 	$CenterContainer/VBoxContainer/option_volume/scroller.value = PlayerData.game_volume * 10
 	$CenterContainer/VBoxContainer/option_others/auto_save/option_check/checkmark.set_visible(PlayerData.game_autosave)
 
 #---------------------------------------------------------------------------------------------------
 func _on_scroller_value_changed(value):
-	$CenterContainer/VBoxContainer/option_volume/volume_percent_indicator.text = String(value*10) + "%"
+	$CenterContainer/VBoxContainer/option_volume/volume_percent_indicator.text = str(value*10) + "%"
 	SoundControl.adjust_sound_volume(value/10)
 	PlayerData.game_volume = value/10
 
@@ -69,10 +69,10 @@ func _on_back_button_button_up():
 	var small_scale = Vector2(0.9 , 0.9)
 	var normal_scale = Vector2(1 , 1)
 	
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "rect_scale", $user_interface/back_button.rect_scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
-	yield($user_interface/UI_tween, "tween_completed")
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "rect_scale", $user_interface/back_button.rect_scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $user_interface/UI_tween.tween_completed
+	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
 	
 	$scene_transitioner.scene_transition("main_menu")
@@ -89,7 +89,7 @@ func save_options_file():
 	save_file.open_encrypted_with_pass("user://gameoptions.save", File.WRITE, OS.get_unique_id()) #ENCRYPTED
 	
 	#Write info to save_file
-	save_file.store_line(to_json(info_to_save)) #get 'info_to_save' dictionary and turn into JSON
+	save_file.store_line(JSON.new().stringify(info_to_save)) #get 'info_to_save' dictionary and turn into JSON
 	save_file.close()
 
 func load_options_file():
@@ -102,7 +102,9 @@ func load_options_file():
 	save_file.open_encrypted_with_pass("user://gameoptions.save", File.READ, OS.get_unique_id()) #ENCRYPTED
 	
 	var info_to_load = { } #start as empty dictionary and will be loaded key by key
-	info_to_load = parse_json(save_file.get_as_text())
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(save_file.get_as_text())
+	info_to_load = test_json_conv.get_data()
 	
 	#Load it safely. IF the save file has that information, load it. Good for future-proof with backwards compatibility
 	var saved_info = [
@@ -115,7 +117,7 @@ func load_options_file():
 		if info_to_load.has(saved_info[i][0]):
 			match saved_info[i][1]:
 				"string":
-					PlayerData[saved_info[i][0]] = String(info_to_load[saved_info[i][0]])
+					PlayerData[saved_info[i][0]] = str(info_to_load[saved_info[i][0]])
 				"int":
 					PlayerData[saved_info[i][0]] = int(info_to_load[saved_info[i][0]])
 				"float":
@@ -138,10 +140,10 @@ func _on_btn_credits_button_up():
 	var small_scale = Vector2(0.6 , 0.6)
 	var normal_scale = Vector2(0.7 , 0.7)
 	
-	$btn_credits/tween.interpolate_property($btn_credits, "rect_scale", $btn_credits.rect_scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$btn_credits/tween.interpolate_property($btn_credits, "scale", $btn_credits.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$btn_credits/tween.start()
-	yield($btn_credits/tween, "tween_completed")
-	$btn_credits/tween.interpolate_property($btn_credits, "rect_scale", $btn_credits.rect_scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $btn_credits/tween.tween_completed
+	$btn_credits/tween.interpolate_property($btn_credits, "scale", $btn_credits.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$btn_credits/tween.start()
 	
 	$scene_transitioner.scene_transition("credits_scene")

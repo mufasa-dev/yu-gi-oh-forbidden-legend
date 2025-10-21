@@ -1,5 +1,5 @@
 extends Button
-var this_card_id : String = String(101).pad_zeros(5)
+var this_card_id : String = str(101).pad_zeros(5)
 
 #This card personal flags
 var this_card_flags : Dictionary = {
@@ -31,11 +31,11 @@ func update_card_information(card_id : String):
 	$z_indexer/card_design/card_name.text = this_card.card_name
 	var card_name_length : int = this_card.card_name.length()
 	var correction : float = clamp(((card_name_length - 14) * 0.033), 0, 0.4) #completely arbitrary, try-and-error based, values
-	$z_indexer/card_design/card_name.rect_scale.x = 1
+	$z_indexer/card_design/card_name.scale.x = 1
 	$z_indexer/card_design/card_name.clip_text = false
 	
 	if card_name_length > 14:
-		$z_indexer/card_design/card_name.rect_scale.x = 1 - correction
+		$z_indexer/card_design/card_name.scale.x = 1 - correction
 		$z_indexer/card_design/card_name.clip_text = true
 	
 	#Determine background texture color and type of 'card_frame'
@@ -60,7 +60,7 @@ func update_card_information(card_id : String):
 	#Determine if it will show 'monster_features' or 'spelltrap_features' on the design
 	match this_card.attribute:
 		"spell", "trap": 
-			$z_indexer/card_design/card_name.add_color_override("font_color", Color(1,1,1))
+			$z_indexer/card_design/card_name.add_theme_color_override("font_color", Color(1,1,1))
 			$z_indexer/card_design/monster_features.hide()
 			$z_indexer/card_design/spelltrap_features.show()
 			
@@ -70,7 +70,7 @@ func update_card_information(card_id : String):
 				$z_indexer/card_design/spelltrap_features/type_of_spelltrap.text = this_card.attribute + " card"
 			
 		_: 
-			$z_indexer/card_design/card_name.add_color_override("font_color", Color(0,0,0))
+			$z_indexer/card_design/card_name.add_theme_color_override("font_color", Color(0,0,0))
 			$z_indexer/card_design/spelltrap_features.hide()
 			$z_indexer/card_design/monster_features.show()
 			
@@ -83,17 +83,17 @@ func update_card_information(card_id : String):
 				$z_indexer/card_design/monster_features/level/upto11.show()
 				
 				for i in range(1, 12):
-					get_node("z_indexer/card_design/monster_features/level/upto11/level" + String(i)).hide()
+					get_node("z_indexer/card_design/monster_features/level/upto11/level" + str(i)).hide()
 				for i in range(0, this_card.level):
-					get_node("z_indexer/card_design/monster_features/level/upto11/level" + String(i+1)).show()
+					get_node("z_indexer/card_design/monster_features/level/upto11/level" + str(i+1)).show()
 			
 			#Show ATK and DEF
-			$z_indexer/card_design/monster_features/atk_def/atk.text = String(this_card.atk)
-			$z_indexer/card_design/monster_features/atk_def/def.text = String(this_card.def)
+			$z_indexer/card_design/monster_features/atk_def/atk.text = str(this_card.atk)
+			$z_indexer/card_design/monster_features/atk_def/def.text = str(this_card.def)
 
 
 #---------------------------------------------------------------------------------------------------
-onready var card_info_box = get_node("/root/free_duel/user_interface/card_info_box")
+@onready var card_info_box = get_node("/root/free_duel/user_interface/card_info_box")
 var init_scale = Vector2(0.175, 0.175)
 var big_scale = Vector2(0.22, 0.22)
 var init_position = Vector2(43, -10.5)
@@ -113,7 +113,7 @@ func _on_rarity_card_button_up():
 	card_info_box.current_highlighted_card = self
 	card_info_box.update_user_interface(self)
 	$z_indexer.z_index = 1
-	$card_self_tween.interpolate_property($z_indexer/card_design, "rect_scale", $z_indexer/card_design.rect_scale, big_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$card_self_tween.interpolate_property($z_indexer/card_design, "scale", $z_indexer/card_design.scale, big_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$card_self_tween.start()
 	
 	#move the rarity indicator
@@ -123,7 +123,7 @@ func _on_rarity_card_button_up():
 func reset_highlighted_card():
 	if card_info_box.current_highlighted_card != null:
 		card_info_box.current_highlighted_card.get_child(0).z_index = 0
-		$card_self_tween.interpolate_property(card_info_box.current_highlighted_card.get_child(0).get_child(0), "rect_scale", card_info_box.current_highlighted_card.get_child(0).get_child(0).rect_scale, init_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$card_self_tween.interpolate_property(card_info_box.current_highlighted_card.get_child(0).get_child(0), "scale", card_info_box.current_highlighted_card.get_child(0).get_child(0).scale, init_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$card_self_tween.start()
 		
 		#move the rarity indicator

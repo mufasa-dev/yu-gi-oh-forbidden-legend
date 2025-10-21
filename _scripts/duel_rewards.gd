@@ -1,7 +1,7 @@
 extends Node2D
 
-onready var npc_decks_gd_script = preload("res://_scripts/npc_decks.gd")
-onready var npc_decks_gd = npc_decks_gd_script.new()
+@onready var npc_decks_gd_script = preload("res://_scripts/npc_decks.gd")
+@onready var npc_decks_gd = npc_decks_gd_script.new()
 var exiting_reward = false #prevent multiple clicking
 
 
@@ -35,7 +35,7 @@ func start_reward_scene():
 	#Show the YOU WIN/LOSE first
 	show_big_letters()
 	#Hold a little before starting the reward bgm
-	$final_timer.start(0.5); yield($final_timer, "timeout")
+	$final_timer.start(0.5); await $final_timer.timeout
 	
 	#Play the correct BGM intro
 	var sound_name = ""
@@ -163,8 +163,8 @@ func get_duel_rank():
 	
 	#Update it visually
 	$rank_info/rank_letter.text = final_rank_letter
-	$rank_info/rank_letter.add_color_override("font_color", rank_letter_colors[final_rank_letter][0])
-	$rank_info/rank_letter.add_color_override("font_color_shadow", rank_letter_colors[final_rank_letter][1])
+	$rank_info/rank_letter.add_theme_color_override("font_color", rank_letter_colors[final_rank_letter][0])
+	$rank_info/rank_letter.add_theme_color_override("font_color_shadow", rank_letter_colors[final_rank_letter][1])
 	
 	return final_rank_letter
 
@@ -179,7 +179,7 @@ func get_starchips_reward():
 		"E": final_stars = 1
 		"F": final_stars = 1
 	
-	$starchip_reward/number.text = String(final_stars)
+	$starchip_reward/number.text = str(final_stars)
 	return final_stars
 
 func get_card_rewards():
@@ -285,7 +285,7 @@ func _on_screen_button_button_up():
 		var text_timer : float = 1
 		tweener.interpolate_property($BIG_LETTERS, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), text_timer/2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		tweener.start()
-		yield(tweener, "tween_completed")
+		await tweener.tween_completed
 		$BIG_LETTERS.hide()
 		
 		match PlayerData.scene_to_return_after_duel:
@@ -306,7 +306,7 @@ func show_duel_info():
 			var text_timer : float = 1
 			tweener.interpolate_property($BIG_LETTERS, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), text_timer/2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			tweener.start()
-			yield(tweener, "tween_completed")
+			await tweener.tween_completed
 			$BIG_LETTERS.hide()
 			
 			SoundControl.play_sound("poc_decide")
@@ -321,10 +321,10 @@ func show_duel_info():
 		
 		1:
 			#Force the countings to it's final values
-			$duel_info/deck_used.text = String(duel_deck_count).pad_zeros(2)
-			$duel_info/fusion_used.text = String(duel_fusion_count).pad_zeros(2)
-			$duel_info/effects_used.text = String(duel_effect_count).pad_zeros(2)
-			$duel_info/spelltrap_used.text = String(duel_spelltrap_count).pad_zeros(2)
+			$duel_info/deck_used.text = str(duel_deck_count).pad_zeros(2)
+			$duel_info/fusion_used.text = str(duel_fusion_count).pad_zeros(2)
+			$duel_info/effects_used.text = str(duel_effect_count).pad_zeros(2)
+			$duel_info/spelltrap_used.text = str(duel_spelltrap_count).pad_zeros(2)
 			
 			SoundControl.play_sound("poc_decide")
 			
@@ -417,22 +417,22 @@ func flip_a_reward(reward_id : Node, tweener : Node):
 	
 	SoundControl.play_sound("poc_move")
 	
-	tweener.interpolate_property(reward_id, "rect_scale", Vector2(1, 1), Vector2(0.05, 1), flipping_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tweener.interpolate_property(reward_id, "scale", Vector2(1, 1), Vector2(0.05, 1), flipping_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tweener.start()
-	tweener.get_node("timer").start(flipping_timer); yield(tweener.get_node("timer"), "timeout")
+	tweener.get_node("timer").start(flipping_timer); await tweener.get_node("timer").timeout
 	reward_id.get_node("card_design/card_back").hide()
 	
-	tweener.interpolate_property(reward_id, "rect_scale", Vector2(0.05, 1), Vector2(1, 1), flipping_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tweener.interpolate_property(reward_id, "scale", Vector2(0.05, 1), Vector2(1, 1), flipping_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tweener.start()
-	tweener.get_node("timer").start(flipping_timer); yield(tweener.get_node("timer"), "timeout")
+	tweener.get_node("timer").start(flipping_timer); await tweener.get_node("timer").timeout
 
 func tween_card_count(count_label : Node, final_value : int, tweener : Node):
 	var step_timer = 0.05
 	
 	for _i in range(final_value):
 		if int(count_label.text) < final_value:
-			count_label.text = String(int(count_label.text) + 1).pad_zeros(2)
-			tweener.get_node("timer").start(step_timer); yield(tweener.get_node("timer"), "timeout")
+			count_label.text = str(int(count_label.text) + 1).pad_zeros(2)
+			tweener.get_node("timer").start(step_timer); await tweener.get_node("timer").timeout
 
 func register_player_rewards(starchips : int, array_of_3 : Array):
 	#Register the Starchips earned
@@ -458,23 +458,23 @@ func show_big_letters():
 	get_node("../dark_transition").show()
 	get_node("../dark_transition/fake_transition_tween").interpolate_property(get_node("../dark_transition"), "modulate", get_node("../dark_transition").modulate, Color(1,1,1,1), fade_in_timer*3, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	get_node("../dark_transition/fake_transition_tween").start()
-	yield(get_node("../dark_transition/fake_transition_tween"), "tween_completed")
+	await get_node("../dark_transition/fake_transition_tween").tween_completed
 	self.show() #reward_scene.show()
 	get_node("../dark_transition/fake_transition_tween").interpolate_property(get_node("../dark_transition"), "modulate", get_node("../dark_transition").modulate, Color(1,1,1,0), fade_in_timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	get_node("../dark_transition/fake_transition_tween").start()
-	yield(get_node("../dark_transition/fake_transition_tween"), "tween_completed")
+	await get_node("../dark_transition/fake_transition_tween").tween_completed
 	
 	#Regular stuff as it was before directly appending this scene to the duel_scene
 	if duel_winner == "player":
 		PlayerData.last_duel_result = "win"
-		$BIG_LETTERS/YOU.add_color_override("font_color","ff0000") #RED
+		$BIG_LETTERS/YOU.add_theme_color_override("font_color","ff0000") #RED
 		$BIG_LETTERS/win_lose.text = GameLanguage.reward_scene.win[PlayerData.game_language]
-		$BIG_LETTERS/win_lose.add_color_override("font_color","ff0000") #RED
+		$BIG_LETTERS/win_lose.add_theme_color_override("font_color","ff0000") #RED
 	else:
 		PlayerData.last_duel_result = "lose"
-		$BIG_LETTERS/YOU.add_color_override("font_color","0000ff") #BLUE
+		$BIG_LETTERS/YOU.add_theme_color_override("font_color","0000ff") #BLUE
 		$BIG_LETTERS/win_lose.text = GameLanguage.reward_scene.lose[PlayerData.game_language]
-		$BIG_LETTERS/win_lose.add_color_override("font_color","0000ff") #BLUE
+		$BIG_LETTERS/win_lose.add_theme_color_override("font_color","0000ff") #BLUE
 	
 	$BIG_LETTERS.show()
 	
@@ -483,21 +483,21 @@ func show_big_letters():
 	var x_position_offset : int = 1000
 	var text_timer : float = 3
 	
-	tweener.interpolate_property($BIG_LETTERS/YOU, "rect_position:x", $BIG_LETTERS/YOU.rect_position.x - x_position_offset, $BIG_LETTERS/YOU.rect_position.x, text_timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	tweener.interpolate_property($BIG_LETTERS/win_lose, "rect_position:x", $BIG_LETTERS/win_lose.rect_position.x + x_position_offset, $BIG_LETTERS/win_lose.rect_position.x, text_timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	tweener.interpolate_property($BIG_LETTERS/YOU, "position:x", $BIG_LETTERS/YOU.position.x - x_position_offset, $BIG_LETTERS/YOU.position.x, text_timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	tweener.interpolate_property($BIG_LETTERS/win_lose, "position:x", $BIG_LETTERS/win_lose.position.x + x_position_offset, $BIG_LETTERS/win_lose.position.x, text_timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	tweener.start()
 	$dark_over.modulate = Color(1,1,1,1)
 	get_node("../dark_transition/fake_transition_tween").interpolate_property($dark_over, "modulate", $dark_over.modulate, Color(1,1,1,0), 1, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	get_node("../dark_transition/fake_transition_tween").start()
-	yield(tweener, "tween_completed")
+	await tweener.tween_completed
 	
-	$BIG_LETTERS/timer.start(3); yield($BIG_LETTERS/timer, "timeout")
+	$BIG_LETTERS/timer.start(3); await $BIG_LETTERS/timer.timeout
 	
-	tweener.interpolate_property($BIG_LETTERS/YOU, "rect_position:x", $BIG_LETTERS/YOU.rect_position.x, $BIG_LETTERS/YOU.rect_position.x + x_position_offset, text_timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	tweener.interpolate_property($BIG_LETTERS/win_lose, "rect_position:x", $BIG_LETTERS/win_lose.rect_position.x, $BIG_LETTERS/win_lose.rect_position.x - x_position_offset, text_timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	tweener.interpolate_property($BIG_LETTERS/YOU, "position:x", $BIG_LETTERS/YOU.position.x, $BIG_LETTERS/YOU.position.x + x_position_offset, text_timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
+	tweener.interpolate_property($BIG_LETTERS/win_lose, "position:x", $BIG_LETTERS/win_lose.position.x, $BIG_LETTERS/win_lose.position.x - x_position_offset, text_timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
 	tweener.start()
 	
-	$BIG_LETTERS/timer.start(1.5); yield($BIG_LETTERS/timer, "timeout")
+	$BIG_LETTERS/timer.start(1.5); await $BIG_LETTERS/timer.timeout
 	
 	if $BIG_LETTERS.is_visible():
 		if duel_winner == "player":
@@ -513,7 +513,7 @@ func show_big_letters():
 			
 			tweener.interpolate_property($BIG_LETTERS, "modulate", Color(1,1,1, 1), Color(1,1,1, 0), text_timer/2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			tweener.start()
-			yield(tweener, "tween_completed")
+			await tweener.tween_completed
 			$BIG_LETTERS.hide()
 			$BIG_LETTERS.z_index = 0
 			

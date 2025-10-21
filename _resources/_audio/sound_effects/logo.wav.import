@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/logo.wav-172fb220546bc54f4cc1e6d8f1e6f47c.sample"
+type="AudioStreamWAV"
+uid="uid://d8wgatj5st2b"
+path="res://.godot/imported/logo.wav-172fb220546bc54f4cc1e6d8f1e6f47c.sample"
 
 [deps]
 
 source_file="res://_resources/_audio/sound_effects/logo.wav"
-dest_files=[ "res://.import/logo.wav-172fb220546bc54f4cc1e6d8f1e6f47c.sample" ]
+dest_files=["res://.godot/imported/logo.wav-172fb220546bc54f4cc1e6d8f1e6f47c.sample"]
 
 [params]
 

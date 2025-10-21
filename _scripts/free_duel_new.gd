@@ -88,8 +88,8 @@ func duelist_face_clicked(duelist_name):
 		$duelist_focus/duelist_name_label.text = GameLanguage.free_duel.duelist_names[duelist_name][PlayerData.game_language]
 	
 	if PlayerData.recorded_duels.keys().has(duelist_name):
-		$duelist_focus/duelist_wins.text = language_wins + String(PlayerData.recorded_duels[duelist_name].W)
-		$duelist_focus/duelist_losses.text = language_losses + String(PlayerData.recorded_duels[duelist_name].L)
+		$duelist_focus/duelist_wins.text = language_wins + str(PlayerData.recorded_duels[duelist_name].W)
+		$duelist_focus/duelist_losses.text = language_losses + str(PlayerData.recorded_duels[duelist_name].L)
 	else:
 		$duelist_focus/duelist_wins.text = language_wins + "0"
 		$duelist_focus/duelist_losses.text = language_losses + "0"
@@ -130,7 +130,7 @@ func defocus_duelist():
 	$panel_right/tween.interpolate_property($panel_right, "position", $panel_right.position, Vector2(1000,0), 0.3, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$panel_right/tween.start()
 	
-	yield($duelist_focus/tween, "tween_completed")
+	await $duelist_focus/tween.tween_completed
 	$duelist_focus.hide()
 	$panel_right.hide()
 
@@ -185,10 +185,10 @@ func update_duelist_cards(duelist_name):
 func _on_go_duel_button_up():
 	SoundControl.play_sound("poc_decide")
 	
-	$user_interface/UI_tween.interpolate_property($duelist_focus/go_duel, "rect_scale", $duelist_focus/go_duel.rect_scale, Vector2(0.9, 0.9), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$user_interface/UI_tween.interpolate_property($duelist_focus/go_duel, "scale", $duelist_focus/go_duel.scale, Vector2(0.9, 0.9), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
-	yield($user_interface/UI_tween, "tween_completed")
-	$user_interface/UI_tween.interpolate_property($duelist_focus/go_duel, "rect_scale", $duelist_focus/go_duel.rect_scale, Vector2(1, 1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $user_interface/UI_tween.tween_completed
+	$user_interface/UI_tween.interpolate_property($duelist_focus/go_duel, "scale", $duelist_focus/go_duel.scale, Vector2(1, 1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
 	
 	PlayerData.going_to_duel = active_duelist_name
@@ -202,17 +202,13 @@ func _on_back_button_button_up():
 	#Animate the button being clicked
 	var small_scale = Vector2(0.8 , 0.8)
 	var normal_scale = Vector2(1 , 1)
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "rect_scale", $user_interface/back_button.rect_scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
-	yield($user_interface/UI_tween, "tween_completed")
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "rect_scale", $user_interface/back_button.rect_scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $user_interface/UI_tween.tween_completed
+	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
 	
 	if $panel_right.is_visible(): #If duelist is on focus, unfocus
 		defocus_duelist()
 	else: #On usual cases, return to main menu
 		$scene_transitioner.scene_transition("main_menu")
-
-
-
-

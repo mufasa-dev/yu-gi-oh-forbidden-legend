@@ -81,10 +81,10 @@ func update_duelist_cards(duelist_name):
 func _on_go_duel_button_up():
 	SoundControl.play_sound("poc_decide")
 	
-	$user_interface/UI_tween.interpolate_property($panel_left/go_duel, "rect_scale", $panel_left/go_duel.rect_scale, Vector2(0.9, 0.9), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$user_interface/UI_tween.interpolate_property($panel_left/go_duel, "scale", $panel_left/go_duel.scale, Vector2(0.9, 0.9), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
-	yield($user_interface/UI_tween, "tween_completed")
-	$user_interface/UI_tween.interpolate_property($panel_left/go_duel, "rect_scale", $panel_left/go_duel.rect_scale, Vector2(1, 1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $user_interface/UI_tween.tween_completed
+	$user_interface/UI_tween.interpolate_property($panel_left/go_duel, "scale", $panel_left/go_duel.scale, Vector2(1, 1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
 	
 	PlayerData.going_to_duel = active_duelist_name
@@ -98,10 +98,10 @@ func _on_back_button_button_up():
 	#Animate the button being clicked
 	var small_scale = Vector2(0.8 , 0.8)
 	var normal_scale = Vector2(1 , 1)
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "rect_scale", $user_interface/back_button.rect_scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
-	yield($user_interface/UI_tween, "tween_completed")
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "rect_scale", $user_interface/back_button.rect_scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	await $user_interface/UI_tween.tween_completed
+	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$user_interface/UI_tween.start()
 	
 	#Return to Main Menu screen

@@ -2,12 +2,12 @@ extends Node
 
 #Reference values for hand cards position and rotation. Order: 0, 1, 2, 3, 4
 const card_references = {
-	"card_0_references" : {"rect_position" : Vector2(185-35, 280), "rect_rotation" : -11},
-	"card_1_references" : {"rect_position" : Vector2(330-35, 258), "rect_rotation" : -6},
-	"card_2_references" : {"rect_position" : Vector2(475-35, 250), "rect_rotation" : 0},
-	"card_3_references" : {"rect_position" : Vector2(620-35, 258), "rect_rotation" : 6},
-	"card_4_references" : {"rect_position" : Vector2(765-35, 280), "rect_rotation" : 11},
-	"offscreen_reference" : {"rect_position" : Vector2(475-35, 400), "rect_rotation" : 0}}
+	"card_0_references" : {"position" : Vector2(185-35, 280), "rotation" : -11},
+	"card_1_references" : {"position" : Vector2(330-35, 258), "rotation" : -6},
+	"card_2_references" : {"position" : Vector2(475-35, 250), "rotation" : 0},
+	"card_3_references" : {"position" : Vector2(620-35, 258), "rotation" : 6},
+	"card_4_references" : {"position" : Vector2(765-35, 280), "rotation" : 11},
+	"offscreen_reference" : {"position" : Vector2(475-35, 400), "rotation" : 0}}
 
 #Player variables
 var player_LP : int
@@ -15,7 +15,7 @@ var player_deck : Array = PlayerData.player_deck.duplicate(true) #populated by '
 var player_hand : Array = [] #populated by 'card_id':String
 
 #Player Logic variables
-onready var GAME_LOGIC = get_node("../")
+@onready var GAME_LOGIC = get_node("../")
 var fusion_order : Array = [] #populated by 'card_node':Node
 
 #Rewards related variables
@@ -39,7 +39,7 @@ func start_player_turn():
 	
 	#Increment the turn counter
 	turn_count += 1
-	get_node("../../user_interface/top_info_box/field_info/turn").text = GameLanguage.duel_scene.turn[PlayerData.game_language] + " " + String(turn_count)
+	get_node("../../user_interface/top_info_box/field_info/turn").text = GameLanguage.duel_scene.turn[PlayerData.game_language] + " " + str(turn_count)
 	#print("------------------------------- TURN ", turn_count," -------------------------------")
 	
 	#Start player turn with hand hidden
@@ -51,19 +51,19 @@ func start_player_turn():
 	#Reset properties related to fusion_order, in case there's any leftover information
 	fusion_order.clear()
 	for i in range(5):
-		var fusion_indicator_to_reset = get_node("../../player_hand/card_" + String(i) + "/fusion_indicator")
+		var fusion_indicator_to_reset = get_node("../../player_hand/card_" + str(i) + "/fusion_indicator")
 		fusion_indicator_to_reset.get_child(1).text = "" #fusion_order_no
 		fusion_indicator_to_reset.hide()
 	
 	#Reset the 'has_battled' for all monsters on the field
 	for i in range(5):
-		var this_i_monster : Node = get_node("../../duel_field/player_side_zones/monster_" + String(i))
+		var this_i_monster : Node = get_node("../../duel_field/player_side_zones/monster_" + str(i))
 		if this_i_monster.is_visible():
 			this_i_monster.this_card_flags.has_battled = false
 	
 	#Reset the flags for all cards in hand, just in case
 	for i in range(5):
-		var this_i_card : Node = get_node("../../player_hand/card_" + String(i))
+		var this_i_card : Node = get_node("../../player_hand/card_" + str(i))
 		GAME_LOGIC.reset_a_card_node_properties(this_i_card)
 	
 	#Reset this at the start of the turn in case needed
@@ -74,7 +74,7 @@ func start_player_turn():
 	GAME_LOGIC.get_parent().get_node("side_menu").history_button_in()
 	
 	#Wait timer just for DEV reasons
-	$player_timer.start(0.2); yield($player_timer, "timeout")
+	$player_timer.start(0.2); await $player_timer.timeout
 	#yield(get_tree().create_timer(0.2), "timeout")
 	#print("player_logic.gd initial timeout!")
 	
@@ -87,7 +87,7 @@ func player_draw_phase():
 	
 	#Hide card nodes that the player doesn't have corresponding card on it's hand
 	for i in range(5):#4, player_hand.size()-1, -1):                            <-------- this was hidden so every turn all cards are animated in hand
-		var card_node_to_hide = get_node("../../player_hand/card_" + String(i))
+		var card_node_to_hide = get_node("../../player_hand/card_" + str(i))
 		card_node_to_hide.hide()
 	
 	#Pull the correct number of cards from the Deck to the Player Hand
@@ -95,7 +95,7 @@ func player_draw_phase():
 	for _i in range(cards_to_pull):
 		if player_deck.size() > 0:
 			player_hand.append(player_deck[0]) #add to the player_hand the first card from the deck
-			player_deck.remove(0) #remove from the deck that same card
+			player_deck.remove_at(0) #remove from the deck that same card
 		else:
 			print("player deck out")
 			GAME_LOGIC.check_for_game_end("PLAYER_deck_out")
@@ -103,7 +103,7 @@ func player_draw_phase():
 	
 	#Update the card_nodes visually to match cards in hand
 	for i in range(5):
-		var card_in_hand : Node = get_node("../../player_hand/card_" + String(i))
+		var card_in_hand : Node = get_node("../../player_hand/card_" + str(i))
 		card_in_hand.update_card_information(player_hand[i])
 	
 	#Show player hand and do the animation for pulling cards
@@ -113,26 +113,26 @@ func player_draw_phase():
 	get_node("../../").show_player_entire_hand()
 	
 	for i in range(5):#-cards_to_pull, 5):                                      <-------- this was hidden so every turn all cards are animated in hand
-		var card_node_to_animate = get_node("../../player_hand/card_" + String(i))
+		var card_node_to_animate = get_node("../../player_hand/card_" + str(i))
 		card_node_to_animate.show()
 		
 		#Set position and rotation to starting value, out of the screen
-		var final_position_reference = card_references["card_"+ String(i) +"_references"]
-		card_node_to_animate.rect_position = card_references.offscreen_reference.rect_position
-		card_node_to_animate.rect_rotation = card_references.offscreen_reference.rect_rotation
+		var final_position_reference = card_references["card_"+ str(i) +"_references"]
+		card_node_to_animate.position = card_references.offscreen_reference.position
+		card_node_to_animate.rotation = card_references.offscreen_reference.rotation
 		
 		SoundControl.play_sound("poc_move")
 		
 		#Do the tween animation
-		hand_tween.interpolate_property(card_node_to_animate, "rect_position", card_node_to_animate.rect_position, final_position_reference.rect_position, waiting_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		hand_tween.interpolate_property(card_node_to_animate, "rect_rotation", card_node_to_animate.rect_rotation, final_position_reference.rect_rotation, waiting_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		hand_tween.interpolate_property(card_node_to_animate, "position", card_node_to_animate.position, final_position_reference.position, waiting_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		hand_tween.interpolate_property(card_node_to_animate, "rotation", card_node_to_animate.rotation, final_position_reference.rotation, waiting_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		hand_tween.start()
-		$player_timer.start(waiting_time); yield($player_timer, "timeout")
+		$player_timer.start(waiting_time); await $player_timer.timeout
 		#yield(get_tree().create_timer(waiting_time), "timeout")                #<-------- if I comment out this yield timer all cards are animated at once. Pretty cool effect
 		
 		#Animate the deck counter
 		if i < cards_to_pull:
-			get_node("../../user_interface/top_info_box/player_info/deck").text = String(int(get_node("../../user_interface/top_info_box/player_info/deck").text) - 1)
+			get_node("../../user_interface/top_info_box/player_info/deck").text = str(int(get_node("../../user_interface/top_info_box/player_info/deck").text) - 1)
 	
 	#Show the button to look at the other side of the field
 	get_node("../..").toggle_visibility_of_change_field_view_button()
@@ -194,13 +194,13 @@ func recursive_slot_animation(field_slots_to_show):
 	
 	#Slots Animation
 	for i in range(5):
-		if slots_for_animation.get_child(i).rect_scale == small_size:
-			tween_slots.interpolate_property(get_node("../../duel_field/player_side_zones/"+ field_slots_to_show +"/slot_" + String(i)), "rect_scale", small_size, big_size, animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		if slots_for_animation.get_child(i).scale == small_size:
+			tween_slots.interpolate_property(get_node("../../duel_field/player_side_zones/"+ field_slots_to_show +"/slot_" + str(i)), "scale", small_size, big_size, animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			tween_slots.start()
-		elif slots_for_animation.get_child(i).rect_scale == big_size:
-			tween_slots.interpolate_property(get_node("../../duel_field/player_side_zones/"+ field_slots_to_show +"/slot_" + String(i)), "rect_scale", big_size, small_size, animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		elif slots_for_animation.get_child(i).scale == big_size:
+			tween_slots.interpolate_property(get_node("../../duel_field/player_side_zones/"+ field_slots_to_show +"/slot_" + str(i)), "scale", big_size, small_size, animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 			tween_slots.start()
-	$player_timer.start(animation_time + 0.3); yield($player_timer, "timeout")
+	$player_timer.start(animation_time + 0.3); await $player_timer.timeout
 	#yield(get_tree().create_timer(animation_time + 0.3), "timeout")
 	
 	#Recursive
@@ -230,8 +230,8 @@ func player_try_to_summon(field_slot_to_summon : int):
 	if CardList.card_list[card_to_summon.this_card_id].attribute in ["spell", "trap"] and fusion_order.size() <= 1: kind_of_card = "spelltrap"
 	
 	#If there is a card on the selected 'field_slot_to_summon', add it to the beginning of 'fusion_order' list
-	if get_node("../../duel_field/player_side_zones/" + kind_of_card + "_" + String(field_slot_to_summon)).is_visible():
-		card_on_slot = get_node("../../duel_field/player_side_zones/" + kind_of_card + "_" + String(field_slot_to_summon))
+	if get_node("../../duel_field/player_side_zones/" + kind_of_card + "_" + str(field_slot_to_summon)).is_visible():
+		card_on_slot = get_node("../../duel_field/player_side_zones/" + kind_of_card + "_" + str(field_slot_to_summon))
 		fusion_order.push_front(card_on_slot)
 	
 	GAME_LOGIC.GAME_PHASE = "checking_for_fusions"
@@ -246,7 +246,7 @@ func player_try_to_summon(field_slot_to_summon : int):
 			
 			#remove that card from player's hand
 			if player_hand.find(card_to_summon.this_card_id) != -1:
-				player_hand.remove(player_hand.find(card_to_summon.this_card_id))
+				player_hand.remove_at(player_hand.find(card_to_summon.this_card_id))
 			
 			summon_final_card(final_card_to_summon, field_slot_to_summon)
 		
@@ -256,7 +256,7 @@ func player_try_to_summon(field_slot_to_summon : int):
 				final_card_to_summon = card_to_summon
 				
 				#remove that card from player's hand
-				player_hand.remove(player_hand.find(card_to_summon.this_card_id))
+				player_hand.remove_at(player_hand.find(card_to_summon.this_card_id))
 				
 				summon_final_card(final_card_to_summon, field_slot_to_summon)
 				
@@ -267,19 +267,19 @@ func player_try_to_summon(field_slot_to_summon : int):
 				#Remove the cards from player's hand
 				for card_node in fusion_order:
 					if player_hand.has(card_node.this_card_id):
-						player_hand.remove(player_hand.find(card_node.this_card_id))
+						player_hand.remove_at(player_hand.find(card_node.this_card_id))
 				
-				final_card_to_summon = call_fusion_logic(field_slot_to_summon)
+				final_card_to_summon = await call_fusion_logic(field_slot_to_summon)
 		
 		_: #Confirmed Fusion Summon
-			final_card_to_summon = call_fusion_logic(field_slot_to_summon)
+			final_card_to_summon = await call_fusion_logic(field_slot_to_summon)
 			
 			#Remove the cards from player's hand
 			for card_node in fusion_order:
 				if player_hand.has(card_node.this_card_id):
-					player_hand.remove(player_hand.find(card_node.this_card_id))
+					player_hand.remove_at(player_hand.find(card_node.this_card_id))
 
-func call_fusion_logic(passing_field_slot_to_summon):
+func call_fusion_logic(passing_field_slot_to_summon) -> void:
 	#SETUP the dummy node that will be keeping the fusion results information
 	var fusion_result = $fusion_animation/fusion_result_card
 	
@@ -296,8 +296,8 @@ func call_fusion_logic(passing_field_slot_to_summon):
 	
 	SoundControl.play_sound("poc_fusion1")
 	
-	$fusion_animation/fusion_order_0.rect_position = fusion_start_pos_0
-	$fusion_animation/fusion_order_1.rect_position = fusion_start_pos_1
+	$fusion_animation/fusion_order_0.position = fusion_start_pos_0
+	$fusion_animation/fusion_order_1.position = fusion_start_pos_1
 	$fusion_animation/fusion_order_0.this_card_flags.fusion_type = fusion_order[0].this_card_flags.fusion_type
 	$fusion_animation/fusion_order_0.this_card_flags.atk_up = fusion_order[0].this_card_flags.atk_up 
 	$fusion_animation/fusion_order_0.this_card_flags.def_up = fusion_order[0].this_card_flags.def_up
@@ -306,12 +306,12 @@ func call_fusion_logic(passing_field_slot_to_summon):
 	$fusion_animation/fusion_order_0.show()
 	$fusion_animation/fusion_order_1.show()
 	$fusion_animation.show()
-	$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_0, "rect_position", fusion_start_pos_0, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+	$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_0, "position", fusion_start_pos_0, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 	$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_0, "modulate", Color(1, 1, 1, 1), Color(10, 10, 10, 0.666), fusion_timer*0.9, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_1, "rect_position", fusion_start_pos_1, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+	$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_1, "position", fusion_start_pos_1, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 	$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_1, "modulate", Color(1, 1, 1, 1), Color(10, 10, 10, 0.666), fusion_timer*0.9, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$fusion_animation/tween_fusion.start()
-	$player_timer.start(fusion_timer); yield($player_timer, "timeout")
+	$player_timer.start(fusion_timer); await $player_timer.timeout
 	#yield(get_tree().create_timer(fusion_timer), "timeout")
 	$fusion_animation/fusion_order_0.hide()
 	$fusion_animation/fusion_order_1.hide()
@@ -373,7 +373,7 @@ func call_fusion_logic(passing_field_slot_to_summon):
 	var fusion_result_final_size : Vector2 = Vector2(0.9, 0.9)
 	
 	$fusion_animation/fusion_result_card.modulate = Color(10, 10, 10)
-	$fusion_animation/fusion_result_card.rect_scale = fusion_result_start_size
+	$fusion_animation/fusion_result_card.scale = fusion_result_start_size
 	$fusion_animation/fusion_result_card.update_card_information(fusion_result.this_card_id)
 	$fusion_animation/fusion_result_card.show()
 	
@@ -384,16 +384,16 @@ func call_fusion_logic(passing_field_slot_to_summon):
 		SoundControl.play_sound("poc_ignore")
 	
 	$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_result_card, "modulate", Color(10, 10, 10), Color(1, 1, 1), fusion_timer*0.8, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_result_card, "rect_scale", fusion_result_start_size, fusion_result_final_size, fusion_timer*0.8, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+	$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_result_card, "scale", fusion_result_start_size, fusion_result_final_size, fusion_timer*0.8, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
 	$fusion_animation/tween_fusion.start()
-	$player_timer.start(fusion_timer*1.5); yield($player_timer, "timeout")
+	$player_timer.start(fusion_timer*1.5); await $player_timer.timeout
 	#yield(get_tree().create_timer(fusion_timer*1.5), "timeout")
 	$fusion_animation/fusion_result_card.hide()
 	$fusion_animation.hide()
 	
 	#Remove from fusion order the used cards
-	fusion_order.remove(0) #card_to_fuse_1 is discarted
-	fusion_order.remove(0) #card_to_fuse_2 became the first, it is also discarted
+	fusion_order.remove_at(0) #card_to_fuse_1 is discarted
+	fusion_order.remove_at(0) #card_to_fuse_2 became the first, it is also discarted
 	fusion_order.push_front(fusion_result) #the result of the fusion is now the first in the order
 	
 	#Recursive check until there aren't any more Fusions to do
@@ -406,7 +406,7 @@ func call_fusion_logic(passing_field_slot_to_summon):
 		
 		summon_final_card(fusion_result, passing_field_slot_to_summon)
 	else:
-		call_fusion_logic(passing_field_slot_to_summon)
+		await call_fusion_logic(passing_field_slot_to_summon)
 
 func summon_final_card(final_card_to_summon, field_slot_to_summon):
 	SoundControl.play_sound("poc_move")
@@ -415,7 +415,7 @@ func summon_final_card(final_card_to_summon, field_slot_to_summon):
 	if CardList.card_list[final_card_to_summon.this_card_id].attribute in ["spell", "trap"]: kind_of_card = "spelltrap"
 	
 	#Update information on the invisible node waiting on the field, then show it
-	var node_slot_to_change = get_node("../../duel_field/player_side_zones/" + kind_of_card + "_" + String(field_slot_to_summon))
+	var node_slot_to_change = get_node("../../duel_field/player_side_zones/" + kind_of_card + "_" + str(field_slot_to_summon))
 	
 	#Force traps to always be facedown!
 	if CardList.card_list[final_card_to_summon.this_card_id].attribute == "trap":
@@ -431,7 +431,7 @@ func summon_final_card(final_card_to_summon, field_slot_to_summon):
 	
 	#Correct rotation if the card is still being shown horizontally
 	if node_slot_to_change.this_card_flags.is_defense_position == false:
-		node_slot_to_change.get_node("card_design").rect_rotation = 0
+		node_slot_to_change.get_node("card_design").rotation = 0
 		node_slot_to_change.get_node("combat_controls/defense_button").icon = load("res://_resources/scene_duel/button_def.png")
 
 	#Check if it is to be placed with facedown
@@ -455,9 +455,9 @@ func summon_final_card(final_card_to_summon, field_slot_to_summon):
 	var summon_size_big : Vector2 = Vector2(0.8, 0.8)
 	var summon_field_size : Vector2 = Vector2(GAME_LOGIC.atk_orientation_x_scale, GAME_LOGIC.atk_orientation_y_scale)
 
-	tween_field_cards.interpolate_property(node_slot_to_change, "rect_scale", summon_size_big, summon_field_size, summon_animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	tween_field_cards.interpolate_property(node_slot_to_change, "scale", summon_size_big, summon_field_size, summon_animation_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween_field_cards.start()
-	$player_timer.start(summon_animation_time); yield($player_timer, "timeout")
+	$player_timer.start(summon_animation_time); await $player_timer.timeout
 	#yield(get_tree().create_timer(summon_animation_time), "timeout")
 	
 	#Check if this card will get a field bonus
@@ -487,7 +487,7 @@ func summon_final_card(final_card_to_summon, field_slot_to_summon):
 	else:
 		if CardList.card_list[final_card_to_summon.this_card_id].effect.size() > 0 and final_card_to_summon.this_card_flags.has_activated_effect == false:
 			GAME_LOGIC.effect_activation(node_slot_to_change, "on_summon") #important to pass 'node_slot_to_change' so effects can target the exact card on the field
-			yield(get_node("../effects"), "effect_fully_executed")
+			await get_node("../effects").effect_fully_executed
 	
 	#Show again the button to look at the other side of the field, and end player's turn
 	get_node("../../").toggle_visibility_of_change_field_view_button()

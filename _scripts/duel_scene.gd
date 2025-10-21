@@ -32,7 +32,7 @@ func _ready():
 	
 	#Wait for the intro part to play before playing the actual looping parte of the free_duel theme song
 	if PlayerData.scene_to_return_after_duel == "free_duel":
-		$debug_menu/debug_timer.start(1.5); yield($debug_menu/debug_timer, "timeout")
+		$debug_menu/debug_timer.start(1.5); await $debug_menu/debug_timer.timeout
 		SoundControl.play_sound("lohweo_duel_free", "music")
 
 #-------------------------------------------------------------------------------
@@ -56,23 +56,23 @@ func put_middle_card_in_hand():
 	
 	#Cancel the card in the middle of the screen and it's summoning options
 	#if $game_logic.GAME_PHASE == "card_options":
-	var card_in_the_middle_id : String = String(card_in_the_middle.get_name()[-1])
-	var recorded_position = $game_logic/player_logic.card_references["card_"+ card_in_the_middle_id +"_references"].rect_position
-	var recorded_rotation = $game_logic/player_logic.card_references["card_"+ card_in_the_middle_id +"_references"].rect_rotation
+	var card_in_the_middle_id : String = str(card_in_the_middle.get_name()[-1])
+	var recorded_position = $game_logic/player_logic.card_references["card_"+ card_in_the_middle_id +"_references"].position
+	var recorded_rotation = $game_logic/player_logic.card_references["card_"+ card_in_the_middle_id +"_references"].rotation
 	var recorded_scale : Vector2 = Vector2(0.524, 0.524) #Scale for cards in hand is slightly bigger than on field
 	
 	$game_logic.reset_a_card_node_properties(card_in_the_middle)
 	
 	$player_hand/darken_screen.hide()
-	get_node("player_hand/card_" + String(card_in_the_middle_id) + "/summon_controls").hide()
-	$player_hand/hand_tween.interpolate_property(card_in_the_middle, "rect_position", card_in_the_middle.rect_position, recorded_position, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$player_hand/hand_tween.interpolate_property(card_in_the_middle, "rect_rotation", card_in_the_middle.rect_rotation, recorded_rotation, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$player_hand/hand_tween.interpolate_property(card_in_the_middle, "rect_scale", card_in_the_middle.rect_scale, recorded_scale, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	get_node("player_hand/card_" + str(card_in_the_middle_id) + "/summon_controls").hide()
+	$player_hand/hand_tween.interpolate_property(card_in_the_middle, "position", card_in_the_middle.position, recorded_position, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$player_hand/hand_tween.interpolate_property(card_in_the_middle, "rotation", card_in_the_middle.rotation, recorded_rotation, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$player_hand/hand_tween.interpolate_property(card_in_the_middle, "scale", card_in_the_middle.scale, recorded_scale, to_middle_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	$player_hand/hand_tween.start()
 	
 	#Return the Game Phase to previous state
 	show_player_entire_hand()
-	yield(get_tree().create_timer(to_middle_time), "timeout")
+	await get_tree().create_timer(to_middle_time).timeout
 	$game_logic.GAME_PHASE = "looking_at_hand"
 
 #-------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ func show_player_entire_hand():
 	$player_hand/hand_tween.start()
 
 func _on_back_to_hand_button_up():
-	if $back_to_hand.rect_position.x != 1174:
+	if $back_to_hand.position.x != 1174:
 		return
 	
 	SoundControl.play_sound("poc_unable")
@@ -117,7 +117,7 @@ var enemy_field_camera_position : Vector2 = Vector2(0,640)
 var time_to_cross_field = 0.3 #in seconds
 
 func _on_change_field_view_button_up():
-	if $change_field_view.rect_position.x != 1174:
+	if $change_field_view.position.x != 1174:
 		return
 	
 	SoundControl.play_sound("poc_move")
@@ -162,11 +162,11 @@ func toggle_visibility_of_change_field_view_button():
 	var position_out : Vector2  = Vector2(1274, 276)
 	
 	if is_change_field_visible: #is visible, move out
-		$change_field_view/tween.interpolate_property($change_field_view, "rect_position", $change_field_view.rect_position, position_out, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$change_field_view/tween.interpolate_property($change_field_view, "position", $change_field_view.position, position_out, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$change_field_view/tween.start()
 		is_change_field_visible = false
 	elif is_change_field_visible == false: #isn't visible, move in
-		$change_field_view/tween.interpolate_property($change_field_view, "rect_position", $change_field_view.rect_position, position_in, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$change_field_view/tween.interpolate_property($change_field_view, "position", $change_field_view.position, position_in, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$change_field_view/tween.start()
 		is_change_field_visible = true
 	else:
@@ -178,11 +178,11 @@ func toggle_visibility_of_turn_end_button():
 	var position_out : Vector2  = Vector2(1274, 366)
 	
 	if is_turn_end_visible: #is visible, move out
-		$turn_end_button/tween.interpolate_property($turn_end_button, "rect_position", $turn_end_button.rect_position, position_out, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$turn_end_button/tween.interpolate_property($turn_end_button, "position", $turn_end_button.position, position_out, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$turn_end_button/tween.start()
 		is_turn_end_visible = false
 	elif is_turn_end_visible == false: #isn't visible, move in
-		$turn_end_button/tween.interpolate_property($turn_end_button, "rect_position", $turn_end_button.rect_position, position_in, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$turn_end_button/tween.interpolate_property($turn_end_button, "position", $turn_end_button.position, position_in, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$turn_end_button/tween.start()
 		is_turn_end_visible = true
 	else:
@@ -194,18 +194,18 @@ func toggle_visibility_of_back_to_hand_button():
 	var position_out : Vector2  = Vector2(1274, 276)
 		
 	if is_back_to_hand_visible: #is visible, move out
-		$back_to_hand/tween.interpolate_property($back_to_hand, "rect_position", $back_to_hand.rect_position, position_out, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$back_to_hand/tween.interpolate_property($back_to_hand, "position", $back_to_hand.position, position_out, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$back_to_hand/tween.start()
 		is_back_to_hand_visible = false
 	elif is_back_to_hand_visible == false: #isn't visible, move in
-		$back_to_hand/tween.interpolate_property($back_to_hand, "rect_position", $back_to_hand.rect_position, position_in, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$back_to_hand/tween.interpolate_property($back_to_hand, "position", $back_to_hand.position, position_in, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$back_to_hand/tween.start()
 		is_back_to_hand_visible = true
 	else:
 		print("Visibility of Back to Hand Button can't be changed")
 
 func _on_turn_end_button_button_up():
-	if $turn_end_button.rect_position.x != 1174:
+	if $turn_end_button.position.x != 1174:
 		return
 	
 	SoundControl.play_sound("poc_turn_end")
@@ -219,7 +219,7 @@ func _on_turn_end_button_button_up():
 	
 	#At the end of player's turn, remove the darken layer from the monsters that battled this turn
 	for i in range(5):
-		var this_i_monster = get_node("duel_field/player_side_zones/monster_" + String(i))
+		var this_i_monster = get_node("duel_field/player_side_zones/monster_" + str(i))
 		this_i_monster.get_node("card_design/darken_card").hide()
 		
 		if CardList.card_list[this_i_monster.this_card_id].effect.size() > 1 and typeof(CardList.card_list[this_i_monster.this_card_id].effect[1]) == TYPE_STRING and CardList.card_list[this_i_monster.this_card_id].effect[1] == "multiple_attacker":

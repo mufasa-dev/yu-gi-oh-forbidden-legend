@@ -69,12 +69,12 @@ func bgm_fadeout(long = false):
 	# tween music volume down to 0
 	$fadeout_tween.interpolate_property(playing_node, "volume_db", playing_node.volume_db, -80, transition_duration, transition_type, Tween.EASE_IN, 0)
 	$fadeout_tween.start()
-	yield($fadeout_tween, "tween_completed")
+	await $fadeout_tween.tween_completed
 	playing_node.stop()
 
 
 func adjust_sound_volume(volume : float):
-	var converted_volume : float = linear2db(volume*0.3)
+	var converted_volume : float = linear_to_db(volume*0.3)
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), converted_volume)
 
 func get_first_available_audio_player(sfx_or_music : String):
@@ -85,15 +85,15 @@ func get_first_available_audio_player(sfx_or_music : String):
 		total_range = 3
 	
 	for i in range(total_range):
-		if get_node(sfx_or_music + "_player" + String(i+1)) == null:
+		if get_node(sfx_or_music + "_player" + str(i+1)) == null:
 			break
 		
-		if get_node(sfx_or_music + "_player" + String(i+1)).is_playing():
+		if get_node(sfx_or_music + "_player" + str(i+1)).is_playing():
 			#continue
 			if sfx_or_music == "music":
 				bgm_fadeout()
 		else:
-			available_audio_player = get_node(sfx_or_music + "_player" + String(i+1))
+			available_audio_player = get_node(sfx_or_music + "_player" + str(i+1))
 			break
 	
 	#If somehow all the audio players are busy, force it on the first one anyway

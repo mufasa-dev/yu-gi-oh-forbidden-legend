@@ -24,12 +24,11 @@ func _on_duelist_face_button_up():
 		var small_scale = Vector2(0.9 , 0.9)
 		var normal_scale = Vector2(1 , 1)
 		
-		$tween.interpolate_property(self, "rect_scale", self.rect_scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		$tween.interpolate_property(self, "scale", self.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$tween.start()
-		yield($tween, "tween_completed")
-		$tween.interpolate_property(self, "rect_scale", self.rect_scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		await $tween.tween_completed
+		$tween.interpolate_property(self, "scale", self.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$tween.start()
 		
 		#Call the function on the scene root
 		get_tree().get_root().get_node("free_duel").duelist_face_clicked(duelist_name)
-

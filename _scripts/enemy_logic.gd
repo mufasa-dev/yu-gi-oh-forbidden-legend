@@ -1,6 +1,6 @@
 extends Node
 
-onready var GAME_LOGIC = get_node("../")
+@onready var GAME_LOGIC = get_node("../")
 signal after_try_move_ahead
 
 #Enemy Specific Variables
@@ -23,11 +23,11 @@ func enemy_draw_phase():
 	if enemy_deck.size() >= cards_to_pull: #if enemy has enough cards to pull
 		for _i in range(cards_to_pull):
 			enemy_hand.append(enemy_deck[0]) #add to the hand the first card from deck
-			enemy_deck.remove(0) #remove that same card from deck
+			enemy_deck.remove_at(0) #remove that same card from deck
 			
 			#Update visual counter for deck size
-			get_node("../../user_interface/top_info_box/com_info/deck").text = String(enemy_deck.size())
-			$enemy_timer.start(0.2); yield($enemy_timer, "timeout")
+			get_node("../../user_interface/top_info_box/com_info/deck").text = str(enemy_deck.size())
+			$enemy_timer.start(0.2); await $enemy_timer.timeout
 	else:
 		print("Enemy deck run out")
 		GAME_LOGIC.check_for_game_end("COM_deck_out")
@@ -42,7 +42,7 @@ func enemy_draw_phase():
 	
 	#Reset the 'has_battled' for all monsters on the field
 	for i in range(5):
-		var this_i_monster : Node = get_node("../../duel_field/enemy_side_zones/monster_" + String(i))
+		var this_i_monster : Node = get_node("../../duel_field/enemy_side_zones/monster_" + str(i))
 		if this_i_monster.is_visible():
 			this_i_monster.this_card_flags.has_battled = false
 	
@@ -51,7 +51,7 @@ func enemy_draw_phase():
 		GAME_LOGIC.waboku_protection = false
 	
 	#Wait some time during draw_phase for better game flow
-	$enemy_timer.start(0.3); yield($enemy_timer, "timeout")
+	$enemy_timer.start(0.3); await $enemy_timer.timeout
 	
 	#Move to enemy's next phase
 	enemy_choosing_card_to_play()
@@ -83,11 +83,11 @@ func enemy_choosing_card_to_play():
 				acceptable_support_spells.push_front("Raigeki")
 				acceptable_support_spells.push_back("Change of Heart")
 			for i in range(5):
-				if get_node("../../duel_field/player_side_zones/spelltrap_" + String(i)).is_visible():
+				if get_node("../../duel_field/player_side_zones/spelltrap_" + str(i)).is_visible():
 					acceptable_support_spells.push_front("Harpie's Feather Duster")
 					break
 			for i in range(5):
-				if get_node("../../duel_field/enemy_side_zones/monster_" + String(i)).is_visible() and get_node("../../duel_field/enemy_side_zones/monster_" + String(i)).this_card_flags.is_facedown == false:
+				if get_node("../../duel_field/enemy_side_zones/monster_" + str(i)).is_visible() and get_node("../../duel_field/enemy_side_zones/monster_" + str(i)).this_card_flags.is_facedown == false:
 					acceptable_support_spells.push_front("Graceful Dice")
 					break
 			
@@ -205,8 +205,8 @@ func enemy_choosing_card_to_play():
 func get_field_monsters_array(which_player : String):
 	var initial_monster_array = [] #the array to return at the end
 	for i in range(5):
-		if get_node("../../duel_field/"+ which_player +"_side_zones/monster_" + String(i)).is_visible():
-			var monster_node = get_node("../../duel_field/"+ which_player +"_side_zones/monster_" + String(i))
+		if get_node("../../duel_field/"+ which_player +"_side_zones/monster_" + str(i)).is_visible():
+			var monster_node = get_node("../../duel_field/"+ which_player +"_side_zones/monster_" + str(i))
 			initial_monster_array.append(monster_node)
 	
 	#organize the array order by strongest status
@@ -304,7 +304,7 @@ func enemy_play_that_card(card_to_play_array : Array):
 	var kind_of_card : String = card_to_play_array[0] #easy way to say it's a 'monster' or 'spelltrap' for node searching
 	#remove the main card being played from enemy hand
 	if enemy_hand.has(card_to_play_array[1]):
-		enemy_hand.remove(enemy_hand.find(card_to_play_array[1]))
+		enemy_hand.remove_at(enemy_hand.find(card_to_play_array[1]))
 	else:
 		var error_prevent_pop = enemy_hand.pop_back()
 		print("enemy_play_that_card resorted to a last case scenario and popped ", CardList.card_list[error_prevent_pop].card_name)
@@ -312,7 +312,7 @@ func enemy_play_that_card(card_to_play_array : Array):
 	#Look for a Field Slot to play
 	var field_node_to_use = null
 	for i in range(5):
-		var invisible_node = get_node("../../duel_field/enemy_side_zones/" + kind_of_card + "_" + String(i))
+		var invisible_node = get_node("../../duel_field/enemy_side_zones/" + kind_of_card + "_" + str(i))
 		if !invisible_node.is_visible():
 			field_node_to_use = invisible_node
 			break
@@ -323,9 +323,9 @@ func enemy_play_that_card(card_to_play_array : Array):
 		var ref_atk = 9999
 		
 		for i in range(5):
-			if int(get_node("../../duel_field/enemy_side_zones/monster_" + String(i)).get_node("card_design/monster_features/atk_def/atk").text) <= ref_atk:
-				weakest_monster_on_com_field = get_node("../../duel_field/enemy_side_zones/monster_" + String(i))
-				ref_atk = int(get_node("../../duel_field/enemy_side_zones/monster_" + String(i)).get_node("card_design/monster_features/atk_def/atk").text)
+			if int(get_node("../../duel_field/enemy_side_zones/monster_" + str(i)).get_node("card_design/monster_features/atk_def/atk").text) <= ref_atk:
+				weakest_monster_on_com_field = get_node("../../duel_field/enemy_side_zones/monster_" + str(i))
+				ref_atk = int(get_node("../../duel_field/enemy_side_zones/monster_" + str(i)).get_node("card_design/monster_features/atk_def/atk").text)
 		field_node_to_use = weakest_monster_on_com_field
 		
 		#Rearrange card_to_play_array (it is ["monster", card_1, {card_2}]
@@ -347,7 +347,7 @@ func enemy_play_that_card(card_to_play_array : Array):
 				is_fusion_summon = true
 		
 		if enemy_hand.has(card_to_play_array[2]):
-			enemy_hand.remove(enemy_hand.find(card_to_play_array[2])) #remove the extra card from Enemy Hand
+			enemy_hand.remove_at(enemy_hand.find(card_to_play_array[2])) #remove the extra card from Enemy Hand
 	
 	#FUSE IF NEEDED
 	var card_being_played : String = card_to_play_array[1] #by default, just the passed card. Fusion will change this
@@ -373,19 +373,19 @@ func enemy_play_that_card(card_to_play_array : Array):
 		
 		SoundControl.play_sound("poc_fusion1")
 		
-		$fusion_animation/fusion_order_0.rect_position = fusion_start_pos_0
-		$fusion_animation/fusion_order_1.rect_position = fusion_start_pos_1
+		$fusion_animation/fusion_order_0.position = fusion_start_pos_0
+		$fusion_animation/fusion_order_1.position = fusion_start_pos_1
 		$fusion_animation/fusion_order_0.update_card_information(card_to_play_array[1])
 		$fusion_animation/fusion_order_1.update_card_information(card_to_play_array[2])
 		$fusion_animation/fusion_order_0.show()
 		$fusion_animation/fusion_order_1.show()
 		$fusion_animation.show()
-		$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_0, "rect_position", fusion_start_pos_0, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+		$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_0, "position", fusion_start_pos_0, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 		$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_0, "modulate", Color(1, 1, 1, 1), Color(10, 10, 10, 0.666), fusion_timer*0.9, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_1, "rect_position", fusion_start_pos_1, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
+		$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_1, "position", fusion_start_pos_1, fusion_final_pos, fusion_timer, Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 		$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_order_1, "modulate", Color(1, 1, 1, 1), Color(10, 10, 10, 0.666), fusion_timer*0.9, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$fusion_animation/tween_fusion.start()
-		$enemy_timer.start(fusion_timer); yield($enemy_timer, "timeout")
+		$enemy_timer.start(fusion_timer); await $enemy_timer.timeout
 		$fusion_animation/fusion_order_0.hide()
 		$fusion_animation/fusion_order_1.hide()
 		
@@ -403,15 +403,15 @@ func enemy_play_that_card(card_to_play_array : Array):
 		var fusion_result_final_size : Vector2 = Vector2(0.9, 0.9)
 		
 		$fusion_animation/fusion_result_card.modulate = Color(10, 10, 10)
-		$fusion_animation/fusion_result_card.rect_scale = fusion_result_start_size
+		$fusion_animation/fusion_result_card.scale = fusion_result_start_size
 		$fusion_animation/fusion_result_card.this_card_flags = field_node_to_use.this_card_flags
 		$fusion_animation/fusion_result_card.update_card_information(card_being_played)
 		$fusion_animation/fusion_result_card.show()
 		SoundControl.play_sound("poc_fusion2")
 		$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_result_card, "modulate", Color(10, 10, 10), Color(1, 1, 1), fusion_timer*0.8, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_result_card, "rect_scale", fusion_result_start_size, fusion_result_final_size, fusion_timer*0.8, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+		$fusion_animation/tween_fusion.interpolate_property($fusion_animation/fusion_result_card, "scale", fusion_result_start_size, fusion_result_final_size, fusion_timer*0.8, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
 		$fusion_animation/tween_fusion.start()
-		$enemy_timer.start(fusion_timer*1.5); yield($enemy_timer, "timeout")
+		$enemy_timer.start(fusion_timer*1.5); await $enemy_timer.timeout
 		$fusion_animation/fusion_result_card.hide()
 		$fusion_animation.hide()
 	
@@ -480,7 +480,7 @@ func enemy_play_that_card(card_to_play_array : Array):
 	#If it's not facedown, check if it has an effect to activate
 	if field_node_to_use.this_card_flags.is_facedown == false and CardList.card_list[field_node_to_use.this_card_id].effect.size() > 0:
 		GAME_LOGIC.effect_activation(field_node_to_use, "on_summon")
-		yield(get_node("../effects"), "effect_fully_executed")
+		await get_node("../effects").effect_fully_executed
 	
 	#Move to enemy's next phase
 	enemy_main_phase()
@@ -501,7 +501,7 @@ func enemy_main_phase():
 			var monster_atk_on_field = int(monster.get_node("card_design/monster_features/atk_def/atk").text)
 			if  monster_atk_on_field >= player_LP or monster_atk_on_field >= 2500:
 				COM_try_to_attack_with_monster(monster, null) #passing the target as Null makes the attack a Direct Attack
-				yield(self, "after_try_move_ahead")
+				await self.after_try_move_ahead
 	
 	for _i in range(2): #loops 2 times, just to make sure no one is left behind
 		#Update the lists
@@ -576,7 +576,7 @@ func enemy_main_phase():
 						if not COM_attacker.is_visible() or not target_monster.is_visible():
 							pass #preventing yield that will never return
 						else:
-							yield(self, "after_try_move_ahead")
+							await self.after_try_move_ahead
 						
 						COM_monsters_available_for_battle.erase(COM_attacker)
 						
@@ -584,9 +584,9 @@ func enemy_main_phase():
 						var scaled_back_size = Vector2(GAME_LOGIC.atk_orientation_x_scale, GAME_LOGIC.atk_orientation_y_scale)
 						var scale_timer : float = 0.2 #in seconds
 						
-						COM_attacker.get_node("card_self_tween").interpolate_property(COM_attacker, "rect_scale", COM_attacker.rect_scale, scaled_back_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+						COM_attacker.get_node("card_self_tween").interpolate_property(COM_attacker, "scale", COM_attacker.scale, scaled_back_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 						COM_attacker.get_node("card_self_tween").start()
-						yield(COM_attacker.get_node("card_self_tween"), "tween_all_completed")
+						await COM_attacker.get_node("card_self_tween").tween_all_completed
 			
 		else: #At least one of the sides don't have monsters to battle
 			if COM_monsters_available_for_battle.size() != 0: #if COM don't have any monsters there is nothing to do, if it does, Direct Attacks!
@@ -612,15 +612,15 @@ func enemy_main_phase():
 					if monster.this_card_flags.has_battled == false:
 						#Timer for better workflow before each monster iteraction
 						var battle_timer : float = 1.0
-						$enemy_timer.start(battle_timer*0.8); yield($enemy_timer, "timeout")
+						$enemy_timer.start(battle_timer*0.8); await $enemy_timer.timeout
 						
 						if monster.this_card_flags.is_defense_position == true and int(monster.get_node("card_design/monster_features/atk_def/atk").text) > 0:
 							monster.toggle_battle_position()
-							$enemy_timer.start(battle_timer/2); yield($enemy_timer, "timeout")
+							$enemy_timer.start(battle_timer/2); await $enemy_timer.timeout
 						
 						GAME_LOGIC.do_direct_attack(monster)
 						if monster.is_visible():
-							yield(get_node("../"), "battle_finished")
+							await get_node("../").battle_finished
 	
 	#Final Check: For any monsters that haven't attacked yet. Maybe they can now, maybe they can be set to Defense
 	list_of_COM_monsters = get_field_monsters_array("enemy")
@@ -640,7 +640,7 @@ func enemy_main_phase():
 			if monster.this_card_flags.is_defense_position == false:
 				#Timer for better workflow before each monster iteraction
 				var battle_timer : float = 1.0
-				$enemy_timer.start(battle_timer*0.8); yield($enemy_timer, "timeout")
+				$enemy_timer.start(battle_timer*0.8); await $enemy_timer.timeout
 				
 				var com_atk = int(monster.get_node("card_design/monster_features/atk_def/atk").text)
 				var com_def = int(monster.get_node("card_design/monster_features/atk_def/def").text)
@@ -678,19 +678,19 @@ func COM_try_to_attack_with_monster(COM_attacking_monster : Node, player_defendi
 	var scaled_back_size = Vector2(GAME_LOGIC.atk_orientation_x_scale, GAME_LOGIC.atk_orientation_y_scale)
 	var scale_up_size = Vector2(scaled_back_size[0]*1.05, scaled_back_size[1]*1.05)
 	var scale_timer : float = 0.2 #in seconds
-	COM_attacking_monster.get_node("card_self_tween").interpolate_property(COM_attacking_monster, "rect_scale", COM_attacking_monster.rect_scale, scale_up_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	COM_attacking_monster.get_node("card_self_tween").interpolate_property(COM_attacking_monster, "scale", COM_attacking_monster.scale, scale_up_size, scale_timer, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	COM_attacking_monster.get_node("card_self_tween").start()
-	yield(COM_attacking_monster.get_node("card_self_tween"), "tween_all_completed")
+	await COM_attacking_monster.get_node("card_self_tween").tween_all_completed
 	
 	#Timer for better workflow before each monster iteraction
 	var battle_timer : float = 1.0
-	$enemy_timer.start(battle_timer*0.8); yield($enemy_timer, "timeout")
+	$enemy_timer.start(battle_timer*0.8); await $enemy_timer.timeout
 	
 	#Check for fear of Spelltraps, independent if it's battling a monster or direct attacking
 	var fear_of_spelltraps : float
 	var player_has_spelltrap = false
 	for i in range(5):
-		if get_node("../../duel_field/player_side_zones/spelltrap_" + String(i)).is_visible():
+		if get_node("../../duel_field/player_side_zones/spelltrap_" + str(i)).is_visible():
 			player_has_spelltrap = true
 			break
 	if player_has_spelltrap:
@@ -718,9 +718,9 @@ func COM_try_to_attack_with_monster(COM_attacking_monster : Node, player_defendi
 		
 		if COM_attacking_monster.this_card_flags.is_defense_position == true and int(COM_attacking_monster.get_node("card_design/monster_features/atk_def/atk").text) > 0:
 			COM_attacking_monster.toggle_battle_position()
-			$enemy_timer.start(battle_timer/2); yield($enemy_timer, "timeout")
+			$enemy_timer.start(battle_timer/2); await $enemy_timer.timeout
 		GAME_LOGIC.do_direct_attack(COM_attacking_monster)
-		yield(get_node("../"), "battle_finished")
+		await get_node("../").battle_finished
 		emit_signal("after_try_move_ahead")
 		return true
 		
@@ -759,9 +759,9 @@ func COM_try_to_attack_with_monster(COM_attacking_monster : Node, player_defendi
 		#If it didn't return out of combat already, finally do the battle
 		if COM_attacking_monster.this_card_flags.is_defense_position == true and int(COM_attacking_monster.get_node("card_design/monster_features/atk_def/atk").text) > 0:
 			COM_attacking_monster.toggle_battle_position()
-			$enemy_timer.start(battle_timer/2); yield($enemy_timer, "timeout")
+			$enemy_timer.start(battle_timer/2); await $enemy_timer.timeout
 		GAME_LOGIC.do_battle(COM_attacking_monster, player_defending_monster)
-		yield(get_node("../"), "battle_finished")
+		await get_node("../").battle_finished
 		emit_signal("after_try_move_ahead")
 		return true
 
@@ -770,14 +770,14 @@ func COM_try_to_attack_with_monster(COM_attacking_monster : Node, player_defendi
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 func enemy_end_turn():
 	#Wait some time before actually ending the turn for better game flow
-	$enemy_timer.start(1); yield($enemy_timer, "timeout")
+	$enemy_timer.start(1); await $enemy_timer.timeout
 	
 	if not get_node("../../reward_scene").is_visible():
 		SoundControl.play_sound("poc_turn_end")
 	
 	#At the end of the turn, remove the darken layer from the monsters that battled this turn
 	for i in range(5):
-		var this_i_monster = get_node("../../duel_field/enemy_side_zones/monster_" + String(i))
+		var this_i_monster = get_node("../../duel_field/enemy_side_zones/monster_" + str(i))
 		this_i_monster.get_node("card_design/darken_card").hide()
 		
 		if CardList.card_list[this_i_monster.this_card_id].effect.size() > 1 and typeof(CardList.card_list[this_i_monster.this_card_id].effect[1]) == TYPE_STRING and CardList.card_list[this_i_monster.this_card_id].effect[1] == "multiple_attacker":

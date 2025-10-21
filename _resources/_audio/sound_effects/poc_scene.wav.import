@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/poc_scene.wav-bb0ac5d97f87cc3ca5a9e85aa4efd32f.sample"
+type="AudioStreamWAV"
+uid="uid://bonlhbk4gwv8h"
+path="res://.godot/imported/poc_scene.wav-bb0ac5d97f87cc3ca5a9e85aa4efd32f.sample"
 
 [deps]
 
 source_file="res://_resources/_audio/sound_effects/poc_scene.wav"
-dest_files=[ "res://.import/poc_scene.wav-bb0ac5d97f87cc3ca5a9e85aa4efd32f.sample" ]
+dest_files=["res://.godot/imported/poc_scene.wav-bb0ac5d97f87cc3ca5a9e85aa4efd32f.sample"]
 
 [params]
 

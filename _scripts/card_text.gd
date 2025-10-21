@@ -76,13 +76,13 @@ func get_card_text(card_id : String):
 			
 			match card_on_CardList.effect[0]:
 				"atk_up":
-					line1 = GameLanguage.equip_spell_atk.part1[PlayerData.game_language] + target_keyword_of_equip + GameLanguage.equip_spell_atk.part2[PlayerData.game_language] + String(card_on_CardList.effect[1]) + " " + GameLanguage.system.points[PlayerData.game_language] + "."
+					line1 = GameLanguage.equip_spell_atk.part1[PlayerData.game_language] + target_keyword_of_equip + GameLanguage.equip_spell_atk.part2[PlayerData.game_language] + str(card_on_CardList.effect[1]) + " " + GameLanguage.system.points[PlayerData.game_language] + "."
 				"stats_up":
 					#Check for the 'special_case' for 'Mage Power' Equip Spell
 					if card_on_CardList.effect[2] == "special_case":
-						line1 = GameLanguage.equip_mage_power_special_case.part1[PlayerData.game_language] + String(card_on_CardList.effect[1]) + GameLanguage.equip_mage_power_special_case.part2[PlayerData.game_language]
+						line1 = GameLanguage.equip_mage_power_special_case.part1[PlayerData.game_language] + str(card_on_CardList.effect[1]) + GameLanguage.equip_mage_power_special_case.part2[PlayerData.game_language]
 					else:
-						line1 = GameLanguage.equip_spell_stats.part1[PlayerData.game_language] + target_keyword_of_equip + GameLanguage.equip_spell_stats.part2[PlayerData.game_language] + String(card_on_CardList.effect[1]) + " " + GameLanguage.system.points[PlayerData.game_language] + "."
+						line1 = GameLanguage.equip_spell_stats.part1[PlayerData.game_language] + target_keyword_of_equip + GameLanguage.equip_spell_stats.part2[PlayerData.game_language] + str(card_on_CardList.effect[1]) + " " + GameLanguage.system.points[PlayerData.game_language] + "."
 			
 		#FIELD SPELLS
 		elif card_on_CardList.type == "field":
@@ -90,9 +90,9 @@ func get_card_text(card_id : String):
 			
 		#RITUAL SPELLS
 		elif card_on_CardList.type == "ritual":
-			var ritual_type = CardList.card_list[String(card_on_CardList.effect[1]).pad_zeros(5)].type
-			var ritual_name = CardList.card_list[String(card_on_CardList.effect[1]).pad_zeros(5)].card_name
-			var monster_level = String(CardList.card_list[String(card_on_CardList.effect[1]).pad_zeros(5)].level)
+			var ritual_type = CardList.card_list[str(card_on_CardList.effect[1]).pad_zeros(5)].type
+			var ritual_name = CardList.card_list[str(card_on_CardList.effect[1]).pad_zeros(5)].card_name
+			var monster_level = str(CardList.card_list[str(card_on_CardList.effect[1]).pad_zeros(5)].level)
 			line1 = GameLanguage.ritual_spell.part1[PlayerData.game_language] + GameLanguage.types[ritual_type][PlayerData.game_language] + GameLanguage.ritual_spell.part2[PlayerData.game_language] + ritual_name + GameLanguage.ritual_spell.part3[PlayerData.game_language] + " ("+ monster_level +")"
 			
 		#ANY OTHER TYPE OF SPELL CARD
@@ -116,7 +116,7 @@ func get_card_text(card_id : String):
 					line1 = GameLanguage.dice_power_change[card_on_CardList.effect[0]][PlayerData.game_language]
 				"tokens":
 					var token_quantity = card_on_CardList.effect[1]
-					line1 = GameLanguage.tokens.part1[PlayerData.game_language] + String(token_quantity) + GameLanguage.tokens.part2[PlayerData.game_language]
+					line1 = GameLanguage.tokens.part1[PlayerData.game_language] + str(token_quantity) + GameLanguage.tokens.part2[PlayerData.game_language]
 				"tokens_for_life", "tokens_for_damage":
 					line1 = GameLanguage.tokens_life_change[card_on_CardList.effect[0]][PlayerData.game_language]
 			
@@ -133,7 +133,7 @@ func get_card_text(card_id : String):
 				"destroy_attacker":
 					line1 = GameLanguage.destroy_attacker.basic_destroy[PlayerData.game_language] + "."
 					if card_on_CardList.effect[1] != 9999:
-						line1 = GameLanguage.destroy_attacker.basic_destroy[PlayerData.game_language] + GameLanguage.destroy_attacker.points_limit[PlayerData.game_language] + String(card_on_CardList.effect[1]) + " " + GameLanguage.system.points[PlayerData.game_language] + "."
+						line1 = GameLanguage.destroy_attacker.basic_destroy[PlayerData.game_language] + GameLanguage.destroy_attacker.points_limit[PlayerData.game_language] + str(card_on_CardList.effect[1]) + " " + GameLanguage.system.points[PlayerData.game_language] + "."
 				"battle_trap":
 					var ATK_or_DEF = "ATK"
 					if card_on_CardList.card_name == "Castle Walls":
@@ -155,16 +155,16 @@ func get_card_text(card_id : String):
 							if typeof(card_on_CardList.effect[2]) == TYPE_STRING:
 								line1 = GameLanguage.on_attack_first[PlayerData.game_language] + GameLanguage.burn.part1[PlayerData.game_language] + GameLanguage.burn.monster_atk_dmg[PlayerData.game_language]
 							else:
-								var burn_damage = String(card_on_CardList.effect[2])
+								var burn_damage = str(card_on_CardList.effect[2])
 								line1 = GameLanguage.on_attack_first[PlayerData.game_language] + GameLanguage.burn.part1[PlayerData.game_language] + burn_damage + " " + GameLanguage.system.points[PlayerData.game_language] + "."
 						"lifepoint_cost", "lifepoint_up":
-							var lifepoint_change_value = String(card_on_CardList.effect[2])
+							var lifepoint_change_value = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_attack_first[PlayerData.game_language] + GameLanguage.lifepoint_change[card_on_CardList.effect[1]][PlayerData.game_language] + lifepoint_change_value + GameLanguage.lifepoint_change.final[PlayerData.game_language]
 						"get_power":
-							var power_gain = String(card_on_CardList.effect[2])
+							var power_gain = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_attack_first[PlayerData.game_language] + GameLanguage[card_on_CardList.effect[1]][PlayerData.game_language] + power_gain + " " + GameLanguage.system.points[PlayerData.game_language] + "."
 						"mill":
-							var milled_cards = String(card_on_CardList.effect[2])
+							var milled_cards = str(card_on_CardList.effect[2])
 							if int(milled_cards) <= 1:
 								line1 = GameLanguage.on_attack_first[PlayerData.game_language] + GameLanguage.mill[PlayerData.game_language] + milled_cards + " " + GameLanguage.system.card[PlayerData.game_language] + "."
 							else:
@@ -180,7 +180,7 @@ func get_card_text(card_id : String):
 							if card_on_CardList.effect.size() > 2:
 								line1 = GameLanguage.on_defend_first[PlayerData.game_language] + GameLanguage.cant_die.basic[PlayerData.game_language] + GameLanguage.cant_die.extra[PlayerData.game_language] + GameLanguage.attributes[card_on_CardList.effect[2]][PlayerData.game_language] + GameLanguage.cant_die.final[PlayerData.game_language]
 						"debuff":
-							var debuff_value = String(card_on_CardList.effect[2])
+							var debuff_value = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_defend_first[PlayerData.game_language] + GameLanguage.debuff[PlayerData.game_language] + debuff_value + " " + GameLanguage.system.points[PlayerData.game_language] + "."
 				
 				#EFFECTS TRIGGERED WHEN THE MONSTER IS FLIPPED
@@ -194,10 +194,10 @@ func get_card_text(card_id : String):
 								"all_enemy_monsters", "both_sides_monsters", "level4_enemy_monsters", "random_monster", "random_spelltrap":
 									line1 = GameLanguage.on_flip_first[PlayerData.game_language] + GameLanguage.monster_destroy_effects[card_on_CardList.effect[2]][PlayerData.game_language]
 						"lifepoint_up":
-							var lifepoint_value = String(card_on_CardList.effect[2])
+							var lifepoint_value = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_flip_first[PlayerData.game_language] + GameLanguage.lifepoint_change.lifepoint_up[PlayerData.game_language] + lifepoint_value + GameLanguage.lifepoint_change.final[PlayerData.game_language]
 						"mill":
-							var milled_cards = String(card_on_CardList.effect[2])
+							var milled_cards = str(card_on_CardList.effect[2])
 							if int(milled_cards) <= 1:
 								line1 = GameLanguage.on_flip_first[PlayerData.game_language] + GameLanguage.mill[PlayerData.game_language] + milled_cards + " " + GameLanguage.system.card[PlayerData.game_language] + "."
 							else:
@@ -224,10 +224,10 @@ func get_card_text(card_id : String):
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.attribute_reptile[PlayerData.game_language] + GameLanguage.attributes[monster_attribute][PlayerData.game_language] + "."
 						"count_as_power_up":
 							var count_as_type = card_on_CardList.count_as
-							var value = String(card_on_CardList.effect[2])
+							var value = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.count_as_power_up.part1[PlayerData.game_language] + value + GameLanguage.count_as_power_up.part2[PlayerData.game_language] + GameLanguage.types[count_as_type][PlayerData.game_language] + GameLanguage.count_as_power_up.part3[PlayerData.game_language]
 						"damage_monster_count", "lifeup_monster_count":
-							var value = String(card_on_CardList.effect[2])
+							var value = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage[card_on_CardList.effect[1]].part1[PlayerData.game_language] + value + GameLanguage[card_on_CardList.effect[1]].part2[PlayerData.game_language]
 						"deck_for_stat":
 							var ATK_or_DEF = card_on_CardList.effect[2].to_upper()
@@ -241,11 +241,11 @@ func get_card_text(card_id : String):
 									var monster_type = card_on_CardList.effect[2]
 									line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.specific_type_destroy.part1[PlayerData.game_language] + GameLanguage.types[monster_type][PlayerData.game_language] + GameLanguage.specific_type_destroy.part2[PlayerData.game_language]
 						"friends_power_up":
-							var value = String(card_on_CardList.effect[2])
+							var value = str(card_on_CardList.effect[2])
 							var monster_type = card_on_CardList.type
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.friends_power_up.part1[PlayerData.game_language] + GameLanguage.types[monster_type][PlayerData.game_language] + GameLanguage.friends_power_up.part2[PlayerData.game_language] + value + " " + GameLanguage.system.points[PlayerData.game_language] + "."
 						"graveyard_power_up":
-							var value = String(card_on_CardList.effect[2])
+							var value = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.graveyard_power_up.part1[PlayerData.game_language] + value + GameLanguage.graveyard_power_up.part2[PlayerData.game_language]
 						"honest":
 							var honest_attribute = card_on_CardList.attribute
@@ -255,12 +255,12 @@ func get_card_text(card_id : String):
 							if jinzo_damage_value == 0:
 								line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.jinzo.part1[PlayerData.game_language] + "."
 							else:
-								line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.jinzo.part1[PlayerData.game_language] + GameLanguage.jinzo.part2[PlayerData.game_language] + String(jinzo_damage_value) + GameLanguage.jinzo.part3[PlayerData.game_language]
+								line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.jinzo.part1[PlayerData.game_language] + GameLanguage.jinzo.part2[PlayerData.game_language] + str(jinzo_damage_value) + GameLanguage.jinzo.part3[PlayerData.game_language]
 						"lifepoint_up":
-							var lifepoint_value = String(card_on_CardList.effect[2])
+							var lifepoint_value = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.lifepoint_change.lifepoint_up[PlayerData.game_language] + lifepoint_value + GameLanguage.lifepoint_change.final[PlayerData.game_language]
 						"mill":
-							var milled_cards = String(card_on_CardList.effect[2])
+							var milled_cards = str(card_on_CardList.effect[2])
 							if int(milled_cards) <= 1:
 								line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.mill[PlayerData.game_language] + milled_cards + " " + GameLanguage.system.card[PlayerData.game_language] + "."
 							else:
@@ -269,7 +269,7 @@ func get_card_text(card_id : String):
 							var monster_attribute = card_on_CardList.attribute
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.monster_change_field[PlayerData.game_language] + GameLanguage.attributes[monster_attribute][PlayerData.game_language]
 						"monster_count_boost":
-							var boost_value = String(card_on_CardList.effect[2])
+							var boost_value = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.monster_count_boost.part1[PlayerData.game_language] + boost_value + GameLanguage.monster_count_boost.part2[PlayerData.game_language]
 						"self_power_up":
 							var boost_value = card_on_CardList.effect[2]
@@ -277,12 +277,12 @@ func get_card_text(card_id : String):
 								"buster_blader", "random_dice", "same_attribute", "spelltrap_count":
 									line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.self_power_up.part1[PlayerData.game_language] + GameLanguage.self_power_up[boost_value][PlayerData.game_language]
 								_: #just a numerical value
-									line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.self_power_up.part1[PlayerData.game_language] + String(boost_value) + GameLanguage.self_power_up.part2[PlayerData.game_language]
+									line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.self_power_up.part1[PlayerData.game_language] + str(boost_value) + GameLanguage.self_power_up.part2[PlayerData.game_language]
 						"get_atk_from_field":
 							var type_of_count = card_on_CardList.effect[2]
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.get_atk_from_field[type_of_count][PlayerData.game_language]
 						"debuff_for_graveyard":
-							var value = String(card_on_CardList.effect[2])
+							var value = str(card_on_CardList.effect[2])
 							line1 = GameLanguage.on_summon_first[PlayerData.game_language] + GameLanguage.debuff_for_graveyard.part1[PlayerData.game_language] + value + GameLanguage.debuff_for_graveyard.part2[PlayerData.game_language]
 						
 	

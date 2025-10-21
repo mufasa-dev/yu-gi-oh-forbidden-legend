@@ -20,7 +20,7 @@ var recorded_dialogs : Array = [] #populated by Dialogic Timeline Names
 
 #Game Settings, stored in a separate file
 var game_language : String = "en" #default is english
-var game_volume : float = 0.1 #0 to 1, 'linear2db' converts it into db in 'sound_control.gd'
+var game_volume : float = 0.1 #0 to 1, 'linear_to_db' converts it into db in 'sound_control.gd'
 var game_autosave : bool = false #starts as false, player can opt in
 
 #Variables that aren't persistent
@@ -121,7 +121,7 @@ func fill_deck_with_cards(general_card_pool):
 	if player_deck.size() < 40:
 		fill_deck_with_cards(general_card_pool)
 	else:
-		#print("Deck Size: " + String(player_deck.size()), "\n", player_deck)
+		#print("Deck Size: " + str(player_deck.size()), "\n", player_deck)
 		return player_deck
 
 #---------------------------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ func create_random_deck():
 	randomize()
 	for _slot in range (0, 40):
 		var rand_no = randi() %CardList.card_list.keys().size()
-		var card_id = String(rand_no).pad_zeros(5)
+		var card_id = str(rand_no).pad_zeros(5)
 		player_deck.append(card_id)
 	
 	register_deck_on_trunk()
