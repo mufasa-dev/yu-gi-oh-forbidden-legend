@@ -16,19 +16,27 @@ func _ready():
 #		$visuals.show()
 
 func _on_duelist_face_button_up():
-	#Animate the button click
+	# Animate the button click
 	if $visuals.is_visible():
 		SoundControl.play_sound("poc_decide")
-		
-		#Animate the button being clicked
-		var small_scale = Vector2(0.9 , 0.9)
-		var normal_scale = Vector2(1 , 1)
-		
-		$tween.interpolate_property(self, "scale", self.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$tween.start()
-		await $tween.tween_completed
-		$tween.interpolate_property(self, "scale", self.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$tween.start()
-		
-		#Call the function on the scene root
+
+		# Define escalas
+		var small_scale := Vector2(0.9, 0.9)
+		var normal_scale := Vector2(1, 1)
+
+		# Tween para reduzir o botão
+		var tween := create_tween()
+		tween.tween_property(self, "scale", small_scale, 0.1)\
+			.set_trans(Tween.TRANS_LINEAR)\
+			.set_ease(Tween.EASE_IN_OUT)
+		await tween.finished  # espera o tween terminar
+
+		# Tween para restaurar a escala
+		var tween_restore := create_tween()
+		tween_restore.tween_property(self, "scale", normal_scale, 0.1)\
+			.set_trans(Tween.TRANS_LINEAR)\
+			.set_ease(Tween.EASE_IN_OUT)
+		await tween_restore.finished
+
+		# Chama a função no root
 		get_tree().get_root().get_node("free_duel").duelist_face_clicked(duelist_name)

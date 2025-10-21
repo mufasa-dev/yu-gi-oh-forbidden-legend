@@ -96,21 +96,27 @@ func duelist_face_clicked(duelist_name):
 	update_duelist_cards(duelist_name)
 	active_duelist_name = duelist_name
 	
-	#Duelist Focus animations
-	$duelist_focus.modulate = Color(0,0,0,0)
+	# Duelist Focus animations
+	$duelist_focus.modulate = Color(0, 0, 0, 0)
 	$duelist_focus.show()
-	$duelist_focus/tween.interpolate_property($duelist_focus, "modulate", $duelist_focus.modulate, Color(1,1,1,1), 0.3, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$duelist_focus/tween.start()
-	#yield($duelist_focus/tween, "tween_completed")
-	
-	#Panel Right animations
-	var out_position = Vector2(1000,0)
-	var in_position = Vector2(0,0)
+
+	var tween_focus := create_tween()
+	tween_focus.tween_property($duelist_focus, "modulate", Color(1,1,1,1), 0.3)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween_focus.finished
+
+	# Panel Right animations
+	var out_position := Vector2(1000, 0)
+	var in_position := Vector2(0, 0)
 	$panel_right.position = out_position
 	$panel_right.show()
-	$panel_right/tween.interpolate_property($panel_right, "position", $panel_right.position, in_position, 0.3, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$panel_right/tween.start()
-	#yield($panel_right/tween, "tween_completed")
+
+	var tween_panel := create_tween()
+	tween_panel.tween_property($panel_right, "position", in_position, 0.3)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween_panel.finished
 
 func _on_defocus_button_button_up():
 	defocus_duelist()
@@ -136,7 +142,7 @@ func defocus_duelist():
 
 #---------------------------------------------------------------------------------------------------
 func update_duelist_cards(duelist_name):
-	var containter_for_cards = $panel_right/duelist_cards/MarginContainer/GridContainer/
+	var containter_for_cards = $panel_right/duelist_cards/MarginContainer/GridContainer
 	var duelist_ref = $npc_decks_gd.list_of_decks[duelist_name]
 	
 	#Starting by making visible only the nodes that are needed
@@ -185,12 +191,20 @@ func update_duelist_cards(duelist_name):
 func _on_go_duel_button_up():
 	SoundControl.play_sound("poc_decide")
 	
-	$user_interface/UI_tween.interpolate_property($duelist_focus/go_duel, "scale", $duelist_focus/go_duel.scale, Vector2(0.9, 0.9), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$user_interface/UI_tween.start()
-	await $user_interface/UI_tween.tween_completed
-	$user_interface/UI_tween.interpolate_property($duelist_focus/go_duel, "scale", $duelist_focus/go_duel.scale, Vector2(1, 1), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$user_interface/UI_tween.start()
+	# Tween para simular clique no botão
+	var tween := create_tween()
+	tween.tween_property($duelist_focus/go_duel, "scale", Vector2(0.9, 0.9), 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
 	
+	var tween_back := create_tween()
+	tween_back.tween_property($duelist_focus/go_duel, "scale", Vector2(1, 1), 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween_back.finished
+	
+	# Atualiza dados e muda de cena
 	PlayerData.going_to_duel = active_duelist_name
 	PlayerData.scene_to_return_after_duel = "free_duel"
 	$scene_transitioner.scene_transition("deck_building")
@@ -199,16 +213,24 @@ func _on_go_duel_button_up():
 func _on_back_button_button_up():
 	SoundControl.play_sound("poc_decide")
 	
-	#Animate the button being clicked
 	var small_scale = Vector2(0.8 , 0.8)
 	var normal_scale = Vector2(1 , 1)
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$user_interface/UI_tween.start()
-	await $user_interface/UI_tween.tween_completed
-	$user_interface/UI_tween.interpolate_property($user_interface/back_button, "scale", $user_interface/back_button.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$user_interface/UI_tween.start()
 	
-	if $panel_right.is_visible(): #If duelist is on focus, unfocus
+	# Tween do clique no botão
+	var tween := create_tween()
+	tween.tween_property($user_interface/back_button, "scale", small_scale, 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+	
+	var tween_back := create_tween()
+	tween_back.tween_property($user_interface/back_button, "scale", normal_scale, 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween_back.finished
+	
+	# Lógica de retorno
+	if $panel_right.is_visible(): # Se duelist estava em foco
 		defocus_duelist()
-	else: #On usual cases, return to main menu
+	else: # Caso normal, retorna ao menu principal
 		$scene_transitioner.scene_transition("main_menu")

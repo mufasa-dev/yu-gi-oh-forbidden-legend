@@ -310,15 +310,23 @@ func _on_back_button_button_up():
 		$scene_transitioner.scene_transition("free_duel")
 
 #---------------------------------------------------------------------------------------------------
-func button_click_animation(button_node_path : String):
+func button_click_animation(button_node_path : String) -> void:
 	SoundControl.play_sound("poc_decide")
 	
-	#Animate the button being clicked
-	var small_scale = Vector2(0.8 , 0.8)
-	var normal_scale = Vector2(1 , 1)
+	var button_node = get_node(button_node_path)
+	var small_scale = Vector2(0.8, 0.8)
+	var normal_scale = Vector2(1, 1)
 	
-	$user_interface/UI_tween.interpolate_property(get_node(button_node_path), "scale", get_node(button_node_path).scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$user_interface/UI_tween.start()
-	await $user_interface/UI_tween.tween_completed
-	$user_interface/UI_tween.interpolate_property(get_node(button_node_path), "scale", get_node(button_node_path).scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$user_interface/UI_tween.start()
+	# Tween para reduzir o botão
+	var tween_down := create_tween()
+	tween_down.tween_property(button_node, "scale", small_scale, 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween_down.finished
+	
+	# Tween para voltar ao tamanho normal
+	var tween_up := create_tween()
+	tween_up.tween_property(button_node, "scale", normal_scale, 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween_up.finished

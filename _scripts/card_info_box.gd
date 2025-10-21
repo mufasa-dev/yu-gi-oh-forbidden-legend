@@ -73,18 +73,27 @@ func update_user_interface(card_node):
 	$extra_icons.show()
 	$colored_bar.show()
 	
-	#update card descriptive text
-	text_tween.stop_all()
+	# Atualiza texto da carta
 	$card_text/Container/description_line1.position.y = 5
 	$card_text.show()
-	var card_text = $card_text_gd.get_card_text(card_node.this_card_id)
+	var card_text: Variant = $card_text_gd.get_card_text(card_node.this_card_id)
 	#if PlayerData.game_language == "pt":
 		#card_text = this_card.text.pt
 	#else:
 		#card_text = this_card.text.en
 	$card_text/Container/description_line1.text = card_text
 	
-	#Start the timer so the information gets cleaned after a while. Pure aesthetic reasons.
+	var tween := create_tween()
+
+	# Tween da opacidade do texto
+	tween.tween_property($card_text/Container/description_line1, "modulate:a", 1.0, 0.3)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+
+	# Espera terminar se necessário
+	await tween.finished
+
+	# Start timer para limpar info (estético)
 	$interface_timer.start(20.0)
 
 func _on_interface_timer_timeout():
@@ -111,12 +120,16 @@ var scroll_time : float = 1
 func _on_description_mouse_over_mouse_entered():
 	if text_node.get_line_count() > 2:
 		if text_node.position.y == 5:
-			text_tween.interpolate_property(text_node, "position:y", text_node.position.y, clamp(text_node.position.y-32, 5-32, 5), scroll_time/2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-			text_tween.start()
+			var tween := create_tween()
+			tween.tween_property(text_node, "position:y", clamp(text_node.position.y - 32, 5 - 32, 5), scroll_time / 2)\
+				.set_trans(Tween.TRANS_LINEAR)\
+				.set_ease(Tween.EASE_IN_OUT)
 
 func _on_description_mouse_over_mouse_exited():
-	text_tween.interpolate_property(text_node, "position:y", text_node.position.y, 5, scroll_time/3, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	text_tween.start()
+	var tween := create_tween()
+	tween.tween_property(text_node, "position:y", 5, scroll_time / 3)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
 
 #The button to toggle between the Containers for card description: either show TXT form (classic) or IMG form (testing)
 #var container_mode = "TXT"

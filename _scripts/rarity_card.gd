@@ -113,19 +113,38 @@ func _on_rarity_card_button_up():
 	card_info_box.current_highlighted_card = self
 	card_info_box.update_user_interface(self)
 	$z_indexer.z_index = 1
-	$card_self_tween.interpolate_property($z_indexer/card_design, "scale", $z_indexer/card_design.scale, big_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$card_self_tween.start()
-	
-	#move the rarity indicator
-	$card_self_tween2.interpolate_property($z_indexer/rarity_indicator, "position", $z_indexer/rarity_indicator.position, onBig_rarity_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$card_self_tween2.start()
+	var big_scale := Vector2(1.2, 1.2)
+
+	# Tween do card design
+	var tween_card := create_tween()
+	tween_card.tween_property($z_indexer/card_design, "scale", big_scale, 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween_card.finished
+
+	# Tween do rarity indicator
+	var tween_rarity := create_tween()
+	tween_rarity.tween_property($z_indexer/rarity_indicator, "position", onBig_rarity_position, 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween_rarity.finished
+
 
 func reset_highlighted_card():
 	if card_info_box.current_highlighted_card != null:
-		card_info_box.current_highlighted_card.get_child(0).z_index = 0
-		$card_self_tween.interpolate_property(card_info_box.current_highlighted_card.get_child(0).get_child(0), "scale", card_info_box.current_highlighted_card.get_child(0).get_child(0).scale, init_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$card_self_tween.start()
+		var card_node: Variant = card_info_box.current_highlighted_card.get_child(0)
+		card_node.z_index = 0
 		
-		#move the rarity indicator
-		$card_self_tween2.interpolate_property(card_info_box.current_highlighted_card.get_child(0).get_child(2), "position", card_info_box.current_highlighted_card.get_child(0).get_child(2).position, init_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$card_self_tween2.start()
+		# Tween para o card voltar à escala inicial
+		var tween_card := create_tween()
+		tween_card.tween_property(card_node.get_child(0), "scale", init_scale, 0.1)\
+			.set_trans(Tween.TRANS_LINEAR)\
+			.set_ease(Tween.EASE_IN_OUT)
+		await tween_card.finished
+		
+		# Tween para mover o rarity indicator
+		var tween_rarity := create_tween()
+		tween_rarity.tween_property(card_node.get_child(2), "position", init_position, 0.1)\
+			.set_trans(Tween.TRANS_LINEAR)\
+			.set_ease(Tween.EASE_IN_OUT)
+		await tween_rarity.finished

@@ -117,8 +117,10 @@ func _on_0175card_button_up():
 	card_info_box.current_highlighted_card = self
 	card_info_box.update_user_interface(self)
 	$z_indexer.z_index = 1
-	$card_self_tween.interpolate_property($z_indexer/card_design, "scale", $z_indexer/card_design.scale, big_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$card_self_tween.start()
+	var tween := create_tween()
+	tween.tween_property($z_indexer/card_design, "scale", big_scale, 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
 	
 	#Figure out where to move on second click
 	if $z_indexer/card_design.scale == big_scale:
@@ -150,28 +152,53 @@ func _on_0175card_button_up():
 	var onBig_trunk_counter_position = Vector2(4, 64)
 	var original_counter_position = Vector2(-1, 54)
 	if $z_indexer/trunk_counter.position == original_counter_position:
-		$card_self_tween2.interpolate_property($z_indexer/trunk_counter, "position", $z_indexer/trunk_counter.position, onBig_trunk_counter_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$card_self_tween2.start()
+		var tween2 := create_tween()
+		tween2.tween_property($z_indexer/trunk_counter, "position", onBig_trunk_counter_position, 0.1)\
+			.set_trans(Tween.TRANS_LINEAR)\
+			.set_ease(Tween.EASE_IN_OUT)
 	else:
-		$card_self_tween2.interpolate_property(card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter"), "position", card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter").position, original_counter_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$card_self_tween2.start()
+		var tween2 := create_tween()
+		tween2.tween_property(
+			card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter"), 
+			"position", 
+			original_counter_position, 
+			0.1
+		).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
+
 
 func reset_highlighted_card():
 	if card_info_box.current_highlighted_card != null:
 		card_info_box.current_highlighted_card.get_child(0).z_index = 0
-		$card_self_tween.interpolate_property(card_info_box.current_highlighted_card.get_child(0).get_child(0), "scale", card_info_box.current_highlighted_card.get_child(0).get_child(0).scale, init_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$card_self_tween.start()
 		
-		#move the trunk_counter indicator back to small position
+		# Animar scale do card
+		var tween_scale := create_tween()
+		tween_scale.tween_property(
+			card_info_box.current_highlighted_card.get_child(0).get_child(0), 
+			"scale", 
+			init_scale, 
+			0.1
+		).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
+		
+		# Mover trunk_counter de volta para a posição pequena
 		var original_counter_position = Vector2(-1, 54)
-		$card_self_tween2.interpolate_property(card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter"), "position", card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter").position, original_counter_position, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$card_self_tween2.start()
+		var tween_trunk := create_tween()
+		tween_trunk.tween_property(
+			card_info_box.current_highlighted_card.get_node("z_indexer/trunk_counter"), 
+			"position", 
+			original_counter_position, 
+			0.1
+		).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
 		
-		#Reset any "New" indicator that has been interacted with
+		# Resetar indicador "New"
 		var final_pos = Vector2(29, -10)
 		var start_pos = Vector2(22, -22)
-		$card_self_tween2.interpolate_property(card_info_box.current_highlighted_card.get_node("z_indexer/new_indicator"), "position", start_pos, final_pos, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		$card_self_tween2.start()
+		var tween_new := create_tween()
+		tween_new.tween_property(
+			card_info_box.current_highlighted_card.get_node("z_indexer/new_indicator"), 
+			"position", 
+			final_pos, 
+			0.1
+		).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
 		
 		card_info_box.current_highlighted_card.get_node("z_indexer/new_indicator").hide()
 		PlayerData.last_reward_cards.erase(card_info_box.current_highlighted_card.this_card_id)
