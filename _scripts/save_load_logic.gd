@@ -23,36 +23,45 @@ func save_game():
 	}
 	
 	#Start the file to be written
-	var save_file = File.new()
-	#save_file.open_encrypted_with_pass("user://savegame.save", File.WRITE, save_key) #ENCRYPTED
-	save_file.open_encrypted_with_pass("user://savegame.save", File.WRITE, OS.get_unique_id()) #ENCRYPTED
-	
-	#Write info to save_file
-	save_file.store_line(JSON.new().stringify(info_to_save)) #get 'info_to_save' dictionary and turn into JSON
-	save_file.close()
-	
-	return "sucess"
+	var save_file := FileAccess.open_encrypted_with_pass("user://savegame.save", FileAccess.WRITE, OS.get_unique_id())
+	if save_file == null:
+		push_error("Failed to open save file!")
+		return "error"
 
-func load_game():
-	#Check if a savegame exists, if not, scape function
-	var save_file = File.new()
-	if not save_file.file_exists("user://savegame.save"):
-		return
-	
-	#for keys in [save_key, OS.get_unique_id()]:
-	#	var get = save_file.open_encrypted_with_pass("user://savegame.save", File.READ, keys) #ENCRYPTED
-	#	if get != null:
-	#		break
-	
-	save_file.open_encrypted_with_pass("user://savegame.save", File.READ, OS.get_unique_id()) #ENCRYPTED
-	
-	var info_to_load = { } #start as empty dictionary and will be loaded key by key
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(save_file.get_as_text())
-	info_to_load = test_json_conv.get_data()
-	
-	#Load it safely. IF the save file has that information, load it. Good for future-proof with backwards compatibility
-	var saved_info = [
+	# Serializa o dicionário como JSON e grava
+	var json := JSON.stringify(info_to_save)
+	save_file.store_line(json)
+	save_file.close()
+
+	return "success"
+
+func load_game() -> String:
+	# Verifica se o arquivo existe
+	if not FileAccess.file_exists("user://savegame.save"):
+		return "no_save"
+
+	# Abre o arquivo criptografado
+	var save_file := FileAccess.open_encrypted_with_pass(
+		"user://savegame.save",
+		FileAccess.READ,
+		OS.get_unique_id()
+	)
+	if save_file == null:
+		push_error("Falha ao abrir o save.")
+		return "error"
+
+	# Lê o conteúdo
+	var json_text := save_file.get_as_text()
+	save_file.close()
+
+	# Converte JSON → Dictionary
+	var info_to_load: Dictionary = JSON.parse_string(json_text)
+	if typeof(info_to_load) != TYPE_DICTIONARY:
+		push_error("Save corrompido ou formato inválido.")
+		return "error"
+
+	# Lista de chaves esperadas
+	var saved_info: Array = [
 		["player_name", "string"],
 		["player_deck", "array"],
 		["player_trunk", "dictionary"],
@@ -66,30 +75,35 @@ func load_game():
 		["recorded_campaign_defeats", "array"],
 		["recorded_dialogs", "array"],
 	]
-	
-	#Safely create the player's first deck slot if the save doesn't have it
+
+	# Corrige save antigo (sem deck list)
 	if not info_to_load.has("list_of_player_decks"):
-		info_to_load.list_of_player_decks = {"01022" : {
-													"color":"1,1,1,1",
-													"deck" : info_to_load.player_deck
-														}
-											}
-		info_to_load.active_deck_name = "01022"
-	
-	for i in range(saved_info.size()):
-		if info_to_load.has(saved_info[i][0]):
-			match saved_info[i][1]:
+		info_to_load["list_of_player_decks"] = {
+			"01022": {
+				"color": "1,1,1,1",
+				"deck": info_to_load.get("player_deck", [])
+			}
+		}
+		info_to_load["active_deck_name"] = "01022"
+
+	# Carrega as informações de forma segura
+	for entry in saved_info:
+		var key: String = entry[0]
+		var expected_type: String = entry[1]
+
+		if info_to_load.has(key):
+			match expected_type:
 				"string":
-					PlayerData[saved_info[i][0]] = str(info_to_load[saved_info[i][0]])
+					PlayerData[key] = str(info_to_load[key])
 				"int":
-					PlayerData[saved_info[i][0]] = int(info_to_load[saved_info[i][0]])
+					PlayerData[key] = int(info_to_load[key])
 				"float":
-					PlayerData[saved_info[i][0]] = float(info_to_load[saved_info[i][0]])
+					PlayerData[key] = float(info_to_load[key])
 				"array":
-					PlayerData[saved_info[i][0]] = Array(info_to_load[saved_info[i][0]])
+					PlayerData[key] = Array(info_to_load[key])
 				"dictionary":
-					PlayerData[saved_info[i][0]] = Dictionary(info_to_load[saved_info[i][0]])
+					PlayerData[key] = Dictionary(info_to_load[key])
 		else:
-			print("savefile didnt have '", saved_info[i][0], "'. This is just a warning, no problem with it.")
-	
-	return "sucess"
+			print("⚠️ savegame não tinha a chave:", key)
+
+	return "success"

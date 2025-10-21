@@ -67,9 +67,12 @@ func bgm_fadeout(long = false):
 	var playing_node = register_sound_node[1]
 	
 	# tween music volume down to 0
-	$fadeout_tween.interpolate_property(playing_node, "volume_db", playing_node.volume_db, -80, transition_duration, transition_type, Tween.EASE_IN, 0)
-	$fadeout_tween.start()
-	await $fadeout_tween.tween_completed
+	var tween := create_tween()
+	tween.tween_property(playing_node, "volume_db", -80, transition_duration)\
+		.set_trans(transition_type)\
+		.set_ease(Tween.EASE_IN)
+
+	await tween.finished
 	playing_node.stop()
 
 

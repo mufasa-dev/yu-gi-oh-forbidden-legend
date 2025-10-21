@@ -17,24 +17,33 @@ func entering_this_scene():
 	await get_tree().create_timer(transition_time/3).timeout
 	$loading_indicator.hide()
 	
-	$transitioner_tween.interpolate_property($darker_screen, "modulate", full_black, transparent, transition_time, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$transitioner_tween.start()
-	await $transitioner_tween.tween_completed
+	var tween := create_tween()
+	tween.tween_property($darker_screen, "modulate", full_black, transition_time / 1.5)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
 	
 	self.hide()
 
-func scene_transition(scene):
+func scene_transition(scene: String) -> void:
 	$loading_indicator/loading_label.text = GameLanguage.system.loading[PlayerData.game_language] + " . . ."
+
 	SoundControl.bgm_fadeout()
 	SoundControl.play_sound("poc_scene")
-	
+
 	self.show()
 	$loading_indicator.show()
-	
-	$transitioner_tween.interpolate_property($darker_screen, "modulate", transparent, full_black, transition_time/1.5, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$transitioner_tween.start()
-	await $transitioner_tween.tween_completed
-	
+
+	# Tween do "darker_screen" usando Godot 4
+	$darker_screen.modulate = transparent  # define valor inicial
+	var tween := create_tween()
+	tween.tween_property($darker_screen, "modulate", full_black, transition_time / 1.5)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+
 	self.hide()
-	
-	var _scene_change = get_tree().change_scene_to_file("res://_scenes/" + scene + ".tscn")
+
+	# Troca de cena
+	get_tree().change_scene_to_file("res://_scenes/" + scene + ".tscn")

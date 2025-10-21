@@ -1,30 +1,31 @@
-extends Node2D
+extends Node
 
 #Easy acess to game version text indicator
 var GAME_VERSION_TEXT = "0.1.116"
 var site_version = "k" #set by "http request"
 
-func _ready():
-	#Animate the transition when starting this scene
+
+func _ready() -> void:
+	# Animate the transition when starting this scene
 	$scene_transitioner.entering_this_scene()
-	
-	#Check for a saved options file to instantly load it
-	var options_file = File.new()
-	if options_file.file_exists("user://gameoptions.save"):
+
+	# Check for a saved options file to instantly load it
+	var options_path := "user://gameoptions.save"
+	if FileAccess.file_exists(options_path):
 		auto_load_options_file()
-	
-	#Check for updates
+
+	# Check for updates
 	look_for_updates()
-	
-	#Properly load the text in the correct language
+
+	# Properly load the text in the correct language
 	load_text_in_correct_language()
-	
-	#Check for a savegame file to enable the load button or not
-	var save_file = File.new()
-	if save_file.file_exists("user://savegame.save"):
-		$CenterContainer2/VBoxContainer/btn_load_game.modulate = Color(1,1,1,1)
-	
-	if PlayerData.game_loaded == false: #load the "New Game, Load Game, Options" menus
+
+	# Check for a savegame file to enable the load button or not
+	var save_path := "user://savegame.save"
+	if FileAccess.file_exists(save_path):
+		$CenterContainer2/VBoxContainer/btn_load_game.modulate = Color(1, 1, 1, 1)
+
+	if not PlayerData.game_loaded:  # Load the "New Game, Load Game, Options" menus
 		$CenterContainer.hide()
 		$big_logo.hide()
 		$CenterContainer2.show()
@@ -36,45 +37,57 @@ func _ready():
 		$big_logo.show()
 		$website_button.hide()
 
-func auto_load_options_file():
-	#Check if a saved file exists, if not, scape function
-	var save_file = File.new()
-	if not save_file.file_exists("user://gameoptions.save"):
+
+func auto_load_options_file() -> void:
+	var options_path := "user://gameoptions.save"
+	if not FileAccess.file_exists(options_path):
 		return
-	
-	#Load the file if one was found
-	save_file.open_encrypted_with_pass("user://gameoptions.save", File.READ, OS.get_unique_id()) #ENCRYPTED
-	
-	var info_to_load = { } #start as empty dictionary and will be loaded key by key
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(save_file.get_as_text())
-	info_to_load = test_json_conv.get_data()
-	
-	#Load it safely. IF the save file has that information, load it. Good for future-proof with backwards compatibility
-	var saved_info = [
+
+	# Open encrypted file
+	var file := FileAccess.open_encrypted_with_pass(options_path, FileAccess.READ, OS.get_unique_id())
+	if not file:
+		push_warning("Failed to open options file")
+		return
+
+	var json_text := file.get_as_text()
+	file.close()
+
+	# Parse JSON
+	var info_to_load: Variant = JSON.parse_string(json_text)
+	if info_to_load.error != OK:
+		push_warning("Failed to parse options JSON")
+		return
+	info_to_load = info_to_load.result
+
+	# List of expected keys and types
+	var saved_info := [
 		["game_language", "string"],
 		["game_volume", "float"],
 		["game_autosave", "bool"]
 	]
-	
-	for i in range(saved_info.size()):
-		if info_to_load.has(saved_info[i][0]):
-			match saved_info[i][1]:
+
+	# Load safely
+	for key_type in saved_info:
+		var key: Variant = key_type[0]
+		var expected_type: Variant = key_type[1]
+		if info_to_load.has(key):
+			match expected_type:
 				"string":
-					PlayerData[saved_info[i][0]] = str(info_to_load[saved_info[i][0]])
+					PlayerData[key] = str(info_to_load[key])
 				"int":
-					PlayerData[saved_info[i][0]] = int(info_to_load[saved_info[i][0]])
+					PlayerData[key] = int(info_to_load[key])
 				"float":
-					PlayerData[saved_info[i][0]] = float(info_to_load[saved_info[i][0]])
+					PlayerData[key] = float(info_to_load[key])
 				"array":
-					PlayerData[saved_info[i][0]] = Array(info_to_load[saved_info[i][0]])
+					PlayerData[key] = Array(info_to_load[key])
 				"dictionary":
-					PlayerData[saved_info[i][0]] = Dictionary(info_to_load[saved_info[i][0]])
+					PlayerData[key] = Dictionary(info_to_load[key])
 				"bool":
-					PlayerData[saved_info[i][0]] = bool(info_to_load[saved_info[i][0]])
-	
-	#NOW THAT THE INFORMATION WAS PROPERLY LOADED, UPDATE NECESSARY THINGS
+					PlayerData[key] = bool(info_to_load[key])
+
+	# NOW THAT THE INFORMATION WAS PROPERLY LOADED, UPDATE NECESSARY THINGS
 	SoundControl.adjust_sound_volume(PlayerData.game_volume)
+
 
 #---------------------------------------------------------------------------------------------------
 func load_text_in_correct_language():
@@ -159,42 +172,64 @@ func load_game():
 	$timer.start(0.6); await $timer.timeout #give it some time
 	$save_load_overlay.hide()
 
-func separation_of_boxes():
-	var offset = 1000
-	var timer = 0.5
-	
-	#Move out the on screen buttons 
-	for i in range($CenterContainer2.get_node("VBoxContainer").get_child_count()):
-		var the_node = $CenterContainer2.get_node("VBoxContainer").get_child(i)
-		if i%2 == 0:
-			$button_tweener.interpolate_property(the_node, "position:x", the_node.position.x, the_node.position.x + offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-			$button_tweener.start()
+func separation_of_boxes() -> void:
+	var offset := 1000
+	var timer := 0.5
+
+	# Move out the on-screen buttons
+	var vbox2 := $CenterContainer2.get_node("VBoxContainer")
+	for i in range(vbox2.get_child_count()):
+		var the_node := vbox2.get_child(i)
+		if i % 2 == 0:
+			var tween := create_tween()
+			tween.tween_property(the_node, "position:x", the_node.position.x + offset, timer)\
+				.set_trans(Tween.TRANS_CUBIC)\
+				.set_ease(Tween.EASE_IN_OUT)
 		else:
-			$button_tweener.interpolate_property(the_node, "position:x", the_node.position.x, the_node.position.x - offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-			$button_tweener.start()
-	$animation_tweener.interpolate_property($small_logo, "modulate", Color(1,1,1,1), Color(1,1,1, 0), timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	$animation_tweener.interpolate_property($website_button, "modulate", Color(1,1,1,1), Color(1,1,1, 0), timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	$animation_tweener.start()
-	$timer.start(timer); await $timer.timeout
+			var tween := create_tween()
+			tween.tween_property(the_node, "position:x", the_node.position.x - offset, timer)\
+				.set_trans(Tween.TRANS_CUBIC)\
+				.set_ease(Tween.EASE_IN_OUT)
+
+	# Fade out logo and website button
+	var tween_anim := create_tween()
+	tween_anim.tween_property($small_logo, "modulate", Color(1,1,1,0), timer)\
+		.set_trans(Tween.TRANS_CUBIC)\
+		.set_ease(Tween.EASE_IN_OUT)
+	tween_anim.tween_property($website_button, "modulate", Color(1,1,1,0), timer)\
+		.set_trans(Tween.TRANS_CUBIC)\
+		.set_ease(Tween.EASE_IN_OUT)
+
+	await tween_anim.finished
 	$CenterContainer2.hide()
-	
-	#Now move in the stuff from the "second page" of the menu
+
+	# Show second page elements
 	$big_logo.modulate = Color(1,1,1,0)
 	$big_logo.show()
-	$animation_tweener.interpolate_property($big_logo, "modulate", Color(1,1,1,0), Color(0.5,0.5,0.5, 0.5), timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-	$animation_tweener.start()
-	
-	for i in range($CenterContainer.get_node("VBoxContainer").get_child_count()):
-		var the_node = $CenterContainer.get_node("VBoxContainer").get_child(i)
-		if i%2 == 0:
+
+	var tween_big_logo := create_tween()
+	tween_big_logo.tween_property($big_logo, "modulate", Color(0.5,0.5,0.5,0.5), timer)\
+		.set_trans(Tween.TRANS_CUBIC)\
+		.set_ease(Tween.EASE_IN_OUT)
+
+	# Move in the new buttons
+	var vbox := $CenterContainer.get_node("VBoxContainer")
+	for i in range(vbox.get_child_count()):
+		var the_node := vbox.get_child(i)
+		if i % 2 == 0:
 			the_node.position.x += offset
-			$button_tweener.interpolate_property(the_node, "position:x", the_node.position.x, the_node.position.x - offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-			$button_tweener.start()
+			var tween := create_tween()
+			tween.tween_property(the_node, "position:x", the_node.position.x - offset, timer)\
+				.set_trans(Tween.TRANS_CUBIC)\
+				.set_ease(Tween.EASE_IN_OUT)
 		else:
 			the_node.position.x -= offset
-			$button_tweener.interpolate_property(the_node, "position:x", the_node.position.x, the_node.position.x + offset, timer, Tween.TRANS_CUBIC, Tween.EASE_IN_OUT)
-			$button_tweener.start()
-	$timer.start(timer*0.55); await $timer.timeout
+			var tween := create_tween()
+			tween.tween_property(the_node, "position:x", the_node.position.x + offset, timer)\
+				.set_trans(Tween.TRANS_CUBIC)\
+				.set_ease(Tween.EASE_IN_OUT)
+
+	await get_tree().create_timer(timer * 0.55).timeout
 	$CenterContainer.show()
 
 #---------------------------------------------------------------------------------------------------
@@ -266,12 +301,18 @@ func animate_button(node : Node):
 	if node == $save_load_overlay/save_warning/button_close/export_close:
 		small_scale = Vector2(1.1, 0.9)
 		normal_scale = Vector2(1.3, 1)
-	
-	$button_tweener.interpolate_property(node, "scale", node.scale, small_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$button_tweener.start()
-	await $button_tweener.tween_completed
-	$button_tweener.interpolate_property(node, "scale", node.scale, normal_scale, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$button_tweener.start()
+			
+	var tween := create_tween()
+	tween.tween_property(node, "scale", small_scale, 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
+
+	await tween.finished
+
+	var tween2 := create_tween()
+	tween2.tween_property(node, "scale", normal_scale, 0.1)\
+		.set_trans(Tween.TRANS_LINEAR)\
+		.set_ease(Tween.EASE_IN_OUT)
 
 func change_scene_to_file(scene_to_go_to : String):
 	$scene_transitioner.scene_transition(scene_to_go_to)
