@@ -235,6 +235,39 @@
                     </tr>
                 </tbody>
             </table>
+
+            <table class="table table-striped table-hover table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th class="p-1">Quando</th>
+                        <th class="p-1">Efeito</th>
+                        <th class="p-1">Valor</th>
+                        <th class="p-1">Se</th>
+                        <th class="p-1" style="width: 50px;">
+                            <button class="btn btn-primary btn-sm" ng-click="newEffect()" style="width: 64px">Novo</button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="ev in selected.effect2 track by $index">
+                        <td class="p-1">
+                            <select class="form-control form-control-sm" ng-model="selected.effect2[$index].when" ng-options="when for when in when"></select>
+                        </td>
+                        <td class="p-1">
+                            <select class="form-control form-control-sm" ng-model="selected.effect2[$index].effect" ng-options="effect for effect in effect"></select>
+                        </td>
+                        <td class="p-1">
+                            <input type="text" class="form-control form-control-sm"  ng-model="selected.effect2[$index].value" placeholder="Evento">
+                        </td>
+                        <td class="p-1">
+                            <input type="text" class="form-control form-control-sm"  ng-model="selected.effect2[$index].if" placeholder="Evento">
+                        </td>
+                        <td class="p-1">
+                            <button class="btn btn-danger btn-sm" ng-click="removeEffect($index)">Apagar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col-md-7">
             <table class="table table-striped table-hover table-bordered mt-3">
@@ -344,6 +377,17 @@
         $scope.colors = [
             "normal", "fusion", "xyz", "synchro", "ritual", "spell", "trap"
         ];
+        $scope.when = [
+            "active", "summon", "flip", "destroy", "battle", "phase_start", "phase_end", "turn_start", "turn_end", 
+            "draw", "discard", "search", "equip", "unequip", "chain", "damage_step", "attack_declared", "life_points_change",
+            "card_played", "card_sent_to_graveyard", "card_banished", "card_returned_to_deck"
+        ]
+        $scope.effect = [
+            "draw_cards", "increase_atk", "increase_def", "decrease_atk", "decrease_def", "destroy_card",
+            "negate_effect", "prevent_attack", "heal_life_points", "damage_opponent", "search_deck",
+            "special_summon", "change_attribute", "change_type", "double_atk", "double_def", "halve_atk", "halve_def",
+            "friends_power_up", "opponents_power_down"
+        ]
 
         $scope.selected = {}
 
@@ -456,12 +500,12 @@
         }
 
         $scope.newEffect = function(){
-            if (!$scope.selected.effect) $scope.selected.effect = [];
-            $scope.selected.effect.push("");
+            if (!$scope.selected.effect2) $scope.selected.effect2 = [];
+            $scope.selected.effect2.push({ when: "active", effect: "damage_opponent", value: "", if: "" });
         }
 
         $scope.removeEffect = function(index) {
-            $scope.selected.effect.splice(index, 1);
+            $scope.selected.effect2.splice(index, 1);
         };
 
         $scope.showNavLiks = function(){
@@ -565,8 +609,8 @@
                     "card_name_pt": "${item.card_name_pt.replace(/"/g, '\\"')}",
                     "attribute": "${item.attribute.replace(/"/g, '\\"')}",
                     "text": {
-                        "en": "${item.text.en.replace(/"/g, '\\"')}",
-                        "pt": "${item.text.pt.replace(/"/g, '\\"')}"
+                        "en": "${item.text.en ? item.text.en.replace(/"/g, '\\"') : item.text}",
+                        "pt": "${item.text.pt ? item.text.pt.replace(/"/g, '\\"') : ""}"
                     },
                     "level": ${item.level},
                     "atk": ${item.atk},
@@ -574,6 +618,7 @@
                     "type": "${item.type.replace(/"/g, '\\"')}",
                     "subtype": "${item.subtype.replace(/"/g, '\\"')}",
                     "effect" : ${JSON.stringify(item.effect, null, 0)},
+                    "effect2" : ${JSON.stringify(item.effect2, null, 0)},
                     "passcode": ${item.passcode != null ? `"${item.passcode}"` : null },
                     "price": ${item.price != null ? `"${item.price}"` : 100 },
                     "count_as": ${item.count_as != null ? `"${item.count_as}"` : null },
