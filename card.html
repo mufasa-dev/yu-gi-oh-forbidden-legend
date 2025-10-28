@@ -93,7 +93,7 @@
             </select>
             </div>
 
-            <div class="nav-link mx-3" ng-click="openModal()">Salvar</div>
+            <div class="btn btn-sm btn-danger mx-3" ng-click="openModal()">Salvar</div>
         </div>
     </nav>
 
@@ -327,10 +327,10 @@
 <div class="modal " id="exampleModal" ng-show="openModalDownload" aria-hidden="false" style="display: block; background: rgba(0,0,0,0.5);">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header d-flex w-100">
                 <h5 class="modal-title" id="exampleModalLabel">Salvar lista de cartas</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal()">
-                <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn ms-auto" data-dismiss="modal" aria-label="Close" ng-click="closeModal()">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -608,27 +608,24 @@
                     "card_name": "${item.card_name.replace(/"/g, '\\"')}",
                     "card_name_pt": "${item.card_name_pt.replace(/"/g, '\\"')}",
                     "attribute": "${item.attribute.replace(/"/g, '\\"')}",
-                    "text": {
-                        "en": "${item.text.en ? item.text.en.replace(/"/g, '\\"') : item.text}",
-                        "pt": "${item.text.pt ? item.text.pt.replace(/"/g, '\\"') : ""}"
-                    },
+                    "text": ${item.text ? JSON.stringify(item.text, null, 0) : '""'},
                     "level": ${item.level},
                     "atk": ${item.atk},
                     "def": ${item.def},
                     "type": "${item.type.replace(/"/g, '\\"')}",
                     "subtype": "${item.subtype.replace(/"/g, '\\"')}",
-                    "effect" : ${JSON.stringify(item.effect, null, 0)},
-                    "effect2" : ${JSON.stringify(item.effect2, null, 0)},
-                    "passcode": ${item.passcode != null ? `"${item.passcode}"` : null },
-                    "price": ${item.price != null ? `"${item.price}"` : 100 },
                     "count_as": ${item.count_as != null ? `"${item.count_as}"` : null },
+                    "effect" : ${JSON.stringify(item.effect, null, 0)},
+                    "effect2" : ${item.effect2 ? JSON.stringify(item.effect2, null, 0) : "[]"},
+                    "passcode": ${item.passcode != null ? `"${item.passcode}"` : null },
+                    "price": ${item.price != null ? item.price : 100 },
                     "color": "${item.color.replace(/"/g, '\\"')}",
                     "star1": "${item.star1 != null ? item.star1.replace(/"/g, '\\"') : "Moon" }",
                     "star2": "${item.star2 != null ? item.star2.replace(/"/g, '\\"') : "Sun" }",
                     "restrict": ${item.restrict},
-                    "fan": ${item.fan},
-                    "chain": ${item.chain},
-                    "initial": ${item.initial},
+                    "fan" : ${item.fan},
+                    "chain" : ${item.chain},
+                    "initial": ${item.initial}
                 }`
                 if (index != $scope.cardArray.length - 1) text += ', \n';
             })
