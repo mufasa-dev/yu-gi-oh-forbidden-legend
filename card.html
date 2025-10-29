@@ -87,7 +87,7 @@
             </ul>
 
             <div class="ms-3">
-            <select ng-model="lang" class="form-select form-select-sm" ng-change="filter()">
+            <select ng-model="lang" class="form-select form-select-sm">
                 <option value="pt-br">Português</option>
                 <option value="en-us">Inglês</option>
             </select>
@@ -201,14 +201,14 @@
                         </div>
                         <div class="col">
                             <div class="form-check mt-1">
-                                <input type="checkbox" class="form-check-input" id="checkInitial" ng-model="selected.fan">
-                                <label class="form-check-label" for="checkInitial">Fancard</label>
+                                <input type="checkbox" class="form-check-input" id="checkFanCard" ng-model="selected.fan">
+                                <label class="form-check-label" for="checkFanCard">Fancard</label>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-check mt-1">
-                                <input type="checkbox" class="form-check-input" id="checkInitial" ng-model="selected.chain">
-                                <label class="form-check-label" for="checkInitial">Corrente</label>
+                                <input type="checkbox" class="form-check-input" id="checkChain" ng-model="selected.chain">
+                                <label class="form-check-label" for="checkChain">Corrente</label>
                             </div>
                         </div>
                     </div>
