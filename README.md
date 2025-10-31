@@ -1,7 +1,7 @@
 
 # 🃏 Yu-gi-oh Forbidden Legend – Versão Customizada 💥
 
-✨ **Clone modificado do projeto [Modern Memories](https://github.com/QualquerRafa/Modern-Memories)**
+✨ **Clone modificado do projeto [Permitted Memories](https://github.com/QualquerRafa/Modern-Memories)**
 🔥 Inspirado em *Yu-Gi-Oh! Forbidden Memories*, com cartas, fusões e muita nostalgia!
 
 ---
@@ -43,7 +43,7 @@
 
 ## 🖌️ Créditos
 
-👨‍💻 Base original: [QualquerRafa / Modern-Memories](https://github.com/QualquerRafa/Modern-Memories)
+👨‍💻 Base original: [QualquerRafa / Permitted-Memories](https://github.com/QualquerRafa/Modern-Memories)
 🪄 Versão modificada e aprimorada por **Bruno Ribeiro**
 
 ---
