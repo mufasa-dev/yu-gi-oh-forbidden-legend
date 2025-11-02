@@ -19,7 +19,7 @@
 * Crie suas próprias cartas com nome, imagem, ataque, defesa e descrição!
 * Visualize tudo em tempo real com preview da carta 🖼️
 
-⚔️ **Novas Cartas & Fusões Épicas!**
+⚔️ **Novas Cartas & Fusões!**
 
 * Adicionadas dezenas de cartas novas 🔮
 * Fusões exclusivas criadas especialmente para esta versão 💥
