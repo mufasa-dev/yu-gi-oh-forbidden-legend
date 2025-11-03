@@ -1,5 +1,5 @@
 
-# 🃏 Yu-gi-oh Forbidden Legend – Versão Customizada 💥
+# 🃏 Yu-gi-oh Forbidden Legend 💥
 
 ✨ **Clone modificado do projeto [Permitted Memories](https://github.com/QualquerRafa/Modern-Memories)**
 🔥 Inspirado em *Yu-Gi-Oh! Forbidden Memories*, com cartas, fusões e muita nostalgia!
