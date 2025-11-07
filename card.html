@@ -378,15 +378,16 @@
             "normal", "fusion", "xyz", "synchro", "ritual", "spell", "trap"
         ];
         $scope.when = [
-            "active", "summon", "flip", "destroy", "battle", "phase_start", "phase_end", "turn_start", "turn_end", 
-            "draw", "discard", "search", "equip", "unequip", "chain", "damage_step", "attack_declared", "life_points_change",
-            "card_played", "card_sent_to_graveyard", "card_banished", "card_returned_to_deck"
+            "active", "battle", "battle_start", "card_played", "card_sent_to_graveyard", "card_banished", "card_returned_to_deck", "chain", 
+            "damage_step", "defend", "destroy", "destroyed_by_effect", "destroyed_by_spell", "destroyed_in_battle", "discard", "draw",
+            "equip", "equip_on", "flip", "life_points_change", "phase_start", "phase_end", "search", "turn_start", "turn_end", 
+            "unequip", "attack_declared", "summon", "summon_only", "win_battle"
         ]
         $scope.effect = [
             "add_counter", "atk_twice", "banish_after_use", "banish_to_field", "banish_to_hand", "basish_to_deck",
             "battle_phase_skip", "boost_allies", "boost_self", "catapult_card", "change_attribute", "change_position",
-            "change_type", "copy_effect", "damage_opponent", "decrease_atk", "decrease_def",
-            "decrease_level", "decrease_rank", "deck_mill", "deck_to_graveyard", "deck_or_hand_to_graveyard", "deck_to_hand",
+            "change_type", "copy_effect", "damage_opponent", "damage_opponent_def", "decrease_atk", "decrease_def",
+            "decrease_level", "decrease_rank", "deck_mill", "deck_to_graveyard", "deck_or_hand_to_field", "deck_or_hand_to_graveyard", "deck_to_hand",
             "destroy_card", "double_atk", "double_def", "draw_cards", "draw_phase_skip", "draw_specific_card", "draw_specific_type",
             "end_turn", "equip_only", "equip_type", "exodia", "extra_attack", "field_clear", "field_to_deck", "field_to_graveyard",
             "field_to_hand", "friends_power_up", "graveyard_to_deck", "graveyard_to_field", "graveyard_to_hand",
@@ -395,7 +396,9 @@
             "increase_rank", "lock_card", "negate_effect", "one_per_turn", "opponents_power_down",
             "piercing_damage", "prevent_attack", "reflect_damage", "remove_counter", "revive_ally",
             "revive_card", "sacrifice_self", "search_deck", "skip_phase", "special_summon",
-            "token_summon", "unlock_card", "weaken_enemies", "zero_damage"
+            "shuffle_deck", "shuffle_opponent_deck", "shuffle_choice_deck", "shuffle_top_deck", "shuffle_top_opponent_deck",
+            "token_summon", "top_deck_to_grayveyard", "unlock_card", "view_hand", "view_top_deck", 
+            "weaken_enemies", "zero_damage"
         ];
 
         $scope.selected = {}
