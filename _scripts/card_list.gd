@@ -39426,5 +39426,28 @@ const card_list = {
         "fan" : true,
         "chain" : false,
         "initial": false
+    }, 
+    "01714" : { 
+        "card_name": "Mr. Volcano",
+        "card_name_pt": "Sr. Vulcão",
+        "attribute": "fire",
+        "text": {"en":"This seemingly mild-mannered creature has an extremely volatile temper.","pt":"Essa criatura aparentemente gentil tem um temperamento extremamente volátil."},
+        "level": 5,
+        "atk": 2100,
+        "def": 1300,
+        "type": "pyro",
+        "subtype": "",
+        "count_as": "spellcaster",
+        "effect" : [],
+        "effect2" : [],
+        "passcode": "31477025",
+        "price": 100,
+        "color": "normal",
+        "star1": "Saturn",
+        "star2": "Mars",
+        "restrict": 3,
+        "fan" : false,
+        "chain" : false,
+        "initial": false
     } 
  }
