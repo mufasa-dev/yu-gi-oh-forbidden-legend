@@ -11,7 +11,6 @@
 💫 **Correção de Ordenação**
 
 * Correção na ordenação das cartas 🧩
-* Classificação por nome, tipo, raridade e muito mais!
 * Upgrade para godot 4.5
 
 🧙‍♂️ **Editor de Cartas**
