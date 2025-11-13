@@ -17,6 +17,7 @@
 
 * Crie suas próprias cartas com nome, imagem, ataque, defesa e descrição!
 * Visualize tudo em tempo real com preview da carta 🖼️
+* Adicione seus próprios efeitos e novos tipos
 
 ⚔️ **Novas Cartas & Fusões!**
 
