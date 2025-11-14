@@ -1,4 +1,3 @@
-
 # 🃏 Yu-gi-oh Forbidden Legend 💥
 
 ✨ **Clone modificado do projeto [Permitted Memories](https://github.com/QualquerRafa/Modern-Memories)**
@@ -35,8 +34,11 @@
 ## 🧩 Destaques 💎
 
 🌟 Sistema de fusão reformulado
+
 💬 Interface mais fluida e intuitiva
+
 🃏 Criação de cartas originais direto no editor
+
 🛡️ Melhor organização e estabilidade nas listas
 
 ---
