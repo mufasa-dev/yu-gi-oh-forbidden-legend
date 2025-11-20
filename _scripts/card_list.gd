@@ -39679,5 +39679,28 @@ const card_list = {
         "fan" : true,
         "chain" : false,
         "initial": false
+    }, 
+    "01725" : { 
+        "card_name": "The forbidden knight",
+        "card_name_pt": "O Cavaleiro Proibido",
+        "attribute": "dark",
+        "text": {"en":"Gain 500 attack and defense for each Exodia piece in your graveyard.","pt":"Ganhe 500 de ataque e defesa para cada parte de Exódia em seu cemitério."},
+        "level": 7,
+        "atk": 2500,
+        "def": 2000,
+        "type": "spellcaster",
+        "subtype": "",
+        "count_as": null,
+        "effect" : [],
+        "effect2" : [{"when":"card_played","effect":"boost_self_for_gy","value":"","if":"exodia"}],
+        "passcode": "000000000",
+        "price": 100,
+        "color": "fusion",
+        "star1": "Moon",
+        "star2": "Sun",
+        "restrict": 3,
+        "fan" : true,
+        "chain" : false,
+        "initial": false
     } 
  }
