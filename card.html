@@ -8,30 +8,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
-        .containerCard{
+        .containerCard {
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        .card-design{
+        .card-design {
             height: 300px;
             z-index: 101;
         }
-        .card-artwork{
+        .card-artwork {
             height: 155px;
             position: absolute;
             z-index: 102;
         }
-        .card-color{
+        .card-color {
             height: 290px;
             position: absolute;
         }
-        .plusType{
+        .plusType {
             color: blue;
             cursor: pointer !important;
         }
-        .loading{
+        .loading {
             background-color: white;
             position: fixed;
             width: 100%;
@@ -380,7 +380,7 @@
         $scope.when = [
             "active", "battle", "battle_start", "card_played", "card_sent_to_graveyard", "card_banished", "card_returned_to_deck", "chain", 
             "damage_step", "defend", "destroy", "destroyed_by_effect", "destroyed_by_spell", "destroyed_in_battle", "discard", "draw",
-            "equip", "equip_on", "flip", "graveyard_active", "life_points_change", "phase_start", "phase_end", "search", "turn_start", "turn_end", 
+            "equip", "equip_on", "flip", "fusion", "graveyard_active", "life_points_change", "phase_start", "phase_end", "search", "turn_start", "turn_end", 
             "unequip", "attack_declared", "summon", "summon_only", "win_battle"
         ]
         $scope.effect = [
