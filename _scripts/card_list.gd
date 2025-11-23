@@ -39748,5 +39748,28 @@ const card_list = {
         "fan" : true,
         "chain" : false,
         "initial": false
+    },
+    "01728" : { 
+        "card_name": "harvest angel and vanity cards",
+        "card_name_pt": "Crazy fish",
+        "attribute": "dark",
+        "text": {"en":"","pt":"Livre estou. Livre estou."},
+        "level": 6,
+        "atk": 2800,
+        "def": 2500,
+        "type": "plant",
+        "subtype": "",
+        "count_as": "female",
+        "effect" : [],
+        "effect2" : [],
+        "passcode": "000000000",
+        "price": 100,
+        "color": "fusion",
+        "star1": "Venus",
+        "star2": "Neptune",
+        "restrict": 3,
+        "fan" : true,
+        "chain" : false,
+        "initial": false
     } 
  }
