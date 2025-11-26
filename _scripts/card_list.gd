@@ -39817,5 +39817,28 @@ const card_list = {
         "fan" : false,
         "chain" : false,
         "initial": false
+    }, 
+    "01731" : { 
+        "card_name": "Duo Mace",
+        "card_name_pt": "Duo Mace",
+        "attribute": "light",
+        "text": {"en":"Immune to spells and traps. Can attack twice. If this card is destroyed in battle, Special Summon Key Mace 2 from your Graveyard. If destroyed by a monster effect, Special Summon Key Mace from your Graveyard.","pt":"Imune a magicas e armadilhas. Pode atacar duas vezes. Se esse card for destruido em batalha invoque por invocação especial Key Mace 2 do seu cemmitério. Se for destruido por efeito de monstro invoque Key Mace do seu cemitério."},
+        "level": 5,
+        "atk": 2200,
+        "def": 2500,
+        "type": "fairy",
+        "subtype": "",
+        "count_as": "spellcaster",
+        "effect" : [],
+        "effect2" : [{"when":"card_played","effect":"immunity","value":"","if":"magic; trap"},{"when":"battle","effect":"atk_twice","value":"","if":""},{"when":"destroyed_by_effect","effect":"graveyard_to_field","value":"1","if":"00323"},{"when":"destroyed_in_battle","effect":"graveyard_to_field","value":"1","if":"00324"}],
+        "passcode": "000000000",
+        "price": 100,
+        "color": "fusion",
+        "star1": "Moon",
+        "star2": "Sun",
+        "restrict": 3,
+        "fan" : true,
+        "chain" : false,
+        "initial": false
     } 
  }
