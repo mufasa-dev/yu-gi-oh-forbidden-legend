@@ -39840,5 +39840,28 @@ const card_list = {
         "fan" : true,
         "chain" : false,
         "initial": false
+    }, 
+    "01732" : { 
+        "card_name": "Masked Chopper",
+        "card_name_pt": "Fatiador Mascarado",
+        "attribute": "earth",
+        "text": {"en":"If this card destroys an opponent's monster by battle, inflict 2000 damage to your opponent.","pt":"Se este card destruir um monstro do oponente em batalha, cause 2000 de dano ao seu oponente."},
+        "level": 1,
+        "atk": 100,
+        "def": 100,
+        "type": "fiend",
+        "subtype": "",
+        "count_as": "dark",
+        "effect" : [],
+        "effect2" : [{"when":"card_played","effect":"immunity","value":"","if":"magic; trap"},{"when":"battle","effect":"atk_twice","value":"","if":""},{"when":"destroyed_by_effect","effect":"graveyard_to_field","value":"1","if":"00323"},{"when":"destroyed_in_battle","effect":"graveyard_to_field","value":"1","if":"00324"}],
+        "passcode": "87350908",
+        "price": 1000,
+        "color": "fusion",
+        "star1": "Moon",
+        "star2": "Sun",
+        "restrict": 3,
+        "fan" : false,
+        "chain" : false,
+        "initial": false
     } 
  }
