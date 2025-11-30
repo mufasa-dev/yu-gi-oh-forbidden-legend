@@ -22,7 +22,7 @@
 
 * Adicionadas dezenas de cartas novas 🔮
 * Fusões exclusivas criadas especialmente para esta versão 💥
-* Combinações clássicas com um toque moderno — como *Kuriboh Canhoneiro* 💣 e *Tartaruga de Aço Azul* 🐢
+* Combinações clássicas com um toque moderno
 
 🎨 **Visuals e Correções Gerais**
 
