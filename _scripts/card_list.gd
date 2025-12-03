@@ -40001,5 +40001,28 @@ const card_list = {
         "fan" : false,
         "chain" : false,
         "initial": false
+    }, 
+    "01739" : { 
+        "card_name": "Spell Absorption",
+        "card_name_pt": "Absorção de Magia",
+        "attribute": "spell",
+        "text": {"en":"Each time a Spell Card is activated, gain 500 Life Points immediately after it resolves.","pt":"Cada vez que um Card de Magia for ativado, ganhe 500 Pontos de Vida imediatamente depois que ele resolver."},
+        "level": 1,
+        "atk": 100,
+        "def": 100,
+        "type": "continuous",
+        "subtype": "",
+        "count_as": null,
+        "effect" : [],
+        "effect2" : [{"when":"someone_active_spell","effect":"heal_life_points","value":"500","if":""}],
+        "passcode": "51481927",
+        "price": 100,
+        "color": "normal",
+        "star1": "Moon",
+        "star2": "Sun",
+        "restrict": 3,
+        "fan" : false,
+        "chain" : false,
+        "initial": false
     } 
  }
