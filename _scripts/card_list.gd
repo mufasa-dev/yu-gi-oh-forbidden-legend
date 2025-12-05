@@ -40024,5 +40024,28 @@ const card_list = {
         "fan" : false,
         "chain" : false,
         "initial": false
+    }, 
+    "01740" : { 
+        "card_name": "Freed the Matchless General",
+        "card_name_pt": "Freed, o General sem Igual",
+        "attribute": "earth",
+        "text": {"en":"Negate any Spell effects that target this card, and if you do, destroy that Spell Card. During your Draw Phase, instead of conducting your normal draw: You can add 1 Level 4 or lower Warrior-Type monster from your Deck to your hand. This card must be face-up on the field to activate and to resolve this effect.","pt":"Negue quaisquer efeitos de Magia que escolham este card como alvo e, se isso acontecer, destrua esse Card de Magia. Durante a sua Fase de Compra, em vez de conduzir sua compra normal: você pode adicionar 1 monstro do Tipo Guerreiro de Nível 4 ou menos do seu Deck à sua mão. Este card deve estar com a face para cima no campo para ativar e resolver este efeito."},
+        "level": 5,
+        "atk": 2300,
+        "def": 1700,
+        "type": "warrior",
+        "subtype": "",
+        "count_as": null,
+        "effect" : [],
+        "effect2" : [],
+        "passcode": "49681811",
+        "price": 100,
+        "color": "normal",
+        "star1": "Mars",
+        "star2": "Jupiter",
+        "restrict": 3,
+        "fan" : false,
+        "chain" : false,
+        "initial": false
     } 
  }
