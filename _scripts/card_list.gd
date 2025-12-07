@@ -40047,5 +40047,28 @@ const card_list = {
         "fan" : false,
         "chain" : false,
         "initial": false
+    }, 
+    "01741" : { 
+        "card_name": "Freed the Brave Wanderer",
+        "card_name_pt": "Freed, o Viajante Corajoso",
+        "attribute": "light",
+        "text": {"en":"Once per turn: You can banish 2 LIGHT monsters from your Graveyard to target 1 face-up monster on the field with higher ATK than this face-up card; destroy that target.","pt":"Uma vez por turno: você pode banir 2 monstros de LUZ do seu Cemitério para escolher 1 monstro com a face para cima no campo com ATK maior do que este card com a face para cima; destrua o alvo."},
+        "level": 4,
+        "atk": 1700,
+        "def": 1200,
+        "type": "warrior",
+        "subtype": "",
+        "count_as": null,
+        "effect" : [],
+        "effect2" : [],
+        "passcode": "16556849",
+        "price": 100,
+        "color": "normal",
+        "star1": "Saturn",
+        "star2": "Sun",
+        "restrict": 3,
+        "fan" : false,
+        "chain" : false,
+        "initial": false
     } 
  }
