@@ -40070,5 +40070,28 @@ const card_list = {
         "fan" : false,
         "chain" : false,
         "initial": false
+    }, 
+    "01742" : { 
+        "card_name": "Archer Friendship",
+        "card_name_pt": "Arqueiro da Amizade",
+        "attribute": "light",
+        "text": {"en":"Heal 1000 hit points whenever you battle a monster.","pt":"Cure 1000 pontos de vida sempre que batalhar com um monstro."},
+        "level": 4,
+        "atk": 1900,
+        "def": 600,
+        "type": "fairy",
+        "subtype": "wind",
+        "count_as": "winged beast",
+        "effect" : [],
+        "effect2" : [{"when":"destroyed_in_battle","effect":"transform","value":"01134","if":""},{"when":"battle","effect":"heal_life_points","value":"1000","if":""}],
+        "passcode": "000000000",
+        "price": 100,
+        "color": "fusion",
+        "star1": "Moon",
+        "star2": "Sun",
+        "restrict": 3,
+        "fan" : true,
+        "chain" : false,
+        "initial": false
     } 
  }
