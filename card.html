@@ -312,13 +312,15 @@
             <div class="pagination mb-2 d-flex align-items-center justify-content-end">
                 <button class="btn btn-success btn-sm me-auto" ng-click="newCard()">Nova carta</button>
 
+                <button class="btn btn-primary btn-sm me-2"  ng-disabled="currentPage === 1" ng-click="goToFirstPage()">Primeira</button>
                 <button class="btn btn-primary btn-sm"  ng-disabled="currentPage === 1" ng-click="prevPage()">Anterior</button>
                 <span class="me-2 ms-2"> 
                     Página 
                     <input type="number" ng-model="currentPage" ng-change="updatePagedCardArray()" style="width: 60px; text-align: center;" min="1" max="{{ numberOfPages() }}">
                     de {{ numberOfPages() }} 
                 </span>
-                <button class="btn btn-primary btn-sm" ng-disabled="currentPage === numberOfPages()" ng-click="nextPage()">Próxima</button>
+                <button class="btn btn-primary btn-sm me-2" ng-disabled="currentPage === numberOfPages()" ng-click="nextPage()">Próxima</button>
+                <button class="btn btn-primary btn-sm" ng-disabled="currentPage === numberOfPages()" ng-click="goToLastPage()">Última</button>
             </div>
         </div>
     </div>
@@ -435,6 +437,20 @@
         $scope.nextPage = function () {
             if ($scope.currentPage < $scope.numberOfPages()) {
                 $scope.currentPage++;
+                $scope.updatePagedCardArray();
+            }
+        };
+        
+        $scope.goToFirstPage = function () {
+            if ($scope.currentPage > 1) {
+                $scope.currentPage = 1;
+                $scope.updatePagedCardArray();
+            }
+        };
+
+        $scope.goToLastPage = function () {
+            if ($scope.currentPage < $scope.numberOfPages()) {
+                $scope.currentPage = $scope.numberOfPages();
                 $scope.updatePagedCardArray();
             }
         };
