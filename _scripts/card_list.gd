@@ -25869,7 +25869,7 @@ const card_list = {
         "subtype": "",
         "count_as": null,
         "effect" : ["change_of_heart"],
-        "effect2" : [],
+        "effect2" : [{"when":"active","effect":"change_hearth","value":"1","if":""}],
         "passcode": "04031928",
         "price": 100,
         "color": "",
