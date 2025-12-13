@@ -40093,5 +40093,28 @@ const card_list = {
         "fan" : true,
         "chain" : false,
         "initial": false
+    }, 
+    "01743" : { 
+        "card_name": "Garvas, the Winged Dark Knight",
+        "card_name_pt": "Garvas, o Cavaleiro Sombrio Alado",
+        "attribute": "dark",
+        "text": {"en":"Inflicts piercing damage when battling an enemy in defense mode.","pt":"Causa dano perfurante ao batalhar contra um inimigo em modo de defesa."},
+        "level": 6,
+        "atk": 3000,
+        "def": 2000,
+        "type": "winged beast",
+        "subtype": "",
+        "count_as": "warrior",
+        "effect" : [],
+        "effect2" : [{"when":"battle","effect":"piercing_damage","value":"","if":""},{"when":"destroyed_by_spell","effect":"transform","value":"00050","if":""}],
+        "passcode": "000000000",
+        "price": 100,
+        "color": "fusion",
+        "star1": "Jupiter",
+        "star2": "Pluto",
+        "restrict": 3,
+        "fan" : true,
+        "chain" : false,
+        "initial": false
     } 
  }
