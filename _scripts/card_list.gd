@@ -40116,5 +40116,28 @@ const card_list = {
         "fan" : true,
         "chain" : false,
         "initial": false
+    }, 
+    "01744" : { 
+        "card_name": "Tyler the Great Warrior",
+        "card_name_pt": "Tyler, o Grande Guerreiro",
+        "attribute": "earth",
+        "text": {"en":"This monster cannot be Special Summoned. When this card destroys a monster as a result of battle and sends it to the Graveyard, inflict damage to your opponent's Life Points equal to the ATK of the destroyed monster.","pt":"Este monstro não pode ser Invocado por Invocação-Especial. Quando este card destruir um monstro como resultado de uma batalha e enviá-lo para o Cemitério, cause dano aos Pontos de Vida do seu oponente igual ao ATK do monstro destruído."},
+        "level": 8,
+        "atk": 3000,
+        "def": 1500,
+        "type": "warrior",
+        "subtype": "",
+        "count_as": null,
+        "effect" : [],
+        "effect2" : [{"when":"battle","effect":"piercing_damage","value":"","if":""}],
+        "passcode": "000000000",
+        "price": 100,
+        "color": "normal",
+        "star1": "Uranus",
+        "star2": "Sun",
+        "restrict": 3,
+        "fan" : false,
+        "chain" : false,
+        "initial": false
     } 
  }
